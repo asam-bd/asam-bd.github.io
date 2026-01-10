@@ -1,10 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Slide Menu</title>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f4f7f6; overflow-x: hidden; }
+        .gd-sldm * { box-sizing: border-box; }
+
+        .gd-sldm .sldm { position: fixed; top: 0; left: 0; width: 100%; z-index: 150; }
+
+        /* Symbol Bar */
+        .symbol-bar {
+            background: #2c3e50;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            color: #fff;
+            font-size: 13px;
+        }
+        .symbol-bar a { color: #fff; text-decoration: none; transition: 0.3s; }
+        .symbol-bar a:hover { color: #3498db; }
+
+        /* Top Bar */
+        .gd-sldm .sldm .sldm-bar { 
+            position: relative; z-index: 10; min-height: 55px; 
+            background: #ffffff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+        }
+        .gd-sldm .sldm .sldm-bar .sldm-brand { 
+            color: #2c3e50; font-weight: 600; font-size: 22px; text-decoration: none;
+        }
+        .gd-sldm .sldm .sldm-bar .sldm-icons a { 
+            color: #555; font-size: 18px; margin-left: 18px; text-decoration: none; transition: 0.3s;
+        }
+        .gd-sldm .sldm .sldm-bar .sldm-icons a:hover { color: #3498db; }
+
+        /* Side Navigation */
+        .gd-sldm .sldm nav { 
+            z-index: 160; position: fixed; top: 0; width: 280px; height: 100%; 
+            background: #ffffff; transform: translateX(-280px); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+        }
+        .gd-sldm .sldm.sldm-active nav { transform: translateX(0); }
+
+        /* Modern Menu Toggle Button */
+        .gd-sldm .sldm nav .sldm-toggle { 
+            position: absolute; top: 15px; right: -60px; width: 45px; height: 45px; 
+            background: #ffffff; color: #2c3e50; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.4s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .gd-sldm .sldm nav .sldm-toggle:hover {
+            background: #3498db; color: #fff; transform: scale(1.1);
+        }
+        .gd-sldm .sldm.sldm-active nav .sldm-toggle { 
+            background: #e74c3c; color: #fff; right: 20px; top: 20px;
+        }
+        .gd-sldm .sldm nav .sldm-toggle i { position: absolute; font-size: 20px; transition: 0.4s; }
+
+        /* Navigation Content */
+        .sldm-nav-container { height: 100%; overflow-y: auto; background: #fff; }
+        .sldm-header { background: #2c3e50; padding: 50px 20px 40px; color: #fff; text-align: center; }
+        
+        /* Morphing Image */
+        .author-photo-widget .custom-image .custom-author-image {
+            width: 140px; height: 140px;
+            background-image: url("https://mohasin.is-a.dev/upscalemedia.jpg");
+            background-repeat: no-repeat; background-position: center; background-size: cover;
+            display: inline-block;
+            animation: random-morph 10s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2), inset 0 0 0 8px rgba(255,255,255,0.1);
+            border: 3px solid #FFFFFF;
+        }
+
+        @keyframes random-morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        .sldm-header .user-name { font-weight: 600; font-size: 18px; display: block; margin-top: 15px; }
+        .sldm-header .user-role { font-size: 13px; opacity: 0.7; }
+
+        .sldm-nav ul { list-style: none; padding: 20px 0; margin: 0; }
+        .sldm-nav ul li a { 
+            display: flex; align-items: center; padding: 12px 25px; 
+            color: #444; text-decoration: none; font-weight: 400; transition: 0.3s;
+        }
+        .sldm-nav ul li a i { width: 30px; font-size: 18px; color: #3498db; }
+        .sldm-nav ul li a:hover { background: #f0f7ff; color: #3498db; }
+
+        /* Submenu */
+        .sldm-submenu ul { display: none; background: #fafafa; padding: 5px 0; }
+        .sldm-submenu ul li a { padding-left: 60px; font-size: 14px; }
+        .sldm-submenu > a::after { content: '\f105'; font-family: FontAwesome; margin-left: auto; transition: 0.3s; }
+        .sldm-submenu > a.sldm-open::after { transform: rotate(90deg); }
+
+        /* Overlay */
+        .sldm-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.4); display: none; z-index: 140; 
+            backdrop-filter: blur(4px);
+        }
+        .gd-sldm.sldm-active .sldm-overlay { display: block; }
+
+        /* Widgets */
+        .sldm-widget { display: none; background: #2c3e50; padding: 15px; color: #fff; border-bottom: 2px solid #3498db; }
+        .sldm-input { border: none; padding: 10px; border-radius: 4px; width: 75%; outline: none; }
+        .sldm-btn { padding: 9px 15px; background: #3498db; border:none; color:#fff; cursor:pointer; border-radius: 4px; font-weight: 600; }
+    </style>
+</head>
+<body class="gd-sldm">
+
+    <div class="sldm">
+        <div class="symbol-bar">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
+        </div>
+
+        <div class="sldm-bar">
+            <a href="#" class="sldm-brand">MyBrand</a>
+            <div class="sldm-icons">
+                <a href="#" class="sldm-widget-toggle" data-target="#sldm-search-widget"><i class="fa fa-search"></i></a>
+                <a href="#" class="sldm-widget-toggle" data-target="#sldm-phone-widget"><i class="fa fa-phone"></i></a>
+                <a href="mailto:support@example.com"><i class="fa fa-envelope"></i></a>
+            </div>
+        </div>
+
+        <div class="sldm-widget-container">
+            <div class="sldm-widget" id="sldm-search-widget">
+                <div style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px; justify-content: center;">
+                    <input class="sldm-input" type="text" placeholder="Search here...">
+                    <button class="sldm-btn">Search</button>
+                </div>
+            </div>
+            <div class="sldm-widget" id="sldm-phone-widget" style="text-align:center;">
+                <i class="fa fa-phone"></i> Support: +880 1700-000000
+            </div>
+        </div>
+
+        <div class="sldm-overlay"></div>
+
+        <nav id="sidebar">
+            <a class="sldm-toggle" id="menuToggle">
+                <i class="fa fa-bars sldm-open"></i>
+                <i class="fa fa-times sldm-close" style="opacity:0; transform: scale(0);"></i>
+            </a>
+
+            <div class="sldm-nav-container">
+                <div class="sldm-header">
+                    <div class="author-photo-widget">
+                        <center>
+                            <div class="custom-image">  
+                                <div class="custom-author-image"></div>
+                            </div>
+                        </center>
+                    </div>
+                    <span class="user-name">Csm Mohasin Alam</span>
+                    <span class="user-role">Web Developer</span>
+                </div>
+                
+                <div class="sldm-nav">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="sldm-submenu">
+                            <a href="#"><i class="fa fa-th-large"></i> Dashboard</a>
+                            <ul>
+                                <li><a href="#">Analytics</a></li>
+                                <li><a href="#">Reports</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i> Messages</a></li>
+                        <li style="border-top: 1px solid #eee; margin-top: 10px;">
+                            <a href="#" style="color: #e74c3c;"><i class="fa fa-sign-out"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        function toggleMenu() {
+            $('.sldm').toggleClass('sldm-active');
+            if($('.sldm').hasClass('sldm-active')) {
+                $('.sldm-open').css({'opacity': '0', 'transform': 'scale(0) rotate(90deg)'});
+                $('.sldm-close').css({'opacity': '1', 'transform': 'scale(1) rotate(0deg)'});
+            } else {
+                $('.sldm-open').css({'opacity': '1', 'transform': 'scale(1) rotate(0deg)'});
+                $('.sldm-close').css({'opacity': '0', 'transform': 'scale(0) rotate(-90deg)'});
+            }
+        }
+
+        $('.sldm-toggle, .sldm-overlay').on("click", function (e) {
+            e.preventDefault();
+            toggleMenu();
+        });
+
+        $(document).on("click", function (event) {
+            if ($('.sldm').hasClass('sldm-active')) {
+                if (!$(event.target).closest('#sidebar, #menuToggle').length) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        $('.sldm-submenu > a').on("click", function (e) {
+            e.preventDefault();
+            $(this).toggleClass('sldm-open');
+            $(this).siblings('ul').slideToggle(300);
+            $('.sldm-submenu > a').not(this).removeClass('sldm-open').siblings('ul').slideUp(300);
+        });
+
+        $('.sldm-widget-toggle').on("click", function (e) {
+            e.preventDefault();
+            var target = $(this).data('target');
+            $('.sldm-widget').not(target).slideUp();
+            $(target).slideToggle();
+        });
+    });
+    </script>
+</body>
+</html>
+
     <title>Eden Mohila College &#8211; Dhaka</title>
 <meta name='robots' content='max-image-preview:large' />
 	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
-	<link rel="alternate" type="application/rss+xml" title="Eden Mohila College &raquo; Feed" href="https://emc.edu.bd/feed/" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@300;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+   padding: 0;
+   margin: 0;
+   /* বডি ব্যাকগ্রাউন্ড আপনার ওয়েবসাইটের ডিফল্ট অনুযায়ী কাজ করবে */
+   color: #EEEEEE;
+   font-family: "Lato", sans-serif;
+}
+
+/* Symbol Bar: আপনার রিকোয়েস্ট অনুযায়ী যুক্ত করা হয়েছে */
+.symbol-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #669AE1, #FE4365, #FC913A);
+    z-index: 999;
+}
+
+.menu {
+   position: fixed; /* স্ক্রিনের সাথে ফিক্সড থাকবে */
+   bottom: 40px;    /* নিচে থেকে দূরত্ব */
+   right: 60px;     /* ডান দিক থেকে দূরত্ব */
+   width: 80px;
+   height: 80px;
+   box-sizing: border-box;
+   font-size: 24px;
+   z-index: 1000;
+}
+
+.menu-item,
+.menu-open-button {
+   background: #EEEEEE;
+   border-radius: 100%;
+   width: 65px;
+   height: 65px;
+   position: absolute;
+   color: #FFFFFF;
+   text-align: center;
+   line-height: 65px;
+   transition: transform ease-out 200ms, background 0.3s;
+}
+
+.menu-open {
+   display: none;
+}
+
+/* Hamburger Icons */
+.lines {
+   width: 22px;
+   height: 3px;
+   background: #596778;
+   display: block;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   margin-left: -11px;
+   margin-top: -1.5px;
+   transition: transform 200ms;
+}
+
+.line-1 { transform: translate3d(0, -7px, 0); }
+.line-2 { transform: translate3d(0, 0, 0); }
+.line-3 { transform: translate3d(0, 7px, 0); }
+
+.menu-open:checked + .menu-open-button .line-1 { transform: translate3d(0, 0, 0) rotate(45deg); }
+.menu-open:checked + .menu-open-button .line-2 { transform: scale(0.1, 1); }
+.menu-open:checked + .menu-open-button .line-3 { transform: translate3d(0, 0, 0) rotate(-45deg); }
+
+/* Menu Items Color & Shadow */
+.menu-item {
+   box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+}
+
+.menu-item:hover {
+   background: #FFFFFF;
+   transform: scale(1.1);
+}
+
+/* ওপেনিং অ্যানিমেশন (ডানদিকের নিচ থেকে ছড়াবে) */
+.menu-open:checked ~ .menu-item {
+   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* আইটেমগুলোর পজিশন (ডান থেকে বামে ও উপরে ছড়াবে) */
+.menu-open:checked ~ .menu-item:nth-child(3) { transform: translate3d(0, -90px, 0); }
+.menu-open:checked ~ .menu-item:nth-child(4) { transform: translate3d(-70px, -70px, 0); }
+.menu-open:checked ~ .menu-item:nth-child(5) { transform: translate3d(-90px, 0, 0); }
+.menu-open:checked ~ .menu-item:nth-child(6) { transform: translate3d(-70px, 70px, 0); }
+.menu-open:checked ~ .menu-item:nth-child(7) { transform: translate3d(0, 90px, 0); }
+
+/* Colors */
+.blue { background-color: #669AE1; }
+.green { background-color: #70CC72; }
+.red { background-color: #FE4365; }
+.purple { background-color: #C49CDE; }
+.orange { background-color: #FC913A; }
+.lightblue { background-color: #62C2E4; }
+
+.menu-open-button {
+   z-index: 2;
+   cursor: pointer;
+   background: #FFFFFF;
+   color: #596778;
+   box-shadow: 3px 3px 15px rgba(0,0,0,0.1);
+}
+
+.menu-open-button:hover { transform: scale(1.1); }
+
+/* আইকনগুলো সেন্টারে রাখার জন্য */
+.menu-item i {
+    line-height: 65px;
+}
+</style>
+
+<div class="symbol-bar"></div>
+
+<nav class="menu">
+   <input type="checkbox" class="menu-open" name="menu-open" id="menu-open" />
+   <label class="menu-open-button" for="menu-open">
+    <span class="lines line-1"></span>
+    <span class="lines line-2"></span>
+    <span class="lines line-3"></span>
+  </label>
+
+   <a href="#" class="menu-item blue"> <i class="fa-solid fa-anchor"></i> </a>
+   <a href="#" class="menu-item green"> <i class="fa-solid fa-mug-hot"></i> </a>
+   <a href="#" class="menu-item red"> <i class="fa-solid fa-heart"></i> </a>
+   <a href="#" class="menu-item purple"> <i class="fa-solid fa-microphone"></i> </a>
+   <a href="#" class="menu-item orange"> <i class="fa-solid fa-star"></i> </a>
+</nav>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="alternate" type="application/rss+xml" title="Eden Mohila College &raquo; Feed" href="https://emc.edu.bd/feed/" />
 <link rel="alternate" type="application/rss+xml" title="Eden Mohila College &raquo; Comments Feed" href="https://emc.edu.bd/comments/feed/" />
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -105,12 +486,7 @@ i.fa.fa-home {
 		    <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--
-/////////////////******///////////////////////
-Project Development & Design by: Tanzid Ahmed-->
-    <!--Author: Tanzid Ahmed-->
-    <!--Help & Suport url : https://www.linkedin.com/in/tanzid-ahmed-3a2a7b175-->
-
+    
     <!--/////////////////******///////////////////////-->
     <!-- LIBRARY FONT-->
     <link type="text/css" rel="stylesheet"
@@ -1105,14 +1481,13 @@ Project Development & Design by: Tanzid Ahmed-->
                         </div>
 
                     </div>
-                    <!-- News-->
-                    <div class="section section-padding top-courses  background-opacity best-staff">
+                    
     <div class="container">
-        <div class="group-title-index">
+        <div class="group-title-index"><hr></hr><br><br>
 
-            <h2 class="center-title">à¦¨à¦¿à¦‰à¦œ à¦à¦¬à¦‚ à¦‡à¦­à§‡à¦¨à§à¦Ÿà¦¸ </h2>
+            <h2 class="center-title">ভিডিও গ্যালারী</h2>
 
-            <div class="bottom-title"><i class="bottom-icon icon-icon-04"></i></div>
+            
         </div>
         <div class="top-courses-wrapper">
             <div class="top-courses-slider">
@@ -1120,7 +1495,7 @@ Project Development & Design by: Tanzid Ahmed-->
     <div class="edugate-layout-2">
         <div class="edugate-layout-2-wrapper">
             <div class="edugate-content"><a href="courses-detail.html"
-                                            class="title">à¦‡à¦¡à§‡à¦¨ à¦•à¦²à§‡à¦œà§‡ à¦¹à§‹à¦¸à¦¨à§‡ à¦†à¦°à¦¾...</a>
+                                            class="title">✓$==</a>
 
                 <div class="info">
                     <!--<div class="author item"><a href="#">By Site Administrator</a></div>-->
@@ -1620,9 +1995,9 @@ Project Development & Design by: Tanzid Ahmed-->
 
                                     <div class="info-list">
                                         <ul class="list-unstyled">
-                                            <li><i class="fa fa-envelope-o"></i><a href="/cdn-cgi/l/email-protection#f6939293989b999e9f9a9795999a9a939193c7b6919b979f9ad895999b"><span class="__cf_email__" data-cfemail="751011101b181a1d1c1914161a191910121044351218141c195b161a18">[email&#160;protected]</span></a>
+                                            <li><i class="fa fa-envelope-o"></i><a href="mailto:example@example.com"><span class="__cf_email__">asam</span></a>
                                             </li>
-                                            <li><i class="fa fa-phone"></i><a href="#">+880-2-58613053</a></li>
+                                            <li><i class="fa fa-phone"></i><a href="tell:+8801625891245">+8801625891245</a></li>
                                             <li><i class="fa fa-fax"></i><a href="#">+880-2-41060988</a></li>
                                             <li><i class="fa fa-map-marker"></i><a href="#"><p>EDEN MOHILA COLLEGE</p>
 
@@ -1633,51 +2008,14 @@ Project Development & Design by: Tanzid Ahmed-->
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 col-xs-6 sd380">
-                            <div class="useful-link-widget widget">
-                                <div class="title-widget">USEFUL LINKS</div>
-                                <div class="content-widget">
-                                    <div class="useful-link-list">
-                                        <div class="row">
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <ul id="menu-footer-menu" class="list-unstyled" role="menuitem"><li id="menu-item-5333" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5333"><a class="main-menu"href="https://www.moedu.gov.bd/">Ministry of Education</a></li>
-<li id="menu-item-5334" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5334"><a class="main-menu"href="https://shed.gov.bd/">Directorate of Secondary &#038; Higher Education</a></li>
-<li id="menu-item-5332" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5332"><a class="main-menu"target="_blank" href="https://7college.du.ac.bd/">University of Dhaka</a></li>
-<li id="menu-item-5956" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5956"><a class="main-menu"target="_blank" href="https://ibas.finance.gov.bd/">à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦¬à§‡à¦¤à¦¨à¦¬à¦¿à¦²</a></li>
-<li id="menu-item-5957" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5957"><a class="main-menu"href="https://shed.gov.bd/">Ministry of Education(SHED)</a></li>
-</ul>                                                <!--<ul class="list-unstyled">
-                                                    <li><i class="fa fa-angle-right"></i><a
-                                                                href="http://www.moedu.gov.bd/">Ministry of
-                                                            Education</a>
-                                                    </li>
-                                                    <li><i class="fa fa-angle-right"></i><a href="http://shed.gov.bd/">Directorate
-                                                            of Secondery & Higher Education</a></li>
-                                                    <li><i class="fa fa-angle-right"></i><a
-                                                                href="https://www.nu.ac.bd/">National University</a>
-                                                    </li>
-                                                    <li><i class="fa fa-angle-right"></i><a
-                                                                href="http://www.bise-ctg.gov.bd/">Chattogram Education
-                                                            Board</a>
-                                                    </li>
-
-                                                </ul>-->
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        
                     <div class="col-2">
                         <div class="col-md-3 col-sm-6 col-xs-6 sd380">
                             <div class="gallery-widget widget">
                                 <div class="title-widget">Facebook</div>
                                 <div class="content-widget">
-                                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100063868147942&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=198646251427011" width="100%" height="250" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-
-
-                                </div>
+                                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61555879694875&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=198646251427011" width="100%" height="250" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+</div>
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-6 col-xs-6 sd380">
@@ -1720,52 +2058,12 @@ Project Development & Design by: Tanzid Ahmed-->
                         <li><a href="https://emc.edu.bd/contact-us">CONTACT US</a></li>
                     </ul>
                 </div>
-                <div class="pull-right hyper-right">Developed by <a href="https://www.aalo.xyz/" target="_blank"><img src="https://emc.edu.bd/wp-content/themes/gccc/assets/images/aalo_bn.png" style="max-height: 40px;"></a></div>
+                <div class="pull-right hyper-right">Developed by <a href="https://www.aalo.xyz/" target="_blank"><font color="lime">Csm Mohasin Alam </a></div>
             </div>
         </div>
     </div>
 </footer>
 
-<!--<div class="body-2 loading">
-    <div class="dots-loader"></div>
-</div>-->
-<div class="body-2 loading-page style1">
-    <div class="lad-cont">
-        <h2 class="loading loading01">
-            <span>A</span>
-            <span>R</span>
-            <span>P</span>
-            <span>A</span>
-            <span>R</span>
-            <span>A</span>
-            <span>S</span>
-            <span>A</span>
-            <span>D</span>
-            <span>A</span>
-            <span>R</span>
-            <span>A</span>
-            <span>L</span>
-            <span>I</span>
-            <span>M</span>
-            <span>M</span>
-            <span>A</span>
-            <span>D</span>
-            <span>R</span>
-			<span>R</span>
-			<span>R</span>
-			<span>R</span>
-        </h2>
-        <small class="loading loading01">
-            <span>l</span>
-            <span>o</span>
-            <span>a</span>
-            <span>d</span>
-            <span>i</span>
-            <span>n</span>
-            <span>g</span>
-        </small>
-    </div>
-</div>
 
 <!-- JAVASCRIPT LIBS-->
 <!--<script>if ((Cookies.get('color-skin') != undefined) && (Cookies.get('color-skin') != 'color-1')) {
