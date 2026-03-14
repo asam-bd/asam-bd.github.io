@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕌 CMS — আরপাড়া সদর আলিম মাদ্রাসা</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#059669;--green-d:#047857;--green-l:#34d399;--green-xs:#ecfdf5;--green-sm:#d1fae5;
+  --gold:#d97706;--gold-l:#fef3c7;
+  --blue:#3b82f6;--blue-l:#eff6ff;--blue-d:#1d4ed8;
+  --red:#ef4444;--red-l:#fef2f2;
+  --purple:#8b5cf6;--purple-l:#f5f3ff;
+  --orange:#f97316;--orange-l:#fff7ed;
+  --navy:#0f172a;--navy-m:#1e293b;--navy-l:#334155;--navy-xl:#475569;
+  --slate:#64748b;--slate-l:#94a3b8;--slate-xs:#f8fafc;
+  --bg:#f0f4f8;--white:#fff;
+  --border:#e2e8f0;--border-2:#cbd5e1;
+  --text:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --shadow-m:0 4px 16px rgba(0,0,0,.09);
+  --shadow-l:0 12px 40px rgba(0,0,0,.13);
+  --shadow-green:0 4px 16px rgba(5,150,105,.25);
+  --r:10px;--r-l:14px;--r-xl:20px;
+  --font:'Noto Sans Bengali',sans-serif;
+  --sidebar-w:260px;--topbar-h:62px;
+  --transition:.2s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:14px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none;outline:none}
+input,select,textarea{font-family:inherit;outline:none}
+img{max-width:100%;display:block}
+
+/* ═══ LOGIN ═══ */
+#loginWrap{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#071520 0%,#0a2a1a 45%,#160826 100%);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.login-bg-pattern{
+  position:absolute;inset:0;opacity:.04;
+  background-image:repeating-linear-gradient(60deg,#fff 0,#fff 1px,transparent 0,transparent 50%),
+    repeating-linear-gradient(120deg,#fff 0,#fff 1px,transparent 0,transparent 50%);
+  background-size:30px 30px;
+}
+.login-card{
+  position:relative;width:100%;max-width:420px;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:28px;padding:48px 40px;text-align:center;
+  box-shadow:0 32px 80px rgba(0,0,0,.4);
+}
+.login-mosque{font-size:56px;display:block;margin-bottom:18px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(52,211,153,.4))}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.04)}}
+.login-card h2{color:#fff;font-size:22px;font-weight:800;margin-bottom:4px;letter-spacing:-.3px}
+.login-card .subtitle{color:rgba(255,255,255,.38);font-size:13px;margin-bottom:36px}
+.l-field{position:relative;margin-bottom:14px;text-align:left}
+.l-field label{display:block;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.45);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
+.l-field-inner{position:relative}
+.l-field-inner i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.28);pointer-events:none;font-size:13px}
+.l-field input{
+  width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--r);padding:12px 14px 12px 42px;color:#fff;font-size:14px;
+  transition:var(--transition);
+}
+.l-field input::placeholder{color:rgba(255,255,255,.22)}
+.l-field input:focus{border-color:var(--green-l);background:rgba(255,255,255,.11);box-shadow:0 0 0 3px rgba(52,211,153,.15)}
+.l-btn{
+  width:100%;padding:14px;margin-top:8px;
+  background:linear-gradient(135deg,var(--green),var(--green-d));
+  color:#fff;border-radius:var(--r);font-size:15px;font-weight:800;
+  transition:var(--transition);box-shadow:0 6px 24px rgba(5,150,105,.45);
+  letter-spacing:.2px;
+}
+.l-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(5,150,105,.55)}
+.l-btn:active{transform:translateY(0)}
+.l-err{
+  color:#fca5a5;font-size:12.5px;margin-top:12px;
+  display:none;align-items:center;gap:7px;justify-content:center;
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);
+  border-radius:var(--r);padding:8px 12px;
+}
+.l-err.show{display:flex}
+.l-version{color:rgba(255,255,255,.2);font-size:10.5px;margin-top:24px}
+
+/* ═══ APP LAYOUT ═══ */
+#app{display:none;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);
+  background:var(--navy);z-index:200;
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform var(--transition);
+  box-shadow:2px 0 20px rgba(0,0,0,.2);
+}
+.sidebar-inner{
+  flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;
+}
+.sidebar-inner::-webkit-scrollbar{width:3px}
+.sidebar-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+
+.sb-brand{
+  padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:11px;flex-shrink:0;
+}
+.sb-brand-ico{
+  width:40px;height:40px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--green),var(--green-d));
+  display:flex;align-items:center;justify-content:center;font-size:19px;
+  box-shadow:0 4px 12px rgba(5,150,105,.4);
+}
+.sb-brand h4{color:#fff;font-size:11.5px;font-weight:800;line-height:1.45}
+.sb-brand span{color:rgba(255,255,255,.28);font-size:10px}
+
+.sb-user{
+  margin:10px 12px;padding:10px 12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);display:flex;align-items:center;gap:9px;flex-shrink:0;
+}
+.sb-avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),#b45309);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;
+}
+.sb-user-name{color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{color:rgba(255,255,255,.28);font-size:10px;margin-top:1px}
+.sb-user-status{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--green-l);flex-shrink:0;box-shadow:0 0 6px var(--green-l);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+
+.sb-nav{padding:10px;flex:1}
+.sb-section-label{
+  font-size:9.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.18);padding:12px 8px 5px;
+}
+.sb-item{
+  display:flex;align-items:center;gap:9px;padding:9px 11px;
+  border-radius:var(--r);color:rgba(255,255,255,.46);font-size:12.5px;font-weight:600;
+  cursor:pointer;transition:var(--transition);margin-bottom:2px;position:relative;
+  user-select:none;
+}
+.sb-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.82)}
+.sb-item.active{
+  background:linear-gradient(135deg,var(--green),var(--green-d));
+  color:#fff;box-shadow:0 3px 12px rgba(5,150,105,.38);
+}
+.sb-item i{width:16px;text-align:center;font-size:13px;flex-shrink:0}
+.sb-item .sb-label{flex:1}
+.sb-badge{
+  background:var(--red);color:#fff;font-size:9.5px;font-weight:800;
+  padding:1px 6px;border-radius:99px;min-width:18px;text-align:center;flex-shrink:0;
+}
+.sb-item.active .sb-badge{background:rgba(255,255,255,.3)}
+.sb-item .sb-arrow{font-size:10px;opacity:.4;transition:transform .2s}
+.sb-item.has-sub.open .sb-arrow{transform:rotate(90deg)}
+.sb-sub{display:none;padding:3px 0 3px 36px}
+.sb-sub.open{display:block}
+.sb-sub-item{
+  display:flex;align-items:center;gap:7px;padding:7px 10px;
+  border-radius:8px;color:rgba(255,255,255,.38);font-size:12px;font-weight:600;
+  cursor:pointer;transition:var(--transition);margin-bottom:1px;
+}
+.sb-sub-item:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.05)}
+.sb-sub-item.active{color:var(--green-l)}
+.sb-sub-item i{font-size:11px;width:14px;text-align:center}
+
+.sb-bottom{padding:12px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.sb-logout{
+  width:100%;padding:9px 14px;
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);
+  color:#fca5a5;border-radius:var(--r);font-size:12.5px;font-weight:700;
+  transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.sb-logout:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.3)}
+
+/* TOPBAR */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;transition:margin-left .3s}
+.topbar{
+  position:sticky;top:0;z-index:100;height:var(--topbar-h);
+  background:rgba(240,244,248,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.mob-menu{display:none;width:36px;height:36px;background:var(--white);border:1px solid var(--border);border-radius:var(--r);align-items:center;justify-content:center;color:var(--text-2);font-size:16px}
+.breadcrumb{display:flex;align-items:center;gap:6px}
+.breadcrumb-home{font-size:12px;color:var(--text-3);cursor:pointer}
+.breadcrumb-home:hover{color:var(--green)}
+.breadcrumb-sep{color:var(--border-2);font-size:12px}
+.breadcrumb-cur{font-size:14px;font-weight:800;color:var(--text)}
+.page-desc{font-size:11.5px;color:var(--text-3);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-live{
+  display:flex;align-items:center;gap:7px;padding:5px 13px;
+  background:var(--green-xs);border:1px solid var(--green-sm);
+  border-radius:99px;font-size:11.5px;font-weight:700;color:var(--green);
+}
+.topbar-live::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse-dot 2s infinite}
+.btn-view-site{
+  display:flex;align-items:center;gap:6px;padding:7px 14px;
+  background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  font-size:12px;font-weight:700;color:var(--text-2);transition:var(--transition);
+}
+.btn-view-site:hover{border-color:var(--green);color:var(--green);background:var(--green-xs)}
+
+/* CONTENT AREA */
+.content{padding:22px;flex:1;max-width:1280px;width:100%}
+.panel{display:none;animation:fadeSlide .28s ease}
+.panel.active{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ DASHBOARD ═══ */
+.dash-welcome{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-m) 50%,#0d3320 100%);
+  border-radius:var(--r-xl);padding:28px 32px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  position:relative;overflow:hidden;
+}
+.dash-welcome::before{
+  content:'🕌';position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  font-size:90px;opacity:.08;
+}
+.dash-welcome-text h2{color:#fff;font-size:20px;font-weight:800;margin-bottom:4px}
+.dash-welcome-text p{color:rgba(255,255,255,.45);font-size:13px}
+.dash-welcome-badge{
+  background:var(--green);color:#fff;padding:6px 16px;border-radius:99px;
+  font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(5,150,105,.4);
+}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r-l);
+  padding:18px 20px;display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shadow);transition:var(--transition);cursor:default;
+}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-m)}
+.kpi-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.kpi-val{font-size:28px;font-weight:800;color:var(--text);line-height:1}
+.kpi-label{font-size:11.5px;color:var(--text-3);margin-top:4px;font-weight:500}
+.dash-lower{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+.dash-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-l);padding:20px;box-shadow:var(--shadow)}
+.dash-card-title{font-size:13.5px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qbtn{
+  padding:14px 10px;border:1.5px solid var(--border);border-radius:var(--r);
+  font-size:12px;font-weight:700;color:var(--text-2);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:var(--transition);background:var(--white);
+}
+.qbtn i{font-size:22px;color:var(--green)}
+.qbtn:hover{border-color:var(--green);color:var(--green);background:var(--green-xs);transform:translateY(-2px);box-shadow:var(--shadow-green)}
+.recent-list{display:flex;flex-direction:column;gap:0}
+.recent-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.recent-row:last-child{border-bottom:none;padding-bottom:0}
+.recent-dot{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.recent-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.recent-meta{font-size:11px;color:var(--text-3);margin-top:2px}
+
+/* ═══ SECTION CARD ═══ */
+.sec-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-l);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.sec-head{
+  padding:16px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.sec-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:9px}
+.sec-title i{font-size:14px}
+.sec-title .hint{font-size:11px;font-weight:500;color:var(--text-3);margin-left:4px}
+.sec-body{padding:22px}
+
+/* FORM ELEMENTS */
+.fg{margin-bottom:16px}
+.fg:last-child{margin-bottom:0}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:6px;letter-spacing:.1px}
+.req{color:var(--red);margin-left:2px}
+.opt{color:var(--text-3);font-weight:400;margin-left:4px}
+.fi{
+  width:100%;background:#f8fafc;border:1.5px solid var(--border);
+  border-radius:var(--r);padding:9px 13px;font-size:13.5px;color:var(--text);
+  transition:var(--transition);
+}
+.fi:focus{border-color:var(--green);background:var(--white);box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+.fi::placeholder{color:var(--text-3)}
+.fi:hover:not(:focus){border-color:var(--border-2)}
+select.fi{cursor:pointer}
+textarea.fi{resize:vertical;min-height:80px;line-height:1.65}
+.fi-hint{font-size:11px;color:var(--text-3);margin-top:5px;display:flex;align-items:flex-start;gap:5px;line-height:1.5}
+.fi-hint i{flex-shrink:0;margin-top:1px;color:var(--blue)}
+.char-count{font-size:10.5px;color:var(--text-3);text-align:right;margin-top:3px}
+
+/* Grid helpers */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+
+/* Divider */
+.divider{position:relative;text-align:center;margin:20px 0;color:var(--text-3);font-size:12px;font-weight:700}
+.divider::before{content:'';position:absolute;left:0;top:50%;width:100%;height:1px;background:var(--border)}
+.divider span{background:var(--white);position:relative;padding:0 14px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:var(--r);font-size:13px;font-weight:700;transition:var(--transition);cursor:pointer;white-space:nowrap;position:relative;overflow:hidden}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.25)}
+.btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.38)}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+.btn-red:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(239,68,68,.35)}
+.btn-amber{background:linear-gradient(135deg,var(--gold),#b45309);color:#fff}
+.btn-amber:hover{transform:translateY(-1px)}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff}
+.btn-ghost{background:var(--white);border:1.5px solid var(--border);color:var(--text-2)}
+.btn-ghost:hover{border-color:var(--border-2);background:var(--slate-xs)}
+.btn-outline-green{background:transparent;border:1.5px solid var(--green);color:var(--green)}
+.btn-outline-green:hover{background:var(--green);color:#fff}
+.btn-sm{padding:6px 13px;font-size:12px;border-radius:8px}
+.btn-xs{padding:4px 10px;font-size:11.5px;border-radius:7px}
+.btn-full{width:100%;justify-content:center;padding:12px}
+.btn-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.bg-green{background:var(--green-xs);color:var(--green)}
+.bg-red{background:var(--red-l);color:var(--red)}
+.bg-blue{background:var(--blue-l);color:var(--blue)}
+.bg-gold{background:var(--gold-l);color:var(--gold)}
+.bg-purple{background:var(--purple-l);color:var(--purple)}
+.bg-orange{background:var(--orange-l);color:var(--orange)}
+.bg-gray{background:#f1f5f9;color:var(--slate)}
+
+/* Toggle switch */
+.sw{position:relative;width:44px;height:24px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-track{
+  position:absolute;cursor:pointer;inset:0;
+  background:#cbd5e1;border-radius:24px;transition:.28s;
+}
+.sw-track::after{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.28s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.sw input:checked + .sw-track{background:var(--green)}
+.sw input:checked + .sw-track::after{transform:translateX(20px)}
+.sw-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#f8fafc;border-radius:var(--r);border:1px solid var(--border)}
+.sw-row-text .sw-row-label{font-size:13px;font-weight:700;color:var(--text)}
+.sw-row-text .sw-row-sub{font-size:11px;color:var(--text-3);margin-top:1px}
+
+/* Image preview */
+.img-preview-wrap{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.img-preview-box{
+  width:110px;height:90px;border-radius:var(--r);
+  border:2px dashed var(--border);background:#f8fafc;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  gap:5px;color:var(--text-3);font-size:11px;overflow:hidden;flex-shrink:0;
+  transition:var(--transition);cursor:pointer;
+}
+.img-preview-box img{width:100%;height:100%;object-fit:cover;display:none}
+.img-preview-box img.loaded{display:block}
+.img-preview-box.has-img{border-style:solid;border-color:var(--green);background:transparent}
+.img-preview-box i{font-size:24px;opacity:.25}
+.img-preview-box:hover{border-color:var(--green-l);background:var(--green-xs)}
+
+/* Upload area (drag-drop file upload) */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:var(--r);
+  padding:28px;text-align:center;background:#f8fafc;
+  transition:var(--transition);cursor:pointer;
+}
+.upload-zone:hover,.upload-zone.drag-active{border-color:var(--green);background:var(--green-xs)}
+.upload-zone i{font-size:36px;color:var(--text-3);margin-bottom:10px;display:block}
+.upload-zone .uz-title{font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:4px}
+.upload-zone .uz-sub{font-size:12px;color:var(--text-3)}
+.upload-zone .uz-or{font-size:12px;color:var(--text-3);margin:10px 0}
+.upload-zone .uz-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 16px;
+  background:var(--green);color:#fff;border-radius:var(--r);font-size:12.5px;font-weight:700;
+}
+
+/* ═══ DND LIST ═══ */
+.dnd-list{display:flex;flex-direction:column;gap:8px}
+.dnd-item{
+  display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
+  background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  transition:var(--transition);user-select:none;
+}
+.dnd-item:hover{border-color:var(--border-2);box-shadow:var(--shadow)}
+.dnd-item.dragging{opacity:.55;border-style:dashed;border-color:var(--green);box-shadow:var(--shadow-m)}
+.dnd-item.drag-over{border-color:var(--green);background:var(--green-xs);transform:scale(1.01);box-shadow:var(--shadow-green)}
+.drag-handle{
+  width:18px;flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  cursor:grab;padding:4px 2px;opacity:.3;transition:.15s;margin-top:2px;
+}
+.drag-handle::before,.drag-handle::after,.drag-handle .dh3{
+  content:'';display:block;width:12px;height:2px;background:var(--navy-xl);border-radius:2px;
+}
+.drag-handle:hover{opacity:.7}
+.dnd-item:hover .drag-handle{opacity:.5}
+.item-content{flex:1;min-width:0}
+.item-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.item-sub{font-size:11.5px;color:var(--text-2);margin-top:3px;line-height:1.5}
+.item-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px}
+.item-actions{display:flex;gap:5px;flex-shrink:0;align-items:flex-start;margin-top:1px}
+.dnd-empty{padding:32px 20px;text-align:center;color:var(--text-3);font-size:13px}
+.dnd-empty i{font-size:36px;opacity:.3;display:block;margin-bottom:8px}
+
+/* Photo DnD grid item */
+.photo-dnd-item{
+  display:flex;align-items:center;gap:11px;padding:10px 12px;
+  background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  transition:var(--transition);user-select:none;
+}
+.photo-dnd-item:hover{border-color:var(--border-2);box-shadow:var(--shadow)}
+.photo-dnd-item.dragging{opacity:.5;border-style:dashed;border-color:var(--green)}
+.photo-dnd-item.drag-over{border-color:var(--green);background:var(--green-xs)}
+.photo-thumb{
+  width:72px;height:56px;border-radius:8px;object-fit:cover;
+  background:#f1f5f9;flex-shrink:0;border:1px solid var(--border);
+}
+.photo-thumb-ph{
+  width:72px;height:56px;border-radius:8px;background:#f1f5f9;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  border:1px solid var(--border);
+}
+.photo-thumb-ph i{font-size:22px;opacity:.25}
+
+/* ═══ MODALS ═══ */
+.modal-bg{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(15,23,42,.65);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+  animation:modal-fade-in .2s ease;
+}
+.modal-bg.open{display:flex}
+@keyframes modal-fade-in{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--white);border-radius:var(--r-xl);padding:28px;
+  width:100%;max-width:460px;max-height:90vh;overflow-y:auto;
+  box-shadow:var(--shadow-l);animation:modal-slide .25s ease;
+}
+@keyframes modal-slide{from{transform:translateY(16px) scale(.97)}to{transform:translateY(0) scale(1)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:800;color:var(--text)}
+.modal-close{width:32px;height:32px;border-radius:8px;background:#f1f5f9;color:var(--text-3);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.modal-close:hover{background:var(--red-l);color:var(--red)}
+.modal-footer{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+
+/* Confirm */
+.confirm-icon{font-size:42px;text-align:center;margin-bottom:14px}
+.confirm-title{font-size:16px;font-weight:800;text-align:center;margin-bottom:6px}
+.confirm-msg{font-size:13px;color:var(--text-2);text-align:center;margin-bottom:4px}
+
+/* ═══ TOAST ═══ */
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:340px}
+.toast{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--navy);color:#fff;border-radius:var(--r-l);
+  font-size:13px;font-weight:600;
+  box-shadow:0 8px 28px rgba(0,0,0,.22);pointer-events:all;
+  transform:translateX(120%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.toast.show{transform:translateX(0)}
+.toast i{font-size:16px;flex-shrink:0}
+.toast.ok i{color:var(--green-l)}
+.toast.err{background:#7f1d1d}
+.toast.err i{color:#fca5a5}
+.toast.warn{background:#78350f}
+.toast.warn i{color:#fcd34d}
+.toast.info{background:var(--blue-d)}
+.toast.info i{color:#93c5fd}
+
+/* ═══ CODE BOX ═══ */
+.code-box{
+  background:#0f172a;border-radius:var(--r);padding:14px 16px;
+  font-family:'Courier New',monospace;font-size:12px;color:#a3e635;
+  line-height:1.8;overflow-x:auto;margin-top:10px;white-space:pre;
+}
+
+/* ═══ SETUP STEPS ═══ */
+.setup-step{display:flex;gap:14px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.setup-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.step-num{
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-d));
+  color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 3px 10px rgba(5,150,105,.35);margin-top:2px;
+}
+.step-body h5{font-size:14px;font-weight:800;margin-bottom:6px}
+.step-body p{font-size:13px;color:var(--text-2);line-height:1.6}
+
+/* ═══ SECTION PREVIEW CARD ═══ */
+.section-preview{
+  background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+  border:1.5px solid var(--green-sm);border-radius:var(--r-l);padding:16px 20px;
+  margin-bottom:18px;display:flex;align-items:center;gap:14px;
+}
+.sp-icon{width:46px;height:46px;border-radius:12px;background:var(--green-xs);border:1.5px solid var(--green-sm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sp-info h4{font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px}
+.sp-info p{font-size:12px;color:var(--text-2)}
+
+/* Inline add-item row */
+.inline-add{
+  display:flex;gap:8px;align-items:center;padding:10px;
+  background:#f8fafc;border:1.5px dashed var(--border);border-radius:var(--r);
+  margin-top:8px;transition:var(--transition);
+}
+.inline-add:hover,.inline-add:focus-within{border-color:var(--green);background:var(--green-xs)}
+.inline-add .fi{background:transparent;border:none;padding:4px 8px;font-size:13px;box-shadow:none}
+.inline-add .fi:focus{box-shadow:none;background:transparent}
+.inline-add button{flex-shrink:0}
+
+/* Tabs */
+.tab-bar{display:flex;gap:4px;padding:4px;background:#f1f5f9;border-radius:var(--r);margin-bottom:18px;flex-wrap:wrap}
+.tab-btn{padding:7px 16px;border-radius:8px;font-size:12.5px;font-weight:700;color:var(--text-2);transition:var(--transition);cursor:pointer}
+.tab-btn.active{background:var(--white);color:var(--green);box-shadow:var(--shadow)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* ═══ RESPONSIVE ═══ */
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:190}
+
+@media(max-width:1024px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-lower{grid-template-columns:1fr}
+  .g4{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  :root{--sidebar-w:0px}
+  .sidebar{transform:translateX(-260px);width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .mob-overlay.open{display:block}
+  .mob-menu{display:flex}
+  .main{margin-left:0}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .content{padding:14px}
+  .topbar{padding:0 14px}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr}
+  .dash-lower{grid-template-columns:1fr}
+  .btn-full.action-row{flex-direction:column}
+}
+
+/* Rich text indicator */
+.richtext-label{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.richtext-badge{font-size:10px;font-weight:700;background:var(--purple-l);color:var(--purple);padding:2px 7px;border-radius:99px}
+.rich-toolbar{display:flex;gap:4px;flex-wrap:wrap;padding:6px;background:#f8fafc;border:1.5px solid var(--border);border-bottom:none;border-radius:var(--r) var(--r) 0 0}
+.rich-toolbar button{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-2);transition:.15s}
+.rich-toolbar button:hover{background:var(--border);color:var(--text)}
+.rich-toolbar .sep{width:1px;background:var(--border);margin:0 2px;align-self:stretch}
+textarea.rich-fi{border-top-left-radius:0;border-top-right-radius:0}
+
+/* Color picker for icons */
+.icon-picker{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:#f8fafc;border:1.5px solid var(--border);border-radius:var(--r);margin-top:6px}
+.icon-opt{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:.15s;border:1.5px solid transparent}
+.icon-opt:hover{border-color:var(--green);background:var(--green-xs)}
+.icon-opt.selected{border-color:var(--green);background:var(--green-xs);color:var(--green)}
+
+/* Stats/Analytics mini chart */
+.mini-stats{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#f8fafc;border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px}
+.ms-item{text-align:center}
+.ms-val{font-size:20px;font-weight:800;color:var(--text)}
+.ms-label{font-size:10.5px;color:var(--text-3);margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="loginWrap">
+  <div class="login-bg-pattern"></div>
+  <div class="login-card">
+    <span class="login-mosque">🕌</span>
+    <h2>আরপাড়া সদর আলিম মাদ্রাসা</h2>
+    <p class="subtitle">ওয়েবসাইট পরিচালনা প্যানেল</p>
+    <div class="l-field">
+      <label>ইমেইল</label>
+      <div class="l-field-inner">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="lEmail" placeholder="admin@madrasah.edu.bd" autocomplete="email">
+      </div>
+    </div>
+    <div class="l-field">
+      <label>পাসওয়ার্ড</label>
+      <div class="l-field-inner">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="lPass" placeholder="••••••••••">
+      </div>
+    </div>
+    <button class="l-btn" id="lBtn" onclick="window.doLogin()"><i class="fas fa-sign-in-alt"></i> প্রবেশ করুন</button>
+    <div class="l-err" id="lErr"><i class="fas fa-exclamation-circle"></i><span id="lMsg">ইমেইল বা পাসওয়ার্ড ভুল।</span></div>
+    <p class="l-version">CMS v2.0 · Firebase Realtime DB</p>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <div class="mob-overlay" id="mobOverlay" onclick="window.closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="sb-brand">
+        <div class="sb-brand-ico">🕌</div>
+        <div>
+          <h4>আরপাড়া সদর আলিম মাদ্রাসা</h4>
+          <span>CMS Admin Panel v2</span>
+        </div>
+      </div>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatar">A</div>
+        <div style="flex:1;min-width:0">
+          <div class="sb-user-name" id="sbEmail">admin@example.com</div>
+          <div class="sb-user-role">Super Admin</div>
+        </div>
+        <div class="sb-user-status"></div>
+      </div>
+      <nav class="sb-nav">
+        <div class="sb-section-label">ড্যাশবোর্ড</div>
+        <div class="sb-item active" data-p="dashboard"><i class="fas fa-th-large"></i><span class="sb-label">ড্যাশবোর্ড</span></div>
+
+        <div class="sb-section-label">সাইট কন্টেন্ট</div>
+        <div class="sb-item" data-p="hero"><i class="fas fa-star"></i><span class="sb-label">Hero সেকশন</span></div>
+        <div class="sb-item" data-p="ticker"><i class="fas fa-scroll"></i><span class="sb-label">Ticker নোটিশ</span></div>
+        <div class="sb-item" data-p="about"><i class="fas fa-info-circle"></i><span class="sb-label">পরিচিতি ও অধ্যক্ষ</span></div>
+        <div class="sb-item" data-p="features"><i class="fas fa-award"></i><span class="sb-label">বিশেষ সুবিধা</span></div>
+
+        <div class="sb-section-label">নোটিশ ও ইভেন্ট</div>
+        <div class="sb-item" data-p="notices"><i class="fas fa-bell"></i><span class="sb-label">নোটিশ বোর্ড</span><span class="sb-badge" id="noticeCount">0</span></div>
+        <div class="sb-item" data-p="events"><i class="fas fa-calendar-alt"></i><span class="sb-label">ইভেন্ট</span></div>
+
+        <div class="sb-section-label">শিক্ষা</div>
+        <div class="sb-item" data-p="teachers"><i class="fas fa-chalkboard-teacher"></i><span class="sb-label">শিক্ষকবৃন্দ</span></div>
+        <div class="sb-item" data-p="exams"><i class="fas fa-file-alt"></i><span class="sb-label">পরীক্ষার সূচি</span></div>
+        <div class="sb-item" data-p="results"><i class="fas fa-trophy"></i><span class="sb-label">ফলাফল</span></div>
+        <div class="sb-item" data-p="admission"><i class="fas fa-clipboard-list"></i><span class="sb-label">ভর্তি তথ্য</span></div>
+
+        <div class="sb-section-label">মিডিয়া</div>
+        <div class="sb-item" data-p="gallery"><i class="fas fa-images"></i><span class="sb-label">ফটো গ্যালারি</span></div>
+        <div class="sb-item" data-p="videos"><i class="fas fa-play-circle"></i><span class="sb-label">ভিডিও</span></div>
+
+        <div class="sb-section-label">সেটিং</div>
+        <div class="sb-item" data-p="fees"><i class="fas fa-money-bill-wave"></i><span class="sb-label">ফি কাঠামো</span></div>
+        <div class="sb-item" data-p="contact"><i class="fas fa-phone-alt"></i><span class="sb-label">যোগাযোগ</span></div>
+        <div class="sb-item" data-p="siteinfo"><i class="fas fa-cog"></i><span class="sb-label">সাইট সেটিং</span></div>
+        <div class="sb-item" data-p="setup"><i class="fas fa-fire" style="color:#f97316"></i><span class="sb-label">Firebase Setup</span></div>
+      </nav>
+    </div>
+    <div class="sb-bottom">
+      <button class="sb-logout" onclick="window.doLogout()"><i class="fas fa-sign-out-alt"></i>লগ আউট</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mob-menu" id="mobMenu" onclick="window.openSidebar()"><i class="fas fa-bars"></i></button>
+        <div>
+          <div class="breadcrumb">
+            <span class="breadcrumb-home" onclick="window.goPanel('dashboard')">🏠 হোম</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-cur" id="pageTitle">ড্যাশবোর্ড</span>
+          </div>
+          <div class="page-desc" id="pageSub">ওয়েবসাইটের সারসংক্ষেপ</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-live" id="fbStatus">Firebase</div>
+        <button class="btn-view-site" onclick="window.open('madrasah.html','_blank')">
+          <i class="fas fa-external-link-alt"></i><span>সাইট দেখুন</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════ DASHBOARD ══════════ -->
+      <div class="panel active" id="p-dashboard">
+        <div class="dash-welcome">
+          <div class="dash-welcome-text">
+            <h2>স্বাগতম! 👋</h2>
+            <p>আরপাড়া সদর আলিম মাদ্রাসা ওয়েবসাইট পরিচালনায় আপনাকে স্বাগত।</p>
+          </div>
+          <div class="dash-welcome-badge">✅ সংযুক্ত</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-icon" style="background:#ecfdf5"><i class="fas fa-bell" style="color:var(--green)"></i></div>
+            <div><div class="kpi-val" id="kNotices">—</div><div class="kpi-label">মোট নোটিশ</div></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-icon" style="background:#eff6ff"><i class="fas fa-chalkboard-teacher" style="color:var(--blue)"></i></div>
+            <div><div class="kpi-val" id="kTeachers">—</div><div class="kpi-label">শিক্ষকবৃন্দ</div></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-icon" style="background:#fef3c7"><i class="fas fa-user-graduate" style="color:var(--gold)"></i></div>
+            <div><div class="kpi-val" id="kStudents">—</div><div class="kpi-label">শিক্ষার্থী</div></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-icon" style="background:#f5f3ff"><i class="fas fa-percent" style="color:var(--purple)"></i></div>
+            <div><div class="kpi-val" id="kPass">—</div><div class="kpi-label">পাসের হার</div></div>
+          </div>
+        </div>
+        <div class="dash-lower">
+          <div class="dash-card">
+            <div class="dash-card-title"><i class="fas fa-bolt" style="color:var(--gold)"></i>দ্রুত কাজ</div>
+            <div class="quick-grid">
+              <button class="qbtn" onclick="goPanel('notices')"><i class="fas fa-plus-circle"></i>নোটিশ যোগ</button>
+              <button class="qbtn" onclick="goPanel('teachers')"><i class="fas fa-user-plus"></i>শিক্ষক যোগ</button>
+              <button class="qbtn" onclick="goPanel('gallery')"><i class="fas fa-image"></i>ফটো যোগ</button>
+              <button class="qbtn" onclick="goPanel('results')"><i class="fas fa-file-alt"></i>ফলাফল</button>
+              <button class="qbtn" onclick="goPanel('events')"><i class="fas fa-calendar-plus"></i>ইভেন্ট</button>
+              <button class="qbtn" onclick="goPanel('ticker')"><i class="fas fa-scroll"></i>Ticker</button>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title"><i class="fas fa-clock" style="color:var(--blue)"></i>সাম্প্রতিক নোটিশ</div>
+            <div id="dashRecentNotices"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ HERO ══════════ -->
+      <div class="panel" id="p-hero">
+        <div class="section-preview">
+          <div class="sp-icon">⭐</div>
+          <div class="sp-info"><h4>Hero সেকশন</h4><p>ওয়েবসাইটের প্রথম পাতার মূল শিরোনাম, বক্তব্য ও কাউন্টার</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-heading" style="color:var(--gold)"></i>শিরোনাম ও মটো</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>বাংলা শিরোনাম<span class="req">*</span></label><input class="fi" id="h-tbn" placeholder="আরপাড়া সদর আলিম মাদ্রাসা"></div>
+              <div class="fg"><label>English Title</label><input class="fi" id="h-ten" placeholder="Arpara Sadar Alim Madrasah"></div>
+              <div class="fg"><label>বাংলা মটো</label><input class="fi" id="h-mbn" placeholder="ইসলামিক শিক্ষা ও আধুনিক জ্ঞানের সমন্বয়"></div>
+              <div class="fg"><label>English Motto</label><input class="fi" id="h-men" placeholder="Combining Islamic Education & Modern Knowledge"></div>
+            </div>
+            <div class="g2">
+              <div class="fg"><label>বিবরণ (বাংলা)</label><textarea class="fi" id="h-dbn" rows="3" placeholder="১৯৮৫ সাল থেকে শালিখা, মাগুরায়..."></textarea></div>
+              <div class="fg"><label>Description (English)</label><textarea class="fi" id="h-den" rows="3" placeholder="Since 1985, spreading the light..."></textarea></div>
+            </div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-chart-bar" style="color:var(--blue)"></i>Counter সংখ্যা</div></div>
+          <div class="sec-body">
+            <div class="g4">
+              <div class="fg"><label>📚 শিক্ষার্থী</label><input class="fi" id="h-st" type="number" placeholder="700"></div>
+              <div class="fg"><label>👨‍🏫 শিক্ষক</label><input class="fi" id="h-tc" type="number" placeholder="22"></div>
+              <div class="fg"><label>✅ পাসের হার %</label><input class="fi" id="h-pr" type="number" placeholder="92"></div>
+              <div class="fg"><label>🏛️ বছরের ঐতিহ্য</label><input class="fi" id="h-yr" type="number" placeholder="40"></div>
+            </div>
+            <button class="btn btn-green btn-full" onclick="saveHero()"><i class="fas fa-save"></i>সংরক্ষণ করুন</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ TICKER ══════════ -->
+      <div class="panel" id="p-ticker">
+        <div class="section-preview">
+          <div class="sp-icon">📢</div>
+          <div class="sp-info"><h4>Ticker নোটিশ</h4><p>ওয়েবসাইটের উপরে স্ক্রল করে যাওয়া ঘোষণা বার্তা</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-plus-circle" style="color:var(--green)"></i>নতুন Ticker যোগ করুন</div></div>
+          <div class="sec-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <div class="fg" style="flex:1;margin:0"><label>Ticker বার্তা</label><input class="fi" id="tk-txt" placeholder="📢 ২০২৫ সালের ভর্তি কার্যক্রম শুরু হয়েছে..."></div>
+              <div style="align-self:flex-end"><button class="btn btn-green" onclick="addTicker()"><i class="fas fa-plus"></i>যোগ করুন</button></div>
+            </div>
+            <div class="fi-hint"><i class="fas fa-info-circle"></i>Emoji ব্যবহার করুন সুন্দর দেখাতে: 📢 🎓 ✅ 🕌 ⚡</div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-list"></i>সকল Ticker <span class="hint">⠿ টেনে সাজান</span></div>
+          </div>
+          <div class="sec-body">
+            <div class="dnd-list" id="tickerList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ ABOUT + PRINCIPAL ══════════ -->
+      <div class="panel" id="p-about">
+        <div class="section-preview">
+          <div class="sp-icon">🏫</div>
+          <div class="sp-info"><h4>পরিচিতি ও অধ্যক্ষ</h4><p>About সেকশনের কার্ড এবং অধ্যক্ষের বাণী ও ছবি</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-th-large" style="color:var(--blue)"></i>পরিচিতি কার্ড <span class="hint">⠿ টেনে সাজান</span></div>
+            <button class="btn btn-outline-green btn-sm" onclick="addAboutCard()"><i class="fas fa-plus"></i>কার্ড যোগ</button>
+          </div>
+          <div class="sec-body">
+            <div class="dnd-list" id="aboutList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+            <button class="btn btn-green btn-full" style="margin-top:14px" onclick="saveAbout()"><i class="fas fa-save"></i>কার্ড সংরক্ষণ</button>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-user-tie" style="color:var(--purple)"></i>অধ্যক্ষের তথ্য</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>নাম<span class="req">*</span></label><input class="fi" id="pr-name" placeholder="মাওলানা মোঃ আব্দুল করিম"></div>
+              <div class="fg"><label>পদবী</label><input class="fi" id="pr-desig" placeholder="অধ্যক্ষ, আরপাড়া সদর আলিম মাদ্রাসা"></div>
+            </div>
+            <div class="fg"><label>বাণী / বক্তব্য</label><textarea class="fi" id="pr-msg" rows="4" placeholder="অধ্যক্ষের বাণী এখানে লিখুন..."></textarea></div>
+            <div class="fg">
+              <label>ছবির URL</label>
+              <div class="img-preview-wrap">
+                <div class="img-preview-box" id="pr-prev-box" style="width:80px;height:80px;border-radius:50%">
+                  <i class="fas fa-user-circle"></i>
+                  <img id="pr-prev-img" alt="" style="border-radius:50%">
+                </div>
+                <div style="flex:1">
+                  <input class="fi" id="pr-photo" placeholder="https://i.ibb.co/..." oninput="livePreview('pr-photo','pr-prev-img','pr-prev-box')">
+                  <div class="fi-hint"><i class="fas fa-lightbulb"></i><span><strong>ImgBB.com</strong> → Upload → Direct Link copy করুন। Cloudinary বা Google Drive (view link) ও চলবে।</span></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-green btn-full" onclick="savePrincipal()"><i class="fas fa-save"></i>সংরক্ষণ করুন</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ FEATURES ══════════ -->
+      <div class="panel" id="p-features">
+        <div class="section-preview">
+          <div class="sp-icon">🏆</div>
+          <div class="sp-info"><h4>বিশেষ সুবিধা</h4><p>মাদ্রাসার সুযোগ-সুবিধা কার্ড — ড্র্যাগ করে সাজান</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-award" style="color:var(--gold)"></i>সুবিধা কার্ড <span class="hint">⠿ টেনে সাজান</span></div>
+            <button class="btn btn-outline-green btn-sm" onclick="addFeature()"><i class="fas fa-plus"></i>কার্ড যোগ</button>
+          </div>
+          <div class="sec-body">
+            <div class="dnd-list" id="featureList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+            <button class="btn btn-green btn-full" style="margin-top:14px" onclick="saveFeatures()"><i class="fas fa-save"></i>সংরক্ষণ করুন</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ NOTICES ══════════ -->
+      <div class="panel" id="p-notices">
+        <div class="section-preview">
+          <div class="sp-icon">🔔</div>
+          <div class="sp-info"><h4>নোটিশ বোর্ড</h4><p>নতুন নোটিশ যোগ করুন, এডিট করুন বা মুছুন</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-plus-circle" style="color:var(--green)"></i><span id="noticeFormLbl">নতুন নোটিশ</span></div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>শিরোনাম<span class="req">*</span></label><input class="fi" id="n-title" placeholder="নোটিশের শিরোনাম লিখুন"></div>
+              <div class="fg"><label>ধরন</label>
+                <select class="fi" id="n-type">
+                  <option value="urgent">🔴 জরুরি</option>
+                  <option value="normal" selected>🟢 সাধারণ</option>
+                  <option value="academic">🔵 একাডেমিক</option>
+                  <option value="event">🟡 ইভেন্ট</option>
+                </select>
+              </div>
+              <div class="fg"><label>তারিখ</label><input class="fi" id="n-date" type="date"></div>
+              <div class="fg"><label>তারিখ (বাংলায়)</label><input class="fi" id="n-dbn" placeholder="১২ জানুয়ারি, ২০২৫"></div>
+            </div>
+            <div class="fg"><label>বিস্তারিত<span class="req">*</span></label><textarea class="fi" id="n-body" rows="4" placeholder="নোটিশের বিস্তারিত বিবরণ লিখুন..."></textarea></div>
+            <div class="g2">
+              <div class="fg"><label>লিংক <span class="opt">(ঐচ্ছিক)</span></label><input class="fi" id="n-link" placeholder="https://..."></div>
+              <div class="fg">
+                <div class="sw-row">
+                  <div class="sw-row-text">
+                    <div class="sw-row-label">সক্রিয়</div>
+                    <div class="sw-row-sub">ওয়েবসাইটে দেখাবে</div>
+                  </div>
+                  <label class="sw"><input type="checkbox" id="n-active" checked><span class="sw-track"></span></label>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-green" style="flex:1;justify-content:center" onclick="saveNotice()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+              <button class="btn btn-ghost" id="n-cancel" style="display:none" onclick="clearNotice()"><i class="fas fa-times"></i>বাতিল</button>
+            </div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-list"></i>সকল নোটিশ <span class="hint">⠿ টেনে সাজান</span></div>
+          </div>
+          <div class="sec-body"><div class="dnd-list" id="noticeList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════ EVENTS ══════════ -->
+      <div class="panel" id="p-events">
+        <div class="section-preview">
+          <div class="sp-icon">📅</div>
+          <div class="sp-info"><h4>আসন্ন ইভেন্ট</h4><p>মাদ্রাসার অনুষ্ঠান, মাহফিল ও অন্যান্য ইভেন্ট</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-plus-circle" style="color:var(--green)"></i><span id="evFormLbl">নতুন ইভেন্ট</span></div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>শিরোনাম<span class="req">*</span></label><input class="fi" id="ev-title" placeholder="🕌 বার্ষিক মিলাদ মাহফিল"></div>
+              <div class="fg"><label>তারিখ</label><input class="fi" id="ev-date" type="date"></div>
+              <div class="fg"><label>দিন (সংখ্যা)</label><input class="fi" id="ev-day" placeholder="১৫"></div>
+              <div class="fg"><label>মাস (বাংলায়)</label><input class="fi" id="ev-mon" placeholder="ফেব্রুয়ারি"></div>
+              <div class="fg"><label>সময়</label><input class="fi" id="ev-time" placeholder="সকাল ১০:০০"></div>
+              <div class="fg"><label>স্থান</label><input class="fi" id="ev-place" placeholder="মাদ্রাসা প্রাঙ্গণ"></div>
+            </div>
+            <div class="fg"><label>বিবরণ</label><textarea class="fi" id="ev-desc" rows="3" placeholder="ইভেন্টের বিস্তারিত বিবরণ..."></textarea></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-green" style="flex:1;justify-content:center" onclick="saveEvent()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+              <button class="btn btn-ghost" id="ev-cancel" style="display:none" onclick="clearEvent()"><i class="fas fa-times"></i>বাতিল</button>
+            </div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-calendar-alt"></i>সকল ইভেন্ট <span class="hint">⠿ টেনে সাজান</span></div></div>
+          <div class="sec-body"><div class="dnd-list" id="eventList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════ TEACHERS ══════════ -->
+      <div class="panel" id="p-teachers">
+        <div class="section-preview">
+          <div class="sp-icon">👨‍🏫</div>
+          <div class="sp-info"><h4>শিক্ষকবৃন্দ</h4><p>শিক্ষকের তথ্য, ছবি, বিষয় ও যোগ্যতা পরিচালনা</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-user-plus" style="color:var(--purple)"></i><span id="tFormLbl">নতুন শিক্ষক</span></div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>নাম<span class="req">*</span></label><input class="fi" id="t-name" placeholder="মাওলানা আব্দুর রহমান"></div>
+              <div class="fg"><label>পদবী</label><input class="fi" id="t-role" placeholder="সিনিয়র শিক্ষক"></div>
+              <div class="fg"><label>বিষয়</label><input class="fi" id="t-subj" placeholder="কুরআন ও তাজবীদ"></div>
+              <div class="fg"><label>বিভাগ</label>
+                <select class="fi" id="t-dept">
+                  <option value="islamic">ইসলামিক বিভাগ</option>
+                  <option value="general">সাধারণ বিভাগ</option>
+                  <option value="science">বিজ্ঞান বিভাগ</option>
+                </select>
+              </div>
+              <div class="fg"><label>যোগ্যতা ও অভিজ্ঞতা</label><input class="fi" id="t-qual" placeholder="কামিল (হাদিস) | অভিজ্ঞতা: ২০ বছর"></div>
+              <div class="fg"><label>ফোন <span class="opt">(ঐচ্ছিক)</span></label><input class="fi" id="t-phone" placeholder="01XXXXXXXXX"></div>
+            </div>
+            <div class="fg">
+              <label>ছবির URL</label>
+              <div class="img-preview-wrap">
+                <div class="img-preview-box" id="t-prev-box" style="width:80px;height:80px;border-radius:50%">
+                  <i class="fas fa-user"></i>
+                  <img id="t-prev-img" alt="" style="border-radius:50%">
+                </div>
+                <div style="flex:1">
+                  <input class="fi" id="t-photo" placeholder="https://i.ibb.co/..." oninput="livePreview('t-photo','t-prev-img','t-prev-box')">
+                  <div class="fi-hint"><i class="fas fa-lightbulb"></i>ImgBB.com থেকে direct link ব্যবহার করুন</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-green" style="flex:1;justify-content:center" onclick="saveTeacher()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+              <button class="btn btn-ghost" id="t-cancel" style="display:none" onclick="clearTeacher()"><i class="fas fa-times"></i>বাতিল</button>
+            </div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-users"></i>সকল শিক্ষক <span class="hint">⠿ টেনে সাজান</span></div></div>
+          <div class="sec-body"><div class="dnd-list" id="teacherList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════ EXAMS ══════════ -->
+      <div class="panel" id="p-exams">
+        <div class="section-preview">
+          <div class="sp-icon">📝</div>
+          <div class="sp-info"><h4>পরীক্ষার সূচি</h4><p>পরীক্ষার তারিখ ও বিষয়সমূহ পরিচালনা</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-file-alt" style="color:var(--blue)"></i>পরীক্ষার সূচি <span class="hint">⠿ টেনে সাজান</span></div>
+            <button class="btn btn-outline-green btn-sm" onclick="addExam()"><i class="fas fa-plus"></i>পরীক্ষা যোগ</button>
+          </div>
+          <div class="sec-body">
+            <div class="dnd-list" id="examList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+            <button class="btn btn-green btn-full" style="margin-top:14px" onclick="saveExams()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ RESULTS ══════════ -->
+      <div class="panel" id="p-results">
+        <div class="section-preview">
+          <div class="sp-icon">🏆</div>
+          <div class="sp-info"><h4>ফলাফল পরিচালনা</h4><p>মেধা তালিকা, পরিসংখ্যান ও শিক্ষার্থীর ফলাফল এন্ট্রি</p></div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-btn active" onclick="switchTab(this,'tab-merit')">🏅 মেধা তালিকা</div>
+          <div class="tab-btn" onclick="switchTab(this,'tab-rstats')">📊 পরিসংখ্যান</div>
+          <div class="tab-btn" onclick="switchTab(this,'tab-entry')">📝 ফলাফল এন্ট্রি</div>
+        </div>
+        <div class="tab-pane active" id="tab-merit">
+          <div class="sec-card">
+            <div class="sec-head">
+              <div class="sec-title"><i class="fas fa-trophy" style="color:var(--gold)"></i>মেধা তালিকা <span class="hint">⠿ টেনে সাজান</span></div>
+              <button class="btn btn-outline-green btn-sm" onclick="addMerit()"><i class="fas fa-plus"></i>যোগ</button>
+            </div>
+            <div class="sec-body">
+              <div class="dnd-list" id="meritList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+              <button class="btn btn-green btn-full" style="margin-top:14px" onclick="saveMerit()"><i class="fas fa-save"></i>মেধা তালিকা সংরক্ষণ</button>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="tab-rstats">
+          <div class="sec-card">
+            <div class="sec-head"><div class="sec-title"><i class="fas fa-chart-bar" style="color:var(--blue)"></i>ফলাফল পরিসংখ্যান</div></div>
+            <div class="sec-body">
+              <div class="g4">
+                <div class="fg"><label>মোট শিক্ষার্থী</label><input class="fi" id="rs-total" placeholder="৭০০+"></div>
+                <div class="fg"><label>পাসের হার</label><input class="fi" id="rs-pass" placeholder="৯২%"></div>
+                <div class="fg"><label>GPA-5 প্রাপ্ত</label><input class="fi" id="rs-g5" placeholder="২৪+"></div>
+                <div class="fg"><label>শিক্ষক</label><input class="fi" id="rs-tc" placeholder="২২+"></div>
+              </div>
+              <button class="btn btn-green btn-full" onclick="saveRStats()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="tab-entry">
+          <div class="sec-card">
+            <div class="sec-head"><div class="sec-title"><i class="fas fa-file-alt" style="color:var(--green)"></i>শিক্ষার্থীর ফলাফল এন্ট্রি</div></div>
+            <div class="sec-body">
+              <div class="g3">
+                <div class="fg"><label>শ্রেণি</label>
+                  <select class="fi" id="re-cls">
+                    <option value="ibtedayi1">ইবতেদায়ী ১ম</option><option value="ibtedayi2">ইবতেদায়ী ২য়</option>
+                    <option value="ibtedayi3">ইবতেদায়ী ৩য়</option><option value="ibtedayi4">ইবতেদায়ী ৪র্থ</option>
+                    <option value="ibtedayi5">ইবতেদায়ী ৫ম</option><option value="class6">৬ষ্ঠ</option>
+                    <option value="class7">৭ম</option><option value="class8">৮ম</option>
+                    <option value="class9">৯ম (দাখিল)</option><option value="class10">১০ম (দাখিল)</option>
+                    <option value="class11">১১শ (আলিম)</option><option value="class12">১২শ (আলিম)</option>
+                  </select>
+                </div>
+                <div class="fg"><label>পরীক্ষা</label>
+                  <select class="fi" id="re-exam">
+                    <option value="first">প্রথম সাময়িক</option>
+                    <option value="second">দ্বিতীয় সাময়িক</option>
+                    <option value="annual">বার্ষিক</option>
+                  </select>
+                </div>
+                <div class="fg"><label>GPA</label><input class="fi" id="re-gpa" placeholder="5.00"></div>
+                <div class="fg"><label>রোল নম্বর<span class="req">*</span></label><input class="fi" id="re-roll" placeholder="101"></div>
+                <div class="fg"><label>শিক্ষার্থীর নাম<span class="req">*</span></label><input class="fi" id="re-name" placeholder="মোঃ আব্দুল্লাহ"></div>
+              </div>
+              <div class="divider"><span>বিষয় ও নম্বর</span></div>
+              <div id="subRows"></div>
+              <div style="display:flex;gap:8px;margin-bottom:14px;margin-top:8px">
+                <button class="btn btn-ghost btn-sm" onclick="addSubRow()"><i class="fas fa-plus"></i>বিষয় যোগ</button>
+              </div>
+              <button class="btn btn-green btn-full" onclick="saveResult()"><i class="fas fa-save"></i>ফলাফল সংরক্ষণ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ ADMISSION ══════════ -->
+      <div class="panel" id="p-admission">
+        <div class="section-preview">
+          <div class="sp-icon">📋</div>
+          <div class="sp-info"><h4>ভর্তি তথ্য</h4><p>ভর্তির তারিখ, পরীক্ষা ও ফি সংক্রান্ত তথ্য</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-clipboard-list" style="color:var(--green)"></i>ভর্তি কার্যক্রম</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>শিক্ষাবর্ষ</label><input class="fi" id="ad-yr" placeholder="২০২৫"></div>
+              <div class="fg"><label>ভর্তি ফি</label><input class="fi" id="ad-fee" placeholder="২,০০০ - ৮,০০০ টাকা"></div>
+              <div class="fg"><label>আবেদন শুরু</label><input class="fi" id="ad-st" placeholder="১ জানুয়ারি, ২০২৫"></div>
+              <div class="fg"><label>আবেদন শেষ</label><input class="fi" id="ad-en" placeholder="২৮ ফেব্রুয়ারি, ২০২৫"></div>
+              <div class="fg"><label>ভর্তি পরীক্ষা</label><input class="fi" id="ad-ex" placeholder="৫ মার্চ, ২০২৫"></div>
+              <div class="fg"><label>ফলাফলের তারিখ</label><input class="fi" id="ad-rs" placeholder="১০ মার্চ, ২০২৫"></div>
+            </div>
+            <button class="btn btn-green btn-full" onclick="saveAdmission()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ GALLERY ══════════ -->
+      <div class="panel" id="p-gallery">
+        <div class="section-preview">
+          <div class="sp-icon">🖼️</div>
+          <div class="sp-info"><h4>ফটো গ্যালারি</h4><p>ছবি যোগ করুন, এডিট করুন ও ড্র্যাগ করে সাজান</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-plus-circle" style="color:var(--green)"></i><span id="phFormLbl">নতুন ফটো যোগ</span></div></div>
+          <div class="sec-body">
+            <div class="fg">
+              <label>ছবির URL<span class="req">*</span></label>
+              <div class="img-preview-wrap">
+                <div class="img-preview-box" id="ph-box" style="width:120px;height:90px">
+                  <i class="fas fa-image"></i><span>Preview</span>
+                  <img id="ph-img" alt="">
+                </div>
+                <div style="flex:1">
+                  <input class="fi" id="ph-url" placeholder="https://i.ibb.co/..." oninput="livePreview('ph-url','ph-img','ph-box')">
+                  <div class="fi-hint"><i class="fas fa-lightbulb"></i><span>ImgBB, Cloudinary বা Google Photos থেকে direct link দিন। URL paste করলেই preview দেখা যাবে।</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="g3">
+              <div class="fg"><label>ক্যাটাগরি</label>
+                <select class="fi" id="ph-cat">
+                  <option value="campus">🏫 ক্যাম্পাস</option>
+                  <option value="event">🎉 ইভেন্ট</option>
+                  <option value="class">📚 ক্লাস</option>
+                  <option value="other">📁 অন্যান্য</option>
+                </select>
+              </div>
+              <div class="fg"><label>শিরোনাম</label><input class="fi" id="ph-title" placeholder="মাদ্রাসা ভবন"></div>
+              <div class="fg"><label>বিবরণ</label><input class="fi" id="ph-desc" placeholder="প্রধান ভবন, ২য় তলা"></div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-green" style="flex:1;justify-content:center" onclick="savePhoto()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+              <button class="btn btn-ghost" id="ph-cancel" style="display:none" onclick="clearPhoto()"><i class="fas fa-times"></i>বাতিল</button>
+            </div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-images"></i>সকল ফটো <span class="hint">⠿ টেনে সাজান</span></div></div>
+          <div class="sec-body"><div class="dnd-list" id="photoList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════ VIDEOS ══════════ -->
+      <div class="panel" id="p-videos">
+        <div class="section-preview">
+          <div class="sp-icon">🎬</div>
+          <div class="sp-info"><h4>ভিডিও গ্যালারি</h4><p>YouTube ভিডিও যোগ করুন ও সাজান</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-plus-circle" style="color:var(--red)"></i>নতুন ভিডিও যোগ</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>ভিডিও শিরোনাম<span class="req">*</span></label><input class="fi" id="vid-title" placeholder="মাদ্রাসা পরিচিতি ভিডিও"></div>
+              <div class="fg">
+                <label>YouTube Video ID</label>
+                <input class="fi" id="vid-ytid" placeholder="dQw4w9WgXcQ" oninput="ytHint()">
+              </div>
+            </div>
+            <div id="yt-hint" style="display:none;margin-bottom:12px" class="fi-hint">
+              <i class="fab fa-youtube" style="color:#ef4444;font-size:16px"></i>
+              <span>youtube.com/watch?v=<strong id="yt-id-txt"></strong> — এটি সঠিক হলে নিচের ছবি দেখা যাবে</span>
+            </div>
+            <div id="yt-thumb-wrap" style="display:none;margin-bottom:12px">
+              <img id="yt-thumb-img" style="width:240px;border-radius:var(--r);border:2px solid var(--border)" alt="">
+            </div>
+            <button class="btn btn-green btn-full" onclick="saveVideo()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-film"></i>সকল ভিডিও <span class="hint">⠿ টেনে সাজান</span></div></div>
+          <div class="sec-body"><div class="dnd-list" id="videoList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div></div>
+        </div>
+      </div>
+
+      <!-- ══════════ FEES ══════════ -->
+      <div class="panel" id="p-fees">
+        <div class="section-preview">
+          <div class="sp-icon">💰</div>
+          <div class="sp-info"><h4>ফি কাঠামো</h4><p>শ্রেণিভিত্তিক ভর্তি, মাসিক ও পরীক্ষার ফি</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-title"><i class="fas fa-money-bill-wave" style="color:var(--green)"></i>ফি কাঠামো <span class="hint">⠿ টেনে সাজান · সরাসরি এডিট করুন</span></div>
+            <button class="btn btn-outline-green btn-sm" onclick="addFee()"><i class="fas fa-plus"></i>শ্রেণি যোগ</button>
+          </div>
+          <div class="sec-body">
+            <div style="display:grid;grid-template-columns:80px 1fr 100px 100px 100px 36px;gap:6px;padding:8px 14px 8px 44px;background:#f8fafc;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px">
+              <div style="font-size:11px;font-weight:800;color:var(--text-3)">DB Key</div>
+              <div style="font-size:11px;font-weight:800;color:var(--text-3)">শ্রেণির নাম</div>
+              <div style="font-size:11px;font-weight:800;color:var(--text-3)">ভর্তি ফি</div>
+              <div style="font-size:11px;font-weight:800;color:var(--text-3)">মাসিক</div>
+              <div style="font-size:11px;font-weight:800;color:var(--text-3)">পরীক্ষা ফি</div>
+            </div>
+            <div class="dnd-list" id="feeList"><div class="dnd-empty"><i class="fas fa-spinner fa-spin"></i>লোড হচ্ছে...</div></div>
+            <button class="btn btn-green btn-full" style="margin-top:14px" onclick="saveFees()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTACT ══════════ -->
+      <div class="panel" id="p-contact">
+        <div class="section-preview">
+          <div class="sp-icon">📞</div>
+          <div class="sp-info"><h4>যোগাযোগ তথ্য</h4><p>ঠিকানা, ফোন, ইমেইল ও কার্যালয়ের সময়</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-map-marker-alt" style="color:var(--red)"></i>যোগাযোগ (বিস্তারিত)</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>পূর্ণ ঠিকানা</label><textarea class="fi" id="ct-addr" rows="3" placeholder="আরপাড়া, শালিখা&#10;মাগুরা-৭৬০০, বাংলাদেশ"></textarea></div>
+              <div class="fg"><label>ফোন নম্বর (প্রতি লাইনে একটি)</label><textarea class="fi" id="ct-phone" rows="3" placeholder="+৮৮০ ১XXXXXXXXX&#10;+৮৮০ ১XXXXXXXXX"></textarea></div>
+              <div class="fg"><label>ইমেইল</label><textarea class="fi" id="ct-email" rows="3" placeholder="info@madrasah.edu.bd"></textarea></div>
+              <div class="fg"><label>অফিস সময়</label><textarea class="fi" id="ct-hours" rows="3" placeholder="রবি-বৃহঃ: ৯:০০-৪:৩০&#10;শুক্র-শনি: বন্ধ"></textarea></div>
+            </div>
+            <div class="divider"><span>সংক্ষিপ্ত (Footer ও Card)</span></div>
+            <div class="g2">
+              <div class="fg"><label>ঠিকানা (সংক্ষিপ্ত)</label><input class="fi" id="ct-as" placeholder="আরপাড়া, শালিখা, মাগুরা"></div>
+              <div class="fg"><label>ফোন (সংক্ষিপ্ত)</label><input class="fi" id="ct-ps" placeholder="+৮৮০ ১XXXXXXXXX"></div>
+              <div class="fg"><label>ইমেইল (সংক্ষিপ্ত)</label><input class="fi" id="ct-es" placeholder="info@madrasah.edu.bd"></div>
+              <div class="fg"><label>সময় (সংক্ষিপ্ত)</label><input class="fi" id="ct-hs" placeholder="রবি-বৃহঃ: ৯:০০-৪:৩০"></div>
+              <div class="fg"><label><i class="fas fa-phone" style="color:var(--green)"></i> Call বাটন নম্বর</label><input class="fi" id="ct-call" placeholder="+8801XXXXXXXXX"></div>
+              <div class="fg"><label><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp নম্বর</label><input class="fi" id="ct-wa" placeholder="8801XXXXXXXXX"></div>
+            </div>
+            <button class="btn btn-green btn-full" onclick="saveContact()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ SITE INFO ══════════ -->
+      <div class="panel" id="p-siteinfo">
+        <div class="section-preview">
+          <div class="sp-icon">⚙️</div>
+          <div class="sp-info"><h4>সাইট সেটিং</h4><p>EIIN, সোশ্যাল মিডিয়া লিংক ও ফুটার টেক্সট</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-cog"></i>সাইট সেটিং</div></div>
+          <div class="sec-body">
+            <div class="g2">
+              <div class="fg"><label>EIIN নম্বর</label><input class="fi" id="si-eiin" placeholder="123456"></div>
+              <div class="fg"><label>প্রতিষ্ঠার বছর</label><input class="fi" id="si-est" placeholder="1985"></div>
+              <div class="fg"><label><i class="fab fa-facebook" style="color:#1877f2"></i> Facebook URL</label><input class="fi" id="si-fb" placeholder="https://facebook.com/..."></div>
+              <div class="fg"><label><i class="fab fa-youtube" style="color:#ef4444"></i> YouTube URL</label><input class="fi" id="si-yt" placeholder="https://youtube.com/..."></div>
+              <div class="fg"><label><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp নম্বর</label><input class="fi" id="si-wa" placeholder="8801XXXXXXXXX"></div>
+              <div class="fg"><label><i class="fab fa-instagram" style="color:#e1306c"></i> Instagram URL</label><input class="fi" id="si-ig" placeholder="https://instagram.com/..."></div>
+            </div>
+            <div class="fg"><label>Footer টেক্সট</label><input class="fi" id="si-footer" placeholder="© ২০২৫ আরপাড়া সদর আলিম মাদ্রাসা। সর্বস্বত্ব সংরক্ষিত।"></div>
+            <button class="btn btn-green btn-full" onclick="saveSiteInfo()"><i class="fas fa-save"></i>সংরক্ষণ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ SETUP ══════════ -->
+      <div class="panel" id="p-setup">
+        <div class="section-preview">
+          <div class="sp-icon">🔥</div>
+          <div class="sp-info"><h4>Firebase Setup গাইড</h4><p>ধাপে ধাপে Firebase ও সাইট সেটআপ করুন</p></div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-title"><i class="fas fa-fire" style="color:#f97316"></i>ধাপে ধাপে সেটআপ গাইড</div></div>
+          <div class="sec-body">
+            <div class="setup-step">
+              <div class="step-num">১</div>
+              <div class="step-body"><h5>Firebase Project তৈরি</h5><p><a href="https://console.firebase.google.com" target="_blank" style="color:var(--green)">console.firebase.google.com</a> → Add Project → নাম দিন → Continue</p></div>
+            </div>
+            <div class="setup-step">
+              <div class="step-num">২</div>
+              <div class="step-body"><h5>Realtime Database চালু</h5><p>Build → Realtime Database → Create → Test mode → নিচের Rules দিন:</p>
+              <div class="code-box">{ "rules": { ".read": true, ".write": "auth != null" } }</div></div>
+            </div>
+            <div class="setup-step">
+              <div class="step-num">৩</div>
+              <div class="step-body"><h5>Authentication চালু</h5><p>Build → Authentication → Email/Password Enable → Users → Add User → আপনার email ও password দিন</p></div>
+            </div>
+            <div class="setup-step">
+              <div class="step-num">৪</div>
+              <div class="step-body"><h5>Config Copy করুন</h5><p>⚙️ Project Settings → General → Web app → Register → firebaseConfig copy করুন</p>
+              <div class="code-box">const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "your-project.firebaseapp.com",
+  databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123:web:abc"
+};</div></div>
+            </div>
+            <div class="setup-step">
+              <div class="step-num">৫</div>
+              <div class="step-body"><h5>দুই ফাইলে Config Paste করুন</h5><p><code style="background:#f1f5f9;padding:2px 8px;border-radius:5px;font-size:12px">index.html</code> এবং <code style="background:#f1f5f9;padding:2px 8px;border-radius:5px;font-size:12px">admin-panel.html</code> — উভয়তে YOUR_API_KEY ইত্যাদি replace করুন</p></div>
+            </div>
+            <div class="setup-step">
+              <div class="step-num">৬</div>
+              <div class="step-body"><h5>GitHub Pages Deploy</h5><p>GitHub → New Repo → Upload files → Settings → Pages → Source: main → Save → আপনার সাইট লাইভ!</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg" id="confirmModal">
+  <div class="modal" style="max-width:380px">
+    <div class="confirm-icon" id="confirmIcon">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">নিশ্চিত করুন</div>
+    <div class="confirm-msg" id="confirmMsg">এটি মুছে ফেলবেন?</div>
+    <div class="modal-footer" style="justify-content:center">
+      <button class="btn btn-red" onclick="confirmYes()"><i class="fas fa-trash"></i>হ্যাঁ, মুছুন</button>
+      <button class="btn btn-ghost" onclick="closeConfirm()"><i class="fas fa-times"></i>বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ═══════════════════════════════
+     🔥 FIREBASE + APP SCRIPT
+═══════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set, push, remove, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ━━━━━━━━━━━━━━━━━━━━━━━
+// ⚙️ Firebase Config
+// ━━━━━━━━━━━━━━━━━━━━━━━
+const firebaseConfig = {
+  apiKey: "AIzaSyDVvulc_Nc0zkcS9G1qRi1HCksULHe1isI",
+  authDomain: "arparasadaralimm-be89e.firebaseapp.com",
+  databaseURL: "https://arparasadaralimm-be89e-default-rtdb.firebaseio.com",
+  projectId: "arparasadaralimm-be89e",
+  storageBucket: "arparasadaralimm-be89e.firebasestorage.app",
+  messagingSenderId: "583486628552",
+  appId: "1:583486628552:web:9ac007bab064add34f3bfd"
+};
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getDatabase(fbApp);
+
+// ── AUTH ──
+onAuthStateChanged(auth, u => {
+  if(u){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('sbEmail').textContent = u.email;
+    document.getElementById('sbAvatar').textContent = u.email[0].toUpperCase();
+    document.getElementById('fbStatus').textContent = '🟢 Firebase';
+    bootApp();
+  } else {
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('app').style.display='none';
+  }
+});
+window.doLogin = async () => {
+  const email=gv('lEmail'), pass=gv('lPass');
+  const btn=document.getElementById('lBtn');
+  const err=document.getElementById('lErr');
+  err.classList.remove('show');
+  if(!email||!pass){showLoginErr('ইমেইল ও পাসওয়ার্ড দিন।');return;}
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> প্রবেশ করছি...';
+  btn.disabled=true;
+  try{ await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){
+    showLoginErr(e.code.includes('credential')||e.code.includes('user')?'ইমেইল বা পাসওয়ার্ড ভুল।':'Firebase config চেক করুন।');
+    btn.innerHTML='<i class="fas fa-sign-in-alt"></i> প্রবেশ করুন';
+    btn.disabled=false;
+  }
+};
+function showLoginErr(m){ document.getElementById('lMsg').textContent=m; document.getElementById('lErr').classList.add('show'); }
+window.doLogout = () => { if(confirm('লগ আউট করবেন?')) signOut(auth); };
+document.getElementById('lPass').addEventListener('keydown',e=>{ if(e.key==='Enter') window.doLogin(); });
+
+// ── NAVIGATION ──
+const panelMeta = {
+  dashboard:['ড্যাশবোর্ড','ওয়েবসাইটের সারসংক্ষেপ'],
+  hero:['Hero সেকশন','মূল শিরোনাম, মটো, counter'],
+  ticker:['Ticker নোটিশ','স্ক্রলিং ঘোষণা বার্তা'],
+  about:['পরিচিতি ও অধ্যক্ষ','About কার্ড ও অধ্যক্ষ'],
+  features:['বিশেষ সুবিধা','সুবিধা কার্ড'],
+  notices:['নোটিশ বোর্ড','নোটিশ যোগ, এডিট, মুছা'],
+  events:['ইভেন্ট','আসন্ন অনুষ্ঠান'],
+  teachers:['শিক্ষকবৃন্দ','শিক্ষক যোগ ও পরিচালনা'],
+  exams:['পরীক্ষার সূচি','পরীক্ষার তারিখ'],
+  results:['ফলাফল','মেধা তালিকা ও result entry'],
+  admission:['ভর্তি তথ্য','ভর্তির তারিখ ও ফি'],
+  gallery:['ফটো গ্যালারি','ছবি যোগ ও সাজানো'],
+  videos:['ভিডিও','YouTube ভিডিও'],
+  fees:['ফি কাঠামো','শ্রেণিভিত্তিক ফি'],
+  contact:['যোগাযোগ','ফোন, ইমেইল, ঠিকানা'],
+  siteinfo:['সাইট সেটিং','EIIN, সোশ্যাল, ফুটার'],
+  setup:['Firebase Setup','সেটআপ গাইড'],
+};
+window.goPanel = id => {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(l=>l.classList.remove('active'));
+  document.getElementById('p-'+id)?.classList.add('active');
+  document.querySelector(`.sb-item[data-p="${id}"]`)?.classList.add('active');
+  const [title,sub] = panelMeta[id]||[id,''];
+  document.getElementById('pageTitle').textContent = title;
+  document.getElementById('pageSub').textContent = sub;
+  closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+function goPanel(id){ window.goPanel(id); }
+document.querySelectorAll('.sb-item[data-p]').forEach(el=>el.addEventListener('click',()=>goPanel(el.dataset.p)));
+window.openSidebar = () => { document.getElementById('sidebar').classList.add('open'); document.getElementById('mobOverlay').classList.add('open'); };
+window.closeSidebar = () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobOverlay').classList.remove('open'); };
+
+// ── TOAST ──
+window.toast = (msg, type='ok') => {
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  const icoMap={ok:'fa-check-circle',err:'fa-exclamation-circle',warn:'fa-exclamation-triangle',info:'fa-info-circle'};
+  t.className=`toast ${type==='ok'?'':type}`;
+  t.innerHTML=`<i class="fas ${icoMap[type]||icoMap.ok}"></i><span>${msg}</span>`;
+  w.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),380); },3500);
+};
+
+// ── CONFIRM ──
+let _cb=null;
+window.confirmYes = () => { if(_cb)_cb(); closeConfirm(); };
+window.closeConfirm = () => document.getElementById('confirmModal').classList.remove('open');
+function confirm_(title, msg, cb, icon='🗑️'){
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmIcon').textContent = icon;
+  _cb = cb;
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+// ── HELPERS ──
+const gv = id => (document.getElementById(id)?.value||'').trim();
+const sv = (id,val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+const gch = id => document.getElementById(id)?.checked;
+const sch = (id,val) => { const el=document.getElementById(id); if(el) el.checked=!!val; };
+
+// ── LIVE PREVIEW ──
+window.livePreview = (inputId, imgId, boxId) => {
+  const url=gv(inputId);
+  const img=document.getElementById(imgId);
+  const box=document.getElementById(boxId);
+  if(url){
+    img.src=url;
+    img.onload=()=>{ img.classList.add('loaded'); box.classList.add('has-img'); };
+    img.onerror=()=>{ img.classList.remove('loaded'); box.classList.remove('has-img'); };
+  } else {
+    img.classList.remove('loaded'); box.classList.remove('has-img');
+  }
+};
+
+// ── YOUTUBE HINT ──
+window.ytHint = () => {
+  const id=gv('vid-ytid');
+  const hint=document.getElementById('yt-hint');
+  const thumbWrap=document.getElementById('yt-thumb-wrap');
+  if(id){
+    document.getElementById('yt-id-txt').textContent=id;
+    hint.style.display='flex';
+    const img=document.getElementById('yt-thumb-img');
+    img.src=`https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+    thumbWrap.style.display='block';
+  } else {
+    hint.style.display='none';
+    thumbWrap.style.display='none';
+  }
+};
+
+// ── TABS ──
+window.switchTab = (btn, tabId) => {
+  const parent = btn.closest('.panel')||btn.closest('#app');
+  parent.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  parent.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId)?.classList.add('active');
+};
+
+// ════════════════════════════════
+// DRAG AND DROP ENGINE
+// ════════════════════════════════
+let dragSrc=null;
+function makeDraggable(el){
+  el.setAttribute('draggable',true);
+  el.querySelector('.drag-handle')?.addEventListener('mousedown',()=>{ el.setAttribute('draggable',true); });
+  el.addEventListener('dragstart',e=>{
+    dragSrc=el;el.classList.add('dragging');
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain','');
+  });
+  el.addEventListener('dragend',()=>{
+    el.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(e=>e.classList.remove('drag-over'));
+  });
+  el.addEventListener('dragover',e=>{
+    e.preventDefault(); e.dataTransfer.dropEffect='move';
+    if(dragSrc&&dragSrc!==el) el.classList.add('drag-over');
+  });
+  el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+  el.addEventListener('drop',e=>{
+    e.preventDefault(); el.classList.remove('drag-over');
+    if(dragSrc&&dragSrc!==el){
+      const p=el.parentNode;
+      const items=[...p.children];
+      const si=items.indexOf(dragSrc), ti=items.indexOf(el);
+      if(si<ti) p.insertBefore(dragSrc,el.nextSibling);
+      else p.insertBefore(dragSrc,el);
+      dragSrc.style.transition='background .35s';
+      dragSrc.style.background='#f0fdf4';
+      setTimeout(()=>{ dragSrc.style.background=''; },500);
+      toast('✅ সাজানো হয়েছে!','info');
+    }
+  });
+}
+function getDNDOrder(listId){
+  return [...document.querySelectorAll(`#${listId} [data-key]`)].map(el=>el.dataset.key);
+}
+// Make DnD handle work on touch too (basic)
+function touchDnD(container){
+  let dragging=null;
+  container.addEventListener('touchstart',e=>{
+    const item=e.target.closest('[data-key]');
+    if(item&&e.target.closest('.drag-handle')){ dragging=item; item.classList.add('dragging'); e.preventDefault(); }
+  },{passive:false});
+  container.addEventListener('touchmove',e=>{
+    if(!dragging) return; e.preventDefault();
+    const t=e.touches[0];
+    const over=document.elementFromPoint(t.clientX,t.clientY)?.closest('[data-key]');
+    if(over&&over!==dragging){
+      const p=over.parentNode;
+      const items=[...p.children];
+      const si=items.indexOf(dragging),ti=items.indexOf(over);
+      if(si<ti) p.insertBefore(dragging,over.nextSibling);
+      else p.insertBefore(dragging,over);
+    }
+  },{passive:false});
+  container.addEventListener('touchend',()=>{ if(dragging){ dragging.classList.remove('dragging'); dragging=null; } });
+}
+
+// ════════════════════════════════
+// BOOT
+// ════════════════════════════════
+function bootApp(){
+  loadHero(); loadTicker(); loadAbout(); loadFeatures(); loadNotices();
+  loadEvents(); loadTeachers(); loadExams(); loadMerit(); loadRStats();
+  loadAdmission(); loadGallery(); loadVideos(); loadFees();
+  loadContact(); loadSiteInfo();
+  addSubRow(); addSubRow(); addSubRow();
+}
+
+// ── HERO ──
+function loadHero(){
+  get(ref(db,'hero')).then(s=>{
+    const d=s.val()||{};
+    sv('h-tbn',d.titleBn); sv('h-ten',d.titleEn); sv('h-mbn',d.mottoBn); sv('h-men',d.mottoEn);
+    sv('h-dbn',d.descBn); sv('h-den',d.descEn);
+    sv('h-st',d.students); sv('h-tc',d.teachers); sv('h-pr',d.passRate); sv('h-yr',d.years);
+    document.getElementById('kStudents').textContent = d.students||'—';
+    document.getElementById('kTeachers').textContent = d.teachers||'—';
+    document.getElementById('kPass').textContent = (d.passRate||'—')+'%';
+  });
+}
+window.saveHero = async() => {
+  const data={
+    titleBn:gv('h-tbn'),titleEn:gv('h-ten'),mottoBn:gv('h-mbn'),mottoEn:gv('h-men'),
+    descBn:gv('h-dbn'),descEn:gv('h-den'),
+    students:+gv('h-st')||0,teachers:+gv('h-tc')||0,passRate:+gv('h-pr')||0,years:+gv('h-yr')||0
+  };
+  await set(ref(db,'hero'),data);
+  await update(ref(db,'stats'),{students:data.students,teachers:data.teachers,passRate:data.passRate,years:data.years});
+  toast('✅ Hero সংরক্ষণ হয়েছে!');
+};
+
+// ── TICKER ──
+let tickerData={};
+function loadTicker(){
+  onValue(ref(db,'ticker'),s=>{ tickerData=s.val()||{}; renderTicker(); });
+}
+function renderTicker(){
+  const list=document.getElementById('tickerList');
+  const items=Object.entries(tickerData);
+  if(!items.length){ list.innerHTML='<div class="dnd-empty"><i class="fas fa-scroll"></i>কোনো Ticker নেই।</div>'; return; }
+  list.innerHTML=items.map(([id,t])=>`
+    <div class="dnd-item" data-key="${id}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content">
+        <div class="item-title" style="white-space:normal">${t.text||'—'}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <label class="sw" title="${t.active?'নিষ্ক্রিয় করুন':'সক্রিয় করুন'}">
+          <input type="checkbox" ${t.active?'checked':''} onchange="toggleTicker('${id}',this.checked)">
+          <span class="sw-track"></span>
+        </label>
+        <button class="btn btn-red btn-xs" onclick="deleteTicker('${id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+  touchDnD(list);
+}
+window.addTicker = async() => {
+  const t=gv('tk-txt'); if(!t){toast('বার্তা লিখুন।','err');return;}
+  await push(ref(db,'ticker'),{text:t,active:true});
+  sv('tk-txt',''); toast('✅ Ticker যোগ হয়েছে!');
+};
+window.toggleTicker = async(id,val) => await update(ref(db,`ticker/${id}`),{active:val});
+window.deleteTicker = id => confirm_('Ticker মুছুন','এই বার্তাটি স্থায়ীভাবে মুছে যাবে।',async()=>{ await remove(ref(db,`ticker/${id}`)); toast('🗑️ মুছে গেছে।'); });
+
+// ── ABOUT CARDS ──
+let aboutCards=[
+  {icon:'fas fa-quran',titleBn:'ইসলামিক শিক্ষা',descBn:'কুরআন, হাদিস, ফিকহ ও ইসলামিক স্টাডিজে মানসম্মত শিক্ষা'},
+  {icon:'fas fa-laptop-code',titleBn:'আধুনিক শিক্ষা',descBn:'বিজ্ঞান, গণিত, ICT সহ আধুনিক বিষয়ে দক্ষ শিক্ষকমণ্ডলী'},
+  {icon:'fas fa-users',titleBn:'অভিজ্ঞ শিক্ষকমণ্ডলী',descBn:'যোগ্য ও অভিজ্ঞ শিক্ষকমণ্ডলী শিক্ষার্থীদের উন্নয়নে নিবেদিত'},
+  {icon:'fas fa-mosque',titleBn:'ইসলামিক পরিবেশ',descBn:'সুন্দর ও পবিত্র পরিবেশে ইসলামিক মূল্যবোধ নিয়ে বেড়ে উঠছে'},
+];
+function loadAbout(){
+  get(ref(db,'aboutCards')).then(s=>{ if(s.val()) aboutCards=Array.isArray(s.val())?s.val():Object.values(s.val()); renderAbout(); });
+  get(ref(db,'principal')).then(s=>{
+    const d=s.val()||{};
+    sv('pr-name',d.name); sv('pr-desig',d.designation); sv('pr-msg',d.message); sv('pr-photo',d.photo);
+    if(d.photo){ const img=document.getElementById('pr-prev-img'); img.src=d.photo; img.classList.add('loaded'); document.getElementById('pr-prev-box').classList.add('has-img'); }
+  });
+}
+function renderAbout(){
+  const list=document.getElementById('aboutList');
+  const cards=Array.isArray(aboutCards)?aboutCards:Object.values(aboutCards);
+  list.innerHTML=cards.map((c,i)=>`
+    <div class="dnd-item" data-key="${i}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content" style="display:grid;grid-template-columns:130px 1fr 1fr;gap:8px;align-items:center">
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">Font Awesome Icon</label>
+        <input class="fi" value="${c.icon||''}" placeholder="fas fa-quran" style="font-size:12px" onchange="aboutCards[${i}].icon=this.value"></div>
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">শিরোনাম</label>
+        <input class="fi" value="${c.titleBn||''}" placeholder="শিরোনাম" style="font-size:12px" onchange="aboutCards[${i}].titleBn=this.value"></div>
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">বিবরণ</label>
+        <input class="fi" value="${c.descBn||''}" placeholder="বিবরণ" style="font-size:12px" onchange="aboutCards[${i}].descBn=this.value"></div>
+      </div>
+      <button class="btn btn-red btn-xs" onclick="removeAboutCard(${i})"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.addAboutCard = () => { const c=Array.isArray(aboutCards)?aboutCards:Object.values(aboutCards); c.push({icon:'fas fa-star',titleBn:'নতুন বিভাগ',descBn:'বিবরণ যোগ করুন'}); aboutCards=c; renderAbout(); toast('নতুন কার্ড যোগ হয়েছে','info'); };
+window.removeAboutCard = i => { const c=Array.isArray(aboutCards)?[...aboutCards]:Object.values(aboutCards); c.splice(i,1); aboutCards=c; renderAbout(); };
+window.saveAbout = async() => {
+  const cards=Array.isArray(aboutCards)?aboutCards:Object.values(aboutCards);
+  const order=getDNDOrder('aboutList');
+  const reordered=order.map(idx=>cards[+idx]).filter(Boolean);
+  await set(ref(db,'aboutCards'),reordered.length?reordered:cards);
+  toast('✅ পরিচিতি কার্ড সংরক্ষণ হয়েছে!');
+};
+window.savePrincipal = async() => {
+  await set(ref(db,'principal'),{name:gv('pr-name'),designation:gv('pr-desig'),message:gv('pr-msg'),photo:gv('pr-photo')});
+  toast('✅ অধ্যক্ষের তথ্য সংরক্ষণ হয়েছে!');
+};
+
+// ── FEATURES ──
+let featureCards=[
+  {icon:'fas fa-award',title:'সরকার অনুমোদিত',desc:'বাংলাদেশ মাদ্রাসা শিক্ষা বোর্ড অনুমোদিত'},
+  {icon:'fas fa-book-reader',title:'লাইব্রেরি সুবিধা',desc:'হাজারের বেশি বই সংরক্ষিত'},
+  {icon:'fas fa-desktop',title:'কম্পিউটার ল্যাব',desc:'ICT শিক্ষা ও ব্যবহারিক ক্লাস'},
+  {icon:'fas fa-futbol',title:'খেলার মাঠ',desc:'শারীরিক শিক্ষা ও বিনোদন'},
+  {icon:'fas fa-hand-holding-heart',title:'বৃত্তি সুবিধা',desc:'মেধাবী ও দরিদ্র শিক্ষার্থীদের জন্য'},
+  {icon:'fas fa-shield-alt',title:'নিরাপদ পরিবেশ',desc:'সম্পূর্ণ নিরাপদ পরিবেশ'},
+];
+function loadFeatures(){
+  get(ref(db,'features')).then(s=>{ if(s.val()) featureCards=Array.isArray(s.val())?s.val():Object.values(s.val()); renderFeatures(); });
+}
+function renderFeatures(){
+  const list=document.getElementById('featureList');
+  list.innerHTML=featureCards.map((c,i)=>`
+    <div class="dnd-item" data-key="${i}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content" style="display:grid;grid-template-columns:130px 1fr 1fr;gap:8px;align-items:center">
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">Icon</label>
+        <input class="fi" value="${c.icon||''}" placeholder="fas fa-award" style="font-size:12px" onchange="featureCards[${i}].icon=this.value"></div>
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">শিরোনাম</label>
+        <input class="fi" value="${c.title||''}" placeholder="শিরোনাম" style="font-size:12px" onchange="featureCards[${i}].title=this.value"></div>
+        <div><label style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:4px;display:block">বিবরণ</label>
+        <input class="fi" value="${c.desc||''}" placeholder="বিবরণ" style="font-size:12px" onchange="featureCards[${i}].desc=this.value"></div>
+      </div>
+      <button class="btn btn-red btn-xs" onclick="featureCards.splice(${i},1);renderFeatures()"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.addFeature = () => { featureCards.push({icon:'fas fa-star',title:'নতুন সুবিধা',desc:''}); renderFeatures(); toast('নতুন সুবিধা কার্ড যোগ হয়েছে','info'); };
+window.saveFeatures = async() => {
+  const order=getDNDOrder('featureList');
+  const reordered=order.map(i=>featureCards[+i]).filter(Boolean);
+  await set(ref(db,'features'),reordered.length?reordered:featureCards);
+  toast('✅ বিশেষ সুবিধা সংরক্ষণ হয়েছে!');
+};
+
+// ── NOTICES ──
+let noticeEditId=null;
+function loadNotices(){
+  onValue(ref(db,'notices'),s=>{
+    const data=s.val()||{};
+    const count=Object.keys(data).length;
+    document.getElementById('noticeCount').textContent=count;
+    document.getElementById('kNotices').textContent=count;
+    renderNotices(data); renderDashRecent(data);
+  });
+}
+function renderNotices(data){
+  const list=document.getElementById('noticeList');
+  const items=Object.entries(data).sort((a,b)=>(b[1].date||'').localeCompare(a[1].date||''));
+  if(!items.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-bell-slash"></i>কোনো নোটিশ নেই।</div>';return;}
+  const typeColors={urgent:'var(--red)',normal:'var(--green)',academic:'var(--blue)',event:'var(--gold)'};
+  const typeBadge={urgent:['bg-red','🔴 জরুরি'],normal:['bg-green','🟢 সাধারণ'],academic:['bg-blue','🔵 একাডেমিক'],event:['bg-gold','🟡 ইভেন্ট']};
+  list.innerHTML=items.map(([id,n])=>{
+    const[bc,bt]=typeBadge[n.type]||typeBadge.normal;
+    return `<div class="dnd-item" data-key="${id}" style="border-left:3px solid ${typeColors[n.type]||typeColors.normal}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content">
+        <div class="item-title">${n.title||'—'}</div>
+        <div class="item-sub">${(n.body||'').substring(0,100)}${(n.body||'').length>100?'...':''}</div>
+        <div class="item-meta">
+          <span class="badge ${bc}">${bt}</span>
+          <span class="badge ${n.active?'bg-green':'bg-gray'}">${n.active?'সক্রিয়':'নিষ্ক্রিয়'}</span>
+          <span style="font-size:11px;color:var(--text-3)">${n.dateDisplay||n.date||''}</span>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-amber btn-xs" title="এডিট" onclick="editNotice('${id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-red btn-xs" title="মুছুন" onclick="deleteNotice('${id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+  touchDnD(list);
+}
+function renderDashRecent(data){
+  const items=Object.entries(data).sort((a,b)=>(b[1].date||'').localeCompare(a[1].date||'')).slice(0,4);
+  const el=document.getElementById('dashRecentNotices');
+  if(!items.length){el.innerHTML='<p style="color:var(--text-3);font-size:13px">কোনো নোটিশ নেই।</p>';return;}
+  el.innerHTML=items.map(([,n])=>`
+    <div class="recent-row">
+      <div class="recent-dot" style="background:${n.type==='urgent'?'#fef2f2':'#ecfdf5'}">${n.type==='urgent'?'🔴':'🟢'}</div>
+      <div><div class="recent-title">${n.title||'—'}</div><div class="recent-meta">${n.dateDisplay||n.date||''}</div></div>
+    </div>`).join('');
+}
+window.saveNotice = async() => {
+  const title=gv('n-title'),body=gv('n-body');
+  if(!title||!body){toast('শিরোনাম ও বিবরণ দিন।','err');return;}
+  const data={title,body,type:gv('n-type'),date:gv('n-date'),dateDisplay:gv('n-dbn'),link:gv('n-link'),active:gch('n-active')};
+  if(noticeEditId){ await update(ref(db,`notices/${noticeEditId}`),data); toast('✅ নোটিশ আপডেট হয়েছে!'); }
+  else{ await push(ref(db,'notices'),data); toast('✅ নোটিশ যোগ হয়েছে!'); }
+  clearNotice();
+};
+window.editNotice = async id => {
+  const s=await get(ref(db,`notices/${id}`));const n=s.val();if(!n)return;
+  sv('n-title',n.title);sv('n-body',n.body);sv('n-type',n.type);sv('n-date',n.date);sv('n-dbn',n.dateDisplay);sv('n-link',n.link);sch('n-active',n.active);
+  noticeEditId=id;
+  document.getElementById('noticeFormLbl').textContent='✏️ নোটিশ এডিট';
+  document.getElementById('n-cancel').style.display='';
+  goPanel('notices'); window.scrollTo({top:0,behavior:'smooth'}); toast('✏️ এডিট মোড।','warn');
+};
+window.deleteNotice = id => confirm_('নোটিশ মুছুন','এই নোটিশটি স্থায়ীভাবে মুছে যাবে।',async()=>{ await remove(ref(db,`notices/${id}`)); toast('🗑️ নোটিশ মুছে গেছে।'); });
+window.clearNotice = () => {
+  ['n-title','n-body','n-link','n-dbn'].forEach(id=>sv(id,''));sv('n-type','normal');sv('n-date','');sch('n-active',true);
+  noticeEditId=null;document.getElementById('noticeFormLbl').textContent='নতুন নোটিশ';document.getElementById('n-cancel').style.display='none';
+};
+
+// ── EVENTS ──
+let evEditId=null;
+function loadEvents(){
+  onValue(ref(db,'events'),s=>{ renderEvents(s.val()||{}); });
+}
+function renderEvents(data){
+  const list=document.getElementById('eventList');
+  const items=Object.entries(data);
+  if(!items.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-calendar-times"></i>কোনো ইভেন্ট নেই।</div>';return;}
+  list.innerHTML=items.map(([id,ev])=>`
+    <div class="dnd-item" data-key="${id}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content">
+        <div class="item-title">${ev.title||'—'}</div>
+        <div class="item-meta">
+          ${ev.day?`<span class="badge bg-blue">📅 ${ev.day} ${ev.month||''}</span>`:''}
+          ${ev.time?`<span class="badge bg-gray">🕐 ${ev.time}</span>`:''}
+          ${ev.place?`<span class="badge bg-green">📍 ${ev.place}</span>`:''}
+        </div>
+        ${ev.desc?`<div class="item-sub">${ev.desc.substring(0,80)}</div>`:''}
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-amber btn-xs" onclick="editEvent('${id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-red btn-xs" onclick="deleteEvent('${id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.saveEvent = async() => {
+  const title=gv('ev-title');if(!title){toast('শিরোনাম দিন।','err');return;}
+  const data={title,date:gv('ev-date'),day:gv('ev-day'),month:gv('ev-mon'),time:gv('ev-time'),place:gv('ev-place'),desc:gv('ev-desc')};
+  if(evEditId){ await update(ref(db,`events/${evEditId}`),data); toast('✅ ইভেন্ট আপডেট!'); evEditId=null; }
+  else{ await push(ref(db,'events'),data); toast('✅ ইভেন্ট যোগ হয়েছে!'); }
+  clearEvent();
+};
+window.editEvent = async id => {
+  const s=await get(ref(db,`events/${id}`));const ev=s.val();if(!ev)return;
+  sv('ev-title',ev.title);sv('ev-date',ev.date);sv('ev-day',ev.day);sv('ev-mon',ev.month);sv('ev-time',ev.time);sv('ev-place',ev.place);sv('ev-desc',ev.desc);
+  evEditId=id; document.getElementById('evFormLbl').textContent='✏️ ইভেন্ট এডিট';
+  document.getElementById('ev-cancel').style.display=''; goPanel('events'); toast('✏️ এডিট মোড','warn');
+};
+window.deleteEvent = id => confirm_('ইভেন্ট মুছুন','এই ইভেন্টটি মুছে যাবে।',async()=>{ await remove(ref(db,`events/${id}`)); toast('🗑️ মুছে গেছে।'); });
+window.clearEvent = () => {
+  ['ev-title','ev-date','ev-day','ev-mon','ev-time','ev-place','ev-desc'].forEach(id=>sv(id,''));
+  evEditId=null; document.getElementById('evFormLbl').textContent='নতুন ইভেন্ট'; document.getElementById('ev-cancel').style.display='none';
+};
+
+// ── TEACHERS ──
+let tEditId=null;
+function loadTeachers(){
+  onValue(ref(db,'teachers'),s=>{ renderTeachers(s.val()||{}); });
+}
+function renderTeachers(data){
+  const list=document.getElementById('teacherList');
+  const items=Object.entries(data);
+  if(!items.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-user-slash"></i>কোনো শিক্ষক নেই।</div>';return;}
+  const deptBadge={islamic:'bg-green',general:'bg-blue',science:'bg-purple'};
+  const deptName={islamic:'ইসলামিক',general:'সাধারণ',science:'বিজ্ঞান'};
+  list.innerHTML=items.map(([id,t])=>`
+    <div class="dnd-item" data-key="${id}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      ${t.photo?`<img class="photo-thumb" src="${t.photo}" alt="${t.name}" onerror="this.style.display='none'">`:'<div class="photo-thumb-ph"><i class="fas fa-user"></i></div>'}
+      <div class="item-content">
+        <div class="item-title">${t.name||'—'}</div>
+        <div class="item-sub">${t.role||''} ${t.subject?'· '+t.subject:''}</div>
+        <div class="item-meta">
+          <span class="badge ${deptBadge[t.dept]||'bg-gray'}">${deptName[t.dept]||t.dept||'অন্যান্য'}</span>
+          ${t.qualification?`<span class="badge bg-gold">${t.qualification.substring(0,30)}</span>`:''}
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-amber btn-xs" onclick="editTeacher('${id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-red btn-xs" onclick="deleteTeacher('${id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+  touchDnD(list);
+}
+window.saveTeacher = async() => {
+  const name=gv('t-name');if(!name){toast('নাম দিন।','err');return;}
+  const data={name,role:gv('t-role'),subject:gv('t-subj'),dept:gv('t-dept'),qualification:gv('t-qual'),phone:gv('t-phone'),photo:gv('t-photo')};
+  if(tEditId){ await update(ref(db,`teachers/${tEditId}`),data); toast('✅ তথ্য আপডেট হয়েছে!'); tEditId=null; }
+  else{ await push(ref(db,'teachers'),data); toast('✅ শিক্ষক যোগ হয়েছে!'); }
+  clearTeacher();
+};
+window.editTeacher = async id => {
+  const s=await get(ref(db,`teachers/${id}`));const t=s.val();if(!t)return;
+  sv('t-name',t.name);sv('t-role',t.role);sv('t-subj',t.subject);sv('t-dept',t.dept);sv('t-qual',t.qualification);sv('t-phone',t.phone);sv('t-photo',t.photo);
+  if(t.photo){const img=document.getElementById('t-prev-img');img.src=t.photo;img.classList.add('loaded');document.getElementById('t-prev-box').classList.add('has-img');}
+  tEditId=id; document.getElementById('tFormLbl').textContent='✏️ শিক্ষক এডিট';
+  document.getElementById('t-cancel').style.display=''; goPanel('teachers'); toast('✏️ এডিট মোড','warn');
+};
+window.deleteTeacher = id => confirm_('শিক্ষক মুছুন','এই শিক্ষকের সব তথ্য মুছে যাবে।',async()=>{ await remove(ref(db,`teachers/${id}`)); toast('🗑️ মুছে গেছে।'); });
+window.clearTeacher = () => {
+  ['t-name','t-role','t-subj','t-qual','t-phone','t-photo'].forEach(id=>sv(id,''));sv('t-dept','islamic');
+  document.getElementById('t-prev-img').classList.remove('loaded');document.getElementById('t-prev-box').classList.remove('has-img');
+  tEditId=null;document.getElementById('tFormLbl').textContent='নতুন শিক্ষক';document.getElementById('t-cancel').style.display='none';
+};
+
+// ── EXAMS ──
+let examData=[];
+function loadExams(){
+  get(ref(db,'exams')).then(s=>{ if(s.val()) examData=Array.isArray(s.val())?s.val():Object.values(s.val()); renderExams(); });
+}
+function renderExams(){
+  const list=document.getElementById('examList');
+  if(!examData.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-file-alt"></i>কোনো পরীক্ষা নেই।</div>';return;}
+  list.innerHTML=examData.map((ex,i)=>`
+    <div class="dnd-item" data-key="${i}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center">
+        <input class="fi" value="${ex.name||''}" placeholder="পরীক্ষার নাম" style="font-size:12px" onchange="examData[${i}].name=this.value">
+        <input class="fi" value="${ex.date||''}" placeholder="তারিখ" style="font-size:12px" onchange="examData[${i}].date=this.value">
+        <input class="fi" value="${ex.class||''}" placeholder="শ্রেণি" style="font-size:12px" onchange="examData[${i}].class=this.value">
+      </div>
+      <button class="btn btn-red btn-xs" onclick="examData.splice(${i},1);renderExams()"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.addExam = () => { examData.push({name:'নতুন পরীক্ষা',date:'',class:''}); renderExams(); };
+window.saveExams = async() => {
+  const order=getDNDOrder('examList');
+  const reordered=order.map(i=>examData[+i]).filter(Boolean);
+  await set(ref(db,'exams'),reordered.length?reordered:examData);
+  toast('✅ পরীক্ষার সূচি সংরক্ষণ হয়েছে!');
+};
+
+// ── MERIT / RESULTS ──
+let meritData=[];
+function loadMerit(){
+  get(ref(db,'merit')).then(s=>{ if(s.val()) meritData=Array.isArray(s.val())?s.val():Object.values(s.val()); renderMerit(); });
+}
+function renderMerit(){
+  const list=document.getElementById('meritList');
+  if(!meritData.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-trophy"></i>কোনো মেধা তালিকা নেই।</div>';return;}
+  list.innerHTML=meritData.map((m,i)=>`
+    <div class="dnd-item" data-key="${i}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content" style="display:grid;grid-template-columns:60px 1fr 80px 80px;gap:8px;align-items:center">
+        <input class="fi" value="${m.rank||''}" placeholder="স্থান" style="font-size:12px;text-align:center" onchange="meritData[${i}].rank=this.value">
+        <input class="fi" value="${m.name||''}" placeholder="নাম" style="font-size:12px" onchange="meritData[${i}].name=this.value">
+        <input class="fi" value="${m.gpa||''}" placeholder="GPA" style="font-size:12px" onchange="meritData[${i}].gpa=this.value">
+        <input class="fi" value="${m.class||''}" placeholder="শ্রেণি" style="font-size:12px" onchange="meritData[${i}].class=this.value">
+      </div>
+      <button class="btn btn-red btn-xs" onclick="meritData.splice(${i},1);renderMerit()"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.addMerit = () => { meritData.push({rank:'',name:'',gpa:'',class:''}); renderMerit(); };
+window.saveMerit = async() => {
+  const order=getDNDOrder('meritList');
+  const reordered=order.map(i=>meritData[+i]).filter(Boolean);
+  await set(ref(db,'merit'),reordered.length?reordered:meritData);
+  toast('✅ মেধা তালিকা সংরক্ষণ হয়েছে!');
+};
+function loadRStats(){ get(ref(db,'resultStats')).then(s=>{ const d=s.val()||{}; sv('rs-total',d.total);sv('rs-pass',d.pass);sv('rs-g5',d.gpa5);sv('rs-tc',d.teachers); }); }
+window.saveRStats = async() => { await set(ref(db,'resultStats'),{total:gv('rs-total'),pass:gv('rs-pass'),gpa5:gv('rs-g5'),teachers:gv('rs-tc')}); toast('✅ পরিসংখ্যান সংরক্ষণ হয়েছে!'); };
+
+// ── RESULT ENTRY ──
+window.addSubRow = () => {
+  const container=document.getElementById('subRows');
+  const row=document.createElement('div');
+  row.className='dnd-item';row.style.marginBottom='6px';
+  row.innerHTML=`
+    <div class="item-content" style="display:grid;grid-template-columns:1fr 80px 80px;gap:8px">
+      <input class="fi" placeholder="বিষয়ের নাম" style="font-size:12px">
+      <input class="fi" type="number" placeholder="প্রাপ্ত" style="font-size:12px">
+      <input class="fi" type="number" placeholder="পূর্ণমান" value="100" style="font-size:12px">
+    </div>
+    <button class="btn btn-red btn-xs" onclick="this.closest('.dnd-item').remove()"><i class="fas fa-minus"></i></button>`;
+  container.appendChild(row);
+};
+window.saveResult = async() => {
+  const cls=gv('re-cls'),exam=gv('re-exam'),roll=gv('re-roll'),name=gv('re-name'),gpa=gv('re-gpa');
+  if(!roll||!name){toast('রোল ও নাম দিন।','err');return;}
+  const subs=[...document.querySelectorAll('#subRows .dnd-item')].reduce((a,r)=>{
+    const ins=r.querySelectorAll('input');const n=ins[0].value.trim();
+    if(n) a.push({name:n,marks:+ins[1].value,full:+ins[2].value||100});return a;
+  },[]);
+  if(!subs.length){toast('বিষয় দিন।','err');return;}
+  await set(ref(db,`results/${cls}/${exam}/${roll}`),{name,gpa,subjects:subs,ts:Date.now()});
+  toast(`✅ "${name}" এর ফলাফল সংরক্ষণ হয়েছে!`);
+  sv('re-roll','');sv('re-name','');sv('re-gpa','');document.getElementById('subRows').innerHTML='';
+  addSubRow();addSubRow();addSubRow();
+};
+
+// ── ADMISSION ──
+function loadAdmission(){ get(ref(db,'admission')).then(s=>{ const d=s.val()||{}; sv('ad-yr',d.year);sv('ad-fee',d.fee);sv('ad-st',d.startDate);sv('ad-en',d.endDate);sv('ad-ex',d.examDate);sv('ad-rs',d.resultDate); }); }
+window.saveAdmission = async() => { await set(ref(db,'admission'),{year:gv('ad-yr'),fee:gv('ad-fee'),startDate:gv('ad-st'),endDate:gv('ad-en'),examDate:gv('ad-ex'),resultDate:gv('ad-rs')}); toast('✅ ভর্তি তথ্য সংরক্ষণ হয়েছে!'); };
+
+// ── GALLERY ──
+let phEditId=null;
+function loadGallery(){ onValue(ref(db,'gallery'),s=>{ renderGallery(s.val()||{}); }); }
+function renderGallery(data){
+  const list=document.getElementById('photoList');
+  const items=Object.entries(data);
+  if(!items.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-images"></i>কোনো ফটো নেই।</div>';return;}
+  const catBadge={campus:['bg-green','🏫 ক্যাম্পাস'],event:['bg-gold','🎉 ইভেন্ট'],class:['bg-blue','📚 ক্লাস'],other:['bg-gray','📁 অন্যান্য']};
+  list.innerHTML=items.map(([id,p])=>{
+    const[bc,bt]=catBadge[p.cat]||catBadge.other;
+    return `<div class="photo-dnd-item" data-key="${id}">
+      <div class="drag-handle" style="margin-right:2px"><div class="dh3"></div></div>
+      ${p.url?`<img class="photo-thumb" src="${p.url}" alt="" onerror="this.style.display='none'">`:'<div class="photo-thumb-ph"><i class="fas fa-image"></i></div>'}
+      <div class="item-content">
+        <div class="item-title">${p.title||'—'}</div>
+        ${p.desc?`<div class="item-sub">${p.desc}</div>`:''}
+        <div class="item-meta"><span class="badge ${bc}">${bt}</span></div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-amber btn-xs" onclick="editPhoto('${id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-red btn-xs" onclick="deletePhoto('${id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.photo-dnd-item').forEach(makeDraggable);
+  touchDnD(list);
+}
+window.savePhoto = async() => {
+  const url=gv('ph-url');if(!url){toast('ছবির URL দিন।','err');return;}
+  const data={url,cat:gv('ph-cat'),title:gv('ph-title'),desc:gv('ph-desc')};
+  if(phEditId){ await update(ref(db,`gallery/${phEditId}`),data); toast('✅ ফটো আপডেট হয়েছে!'); }
+  else{ await push(ref(db,'gallery'),data); toast('✅ ফটো যোগ হয়েছে!'); }
+  clearPhoto();
+};
+window.editPhoto = async id => {
+  const s=await get(ref(db,`gallery/${id}`));const p=s.val();if(!p)return;
+  sv('ph-url',p.url);sv('ph-cat',p.cat);sv('ph-title',p.title);sv('ph-desc',p.desc);
+  if(p.url){ const img=document.getElementById('ph-img'); img.src=p.url; img.classList.add('loaded'); document.getElementById('ph-box').classList.add('has-img'); }
+  phEditId=id;document.getElementById('phFormLbl').textContent='✏️ ফটো এডিট';document.getElementById('ph-cancel').style.display='';
+  goPanel('gallery'); window.scrollTo({top:0,behavior:'smooth'}); toast('✏️ এডিট মোড।','warn');
+};
+window.deletePhoto = id => confirm_('ফটো মুছুন','এই ছবিটি মুছে যাবে।',async()=>{ await remove(ref(db,`gallery/${id}`)); toast('🗑️ মুছে গেছে।'); });
+window.clearPhoto = () => {
+  ['ph-url','ph-title','ph-desc'].forEach(id=>sv(id,''));sv('ph-cat','campus');
+  document.getElementById('ph-img').classList.remove('loaded');document.getElementById('ph-box').classList.remove('has-img');
+  phEditId=null;document.getElementById('phFormLbl').textContent='নতুন ফটো যোগ';document.getElementById('ph-cancel').style.display='none';
+};
+
+// ── VIDEOS ──
+function loadVideos(){ onValue(ref(db,'videos'),s=>{ renderVideos(s.val()||{}); }); }
+function renderVideos(data){
+  const list=document.getElementById('videoList');
+  const items=Object.entries(data);
+  if(!items.length){list.innerHTML='<div class="dnd-empty"><i class="fas fa-film"></i>কোনো ভিডিও নেই।</div>';return;}
+  list.innerHTML=items.map(([id,v])=>`
+    <div class="photo-dnd-item" data-key="${id}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      ${v.ytId?`<img class="photo-thumb" src="https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg" alt="">`:'<div class="photo-thumb-ph"><i class="fab fa-youtube" style="color:#ef4444"></i></div>'}
+      <div class="item-content">
+        <div class="item-title">${v.title||'—'}</div>
+        ${v.ytId?`<div class="item-sub">ID: ${v.ytId}</div>`:''}
+      </div>
+      <button class="btn btn-red btn-xs" onclick="deleteVideo('${id}')"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.photo-dnd-item').forEach(makeDraggable);
+}
+window.saveVideo = async() => {
+  const t=gv('vid-title');if(!t){toast('শিরোনাম দিন।','err');return;}
+  await push(ref(db,'videos'),{title:t,ytId:gv('vid-ytid'),active:true});
+  sv('vid-title','');sv('vid-ytid','');document.getElementById('yt-hint').style.display='none';document.getElementById('yt-thumb-wrap').style.display='none';
+  toast('✅ ভিডিও যোগ হয়েছে!');
+};
+window.deleteVideo = id => confirm_('ভিডিও মুছুন','এই ভিডিওটি মুছে যাবে।',async()=>{ await remove(ref(db,`videos/${id}`)); toast('🗑️ মুছে গেছে।'); });
+
+// ── FEES ──
+let feeData=[
+  {key:'ibtedayi',className:'ইবতেদায়ী (১-৫)',admissionFee:'২,০০০৳',monthlyFee:'৩০০৳',examFee:'২০০৳'},
+  {key:'dakhil',className:'দাখিল (৬-১০)',admissionFee:'৪,০০০৳',monthlyFee:'৫০০৳',examFee:'৩০০৳'},
+  {key:'alim',className:'আলিম (১১-১২)',admissionFee:'৮,০০০৳',monthlyFee:'৮০০৳',examFee:'৫০০৳'},
+];
+function loadFees(){ get(ref(db,'fees')).then(s=>{ if(s.val()) feeData=Object.entries(s.val()).map(([key,v])=>({key,...v})); renderFees(); }); }
+function renderFees(){
+  const list=document.getElementById('feeList');
+  list.innerHTML=feeData.map((f,i)=>`
+    <div class="dnd-item" data-key="${i}">
+      <div class="drag-handle"><div class="dh3"></div></div>
+      <div class="item-content" style="display:grid;grid-template-columns:80px 1fr 100px 100px 100px;gap:8px;align-items:center">
+        <input class="fi" value="${f.key||''}" placeholder="db-key" style="font-size:12px" onchange="feeData[${i}].key=this.value">
+        <input class="fi" value="${f.className||''}" placeholder="শ্রেণির নাম" style="font-size:12px" onchange="feeData[${i}].className=this.value">
+        <input class="fi" value="${f.admissionFee||''}" placeholder="ভর্তি ফি" style="font-size:12px" onchange="feeData[${i}].admissionFee=this.value">
+        <input class="fi" value="${f.monthlyFee||''}" placeholder="মাসিক" style="font-size:12px" onchange="feeData[${i}].monthlyFee=this.value">
+        <input class="fi" value="${f.examFee||''}" placeholder="পরীক্ষা" style="font-size:12px" onchange="feeData[${i}].examFee=this.value">
+      </div>
+      <button class="btn btn-red btn-xs" onclick="feeData.splice(${i},1);renderFees()"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+  list.querySelectorAll('.dnd-item').forEach(makeDraggable);
+}
+window.addFee = () => { feeData.push({key:'newclass',className:'নতুন শ্রেণি',admissionFee:'',monthlyFee:'',examFee:''}); renderFees(); };
+window.saveFees = async() => {
+  const order=getDNDOrder('feeList');
+  const reordered=order.map(i=>feeData[+i]).filter(Boolean);
+  const data={};(reordered.length?reordered:feeData).forEach(f=>{ if(f.key) data[f.key]={className:f.className,admissionFee:f.admissionFee,monthlyFee:f.monthlyFee,examFee:f.examFee}; });
+  await set(ref(db,'fees'),data); toast('✅ ফি কাঠামো সংরক্ষণ হয়েছে!');
+};
+
+// ── CONTACT ──
+function loadContact(){ get(ref(db,'contact')).then(s=>{ const d=s.val()||{}; sv('ct-addr',d.address);sv('ct-phone',d.phone);sv('ct-email',d.email);sv('ct-hours',d.hours);sv('ct-as',d.addressShort);sv('ct-ps',d.phoneShort);sv('ct-es',d.emailShort);sv('ct-hs',d.hoursShort);sv('ct-call',d.callNumber);sv('ct-wa',d.whatsapp); }); }
+window.saveContact = async() => { await set(ref(db,'contact'),{address:gv('ct-addr'),phone:gv('ct-phone'),email:gv('ct-email'),hours:gv('ct-hours'),addressShort:gv('ct-as'),phoneShort:gv('ct-ps'),emailShort:gv('ct-es'),hoursShort:gv('ct-hs'),callNumber:gv('ct-call'),whatsapp:gv('ct-wa')}); toast('✅ যোগাযোগ তথ্য সংরক্ষণ হয়েছে!'); };
+
+// ── SITE INFO ──
+function loadSiteInfo(){ get(ref(db,'siteInfo')).then(s=>{ const d=s.val()||{}; sv('si-eiin',d.eiin);sv('si-est',d.established||'1985');sv('si-fb',d.facebook);sv('si-yt',d.youtube);sv('si-wa',d.whatsapp);sv('si-ig',d.instagram);sv('si-footer',d.footerText); }); }
+window.saveSiteInfo = async() => { await set(ref(db,'siteInfo'),{eiin:gv('si-eiin'),established:gv('si-est'),facebook:gv('si-fb'),youtube:gv('si-yt'),whatsapp:gv('si-wa'),instagram:gv('si-ig'),footerText:gv('si-footer')}); toast('✅ সাইট সেটিং সংরক্ষণ হয়েছে!'); };
+
+</script>
+</body>
+</html>
