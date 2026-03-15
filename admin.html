@@ -1,1 +1,395 @@
-ttg
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — আরপাড়া সদর আলিম মাদ্রাসা</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin-style.css" />
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginWrap">
+    <div class="login-card">
+      <div class="login-icon">🕌</div>
+      <h1>Admin Login</h1>
+      <p>আরপাড়া সদর আলিম মাদ্রাসা</p>
+
+      <div class="field">
+        <label>ইমেইল</label>
+        <input type="email" id="lEmail" placeholder="admin@example.com">
+      </div>
+
+      <div class="field">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="lPass" placeholder="••••••••">
+      </div>
+
+      <button id="loginBtn" class="btn primary">লগইন</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🕌</div>
+        <div>
+          <h2>Madrasah CMS</h2>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <div class="admin-user">
+        <div class="avatar" id="adminAvatar">A</div>
+        <div>
+          <div id="adminEmail">admin@example.com</div>
+          <small>Authenticated</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-panel="dashboard"><i class="fas fa-house"></i> ড্যাশবোর্ড</button>
+        <button class="nav-item" data-panel="hero"><i class="fas fa-star"></i> Hero</button>
+        <button class="nav-item" data-panel="ticker"><i class="fas fa-scroll"></i> Ticker</button>
+        <button class="nav-item" data-panel="notices"><i class="fas fa-bell"></i> Notices</button>
+        <button class="nav-item" data-panel="teachers"><i class="fas fa-chalkboard-teacher"></i> Teachers</button>
+        <button class="nav-item" data-panel="contact"><i class="fas fa-phone"></i> Contact</button>
+        <button class="nav-item" data-panel="siteinfo"><i class="fas fa-gear"></i> Site Info</button>
+        <button class="nav-item" data-panel="messages">
+          <i class="fas fa-envelope-open-text"></i> Messages
+          <span class="badge" id="msgCount">0</span>
+        </button>
+      </nav>
+
+      <button id="logoutBtn" class="btn danger logout"><i class="fas fa-right-from-bracket"></i> Logout</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">ড্যাশবোর্ড</h2>
+          <small id="pageDesc">সারাংশ</small>
+        </div>
+      </header>
+
+      <section class="content">
+
+        <!-- DASHBOARD -->
+        <div class="panel active" id="panel-dashboard">
+          <div class="card">
+            <h3>স্বাগতম</h3>
+            <p>এই প্যানেল থেকে সাইটের কনটেন্ট ও মেসেজ পরিচালনা করুন।</p>
+          </div>
+
+          <div class="grid two">
+            <div class="card stat-card">
+              <h4>নতুন মেসেজ</h4>
+              <div class="big" id="dashMsgCount">0</div>
+            </div>
+            <div class="card stat-card">
+              <h4>নোটিশ</h4>
+              <div class="big" id="dashNoticeCount">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERO -->
+        <div class="panel" id="panel-hero">
+          <div class="card">
+            <h3>Hero Section</h3>
+            <div class="grid two">
+              <div class="field">
+                <label>বাংলা শিরোনাম</label>
+                <input id="heroTitleBn" type="text" placeholder="আরপাড়া সদর আলিম মাদ্রাসা">
+              </div>
+              <div class="field">
+                <label>English Title</label>
+                <input id="heroTitleEn" type="text" placeholder="Arpara Sadar Alim Madrasah">
+              </div>
+              <div class="field">
+                <label>বাংলা মটো</label>
+                <input id="heroMottoBn" type="text" placeholder="ইসলামিক শিক্ষা ও আধুনিক জ্ঞানের সমন্বয়">
+              </div>
+              <div class="field">
+                <label>English Motto</label>
+                <input id="heroMottoEn" type="text" placeholder="Combining Islamic Education & Modern Knowledge">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>বাংলা বিবরণ</label>
+              <textarea id="heroDescBn" rows="4"></textarea>
+            </div>
+
+            <div class="grid four">
+              <div class="field">
+                <label>Students</label>
+                <input id="heroStudents" type="number">
+              </div>
+              <div class="field">
+                <label>Teachers</label>
+                <input id="heroTeachers" type="number">
+              </div>
+              <div class="field">
+                <label>Pass Rate</label>
+                <input id="heroPassRate" type="number">
+              </div>
+              <div class="field">
+                <label>Years</label>
+                <input id="heroYears" type="number">
+              </div>
+            </div>
+
+            <button class="btn primary" id="saveHeroBtn">Save Hero</button>
+          </div>
+        </div>
+
+        <!-- TICKER -->
+        <div class="panel" id="panel-ticker">
+          <div class="card">
+            <h3>Ticker</h3>
+
+            <div class="inline-row">
+              <input id="tickerInput" type="text" placeholder="Ticker message লিখুন...">
+              <button class="btn primary" id="addTickerBtn">Add</button>
+            </div>
+
+            <div id="tickerList" class="list"></div>
+          </div>
+        </div>
+
+        <!-- NOTICES -->
+        <div class="panel" id="panel-notices">
+          <div class="card">
+            <h3>Notice Form</h3>
+
+            <input type="hidden" id="noticeEditId">
+
+            <div class="field">
+              <label>Title</label>
+              <input id="noticeTitle" type="text" placeholder="Notice title">
+            </div>
+
+            <div class="grid two">
+              <div class="field">
+                <label>Type</label>
+                <select id="noticeType">
+                  <option value="normal">Normal</option>
+                  <option value="urgent">Urgent</option>
+                  <option value="academic">Academic</option>
+                  <option value="event">Event</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Date</label>
+                <input id="noticeDate" type="date">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>বাংলা তারিখ</label>
+              <input id="noticeDateDisplay" type="text" placeholder="১২ জানুয়ারি, ২০২৫">
+            </div>
+
+            <div class="field">
+              <label>Body</label>
+              <textarea id="noticeBody" rows="5"></textarea>
+            </div>
+
+            <div class="field">
+              <label>Link</label>
+              <input id="noticeLink" type="text" placeholder="https://...">
+            </div>
+
+            <div class="check-row">
+              <input id="noticeActive" type="checkbox" checked>
+              <label for="noticeActive">Active</label>
+            </div>
+
+            <div class="action-row">
+              <button class="btn primary" id="saveNoticeBtn">Save Notice</button>
+              <button class="btn ghost" id="clearNoticeBtn">Clear</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>All Notices</h3>
+            <div id="noticeList" class="list"></div>
+          </div>
+        </div>
+
+        <!-- TEACHERS -->
+        <div class="panel" id="panel-teachers">
+          <div class="card">
+            <h3>Teacher Form</h3>
+
+            <input type="hidden" id="teacherEditId">
+
+            <div class="grid two">
+              <div class="field">
+                <label>Name</label>
+                <input id="teacherName" type="text">
+              </div>
+              <div class="field">
+                <label>Role</label>
+                <input id="teacherRole" type="text">
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div class="field">
+                <label>Subject</label>
+                <input id="teacherSubject" type="text">
+              </div>
+              <div class="field">
+                <label>Department</label>
+                <select id="teacherDept">
+                  <option value="islamic">Islamic</option>
+                  <option value="general">General</option>
+                  <option value="science">Science</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Qualification</label>
+              <input id="teacherQualification" type="text">
+            </div>
+
+            <div class="field">
+              <label>Photo URL</label>
+              <input id="teacherPhoto" type="text" placeholder="https://...">
+            </div>
+
+            <div class="action-row">
+              <button class="btn primary" id="saveTeacherBtn">Save Teacher</button>
+              <button class="btn ghost" id="clearTeacherBtn">Clear</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>All Teachers</h3>
+            <div id="teacherList" class="list"></div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="panel" id="panel-contact">
+          <div class="card">
+            <h3>Contact Info</h3>
+
+            <div class="field">
+              <label>Full Address</label>
+              <textarea id="contactAddress" rows="3"></textarea>
+            </div>
+
+            <div class="grid two">
+              <div class="field">
+                <label>Phone</label>
+                <textarea id="contactPhone" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <textarea id="contactEmail" rows="3"></textarea>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Hours</label>
+              <textarea id="contactHours" rows="3"></textarea>
+            </div>
+
+            <div class="grid two">
+              <div class="field">
+                <label>Address Short</label>
+                <input id="contactAddressShort" type="text">
+              </div>
+              <div class="field">
+                <label>Phone Short</label>
+                <input id="contactPhoneShort" type="text">
+              </div>
+              <div class="field">
+                <label>Email Short</label>
+                <input id="contactEmailShort" type="text">
+              </div>
+              <div class="field">
+                <label>Hours Short</label>
+                <input id="contactHoursShort" type="text">
+              </div>
+              <div class="field">
+                <label>Call Number</label>
+                <input id="contactCallNumber" type="text">
+              </div>
+              <div class="field">
+                <label>WhatsApp</label>
+                <input id="contactWhatsapp" type="text">
+              </div>
+            </div>
+
+            <button class="btn primary" id="saveContactBtn">Save Contact</button>
+          </div>
+        </div>
+
+        <!-- SITE INFO -->
+        <div class="panel" id="panel-siteinfo">
+          <div class="card">
+            <h3>Site Info</h3>
+
+            <div class="grid two">
+              <div class="field">
+                <label>EIIN</label>
+                <input id="siteEiin" type="text">
+              </div>
+              <div class="field">
+                <label>Established</label>
+                <input id="siteEstablished" type="text">
+              </div>
+              <div class="field">
+                <label>Facebook URL</label>
+                <input id="siteFacebook" type="text">
+              </div>
+              <div class="field">
+                <label>YouTube URL</label>
+                <input id="siteYoutube" type="text">
+              </div>
+              <div class="field">
+                <label>WhatsApp</label>
+                <input id="siteWhatsapp" type="text">
+              </div>
+              <div class="field">
+                <label>Instagram URL</label>
+                <input id="siteInstagram" type="text">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Footer Text</label>
+              <input id="siteFooterText" type="text">
+            </div>
+
+            <button class="btn primary" id="saveSiteInfoBtn">Save Site Info</button>
+          </div>
+        </div>
+
+        <!-- MESSAGES -->
+        <div class="panel" id="panel-messages">
+          <div class="card">
+            <h3>যোগাযোগ মেসেজ</h3>
+            <div id="messageList" class="list"></div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="admin-script.js"></script>
+</body>
+</html>
