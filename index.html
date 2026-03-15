@@ -1566,10 +1566,14 @@ input,select,textarea{font-family:inherit;outline:none}
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// PRELOADER
-window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('preloader').classList.add('done'), 2400);
-});
+// PRELOADER — multiple fallbacks so it always hides
+function hidePreloader() {
+  const el = document.getElementById('preloader');
+  if (el) el.classList.add('done');
+}
+document.addEventListener('DOMContentLoaded', () => setTimeout(hidePreloader, 2000));
+window.addEventListener('load', () => setTimeout(hidePreloader, 1500));
+setTimeout(hidePreloader, 4000);
 
 // STARS
 const starsContainer = document.getElementById('heroStars');
