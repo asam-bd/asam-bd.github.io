@@ -666,24 +666,53 @@ document.getElementById('resultForm')?.addEventListener('submit', async e => {
   const examText = document.getElementById('inputExam').selectedOptions[0]?.text || '';
   const output = document.getElementById('resultOutput');
 
+  if (!roll || !classVal || !examVal) {
+    showToast('সব ঘর পূরণ করুন।', 'error');
+    return;
+  }
+
   output.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-mid)"><i class="fas fa-spinner fa-spin" style="font-size:32px;color:var(--emerald)"></i><p style="margin-top:12px">ফলাফল খোঁজা হচ্ছে...</p></div>`;
 
+  // Normalize roll: remove leading zeros for numeric rolls, keep as-is otherwise
+  const normalizedRoll = /^\d+$/.test(roll) ? String(parseInt(roll, 10)) : roll;
+
   try {
-    const path = `results/${classVal}/${examVal}/${roll}`;
-    const snap = await get(ref(db, path));
-    const student = snap.val();
+    // Try both with and without leading zeros to be safe
+    let student = null;
+    const paths = [...new Set([
+      `results/${classVal}/${examVal}/${normalizedRoll}`,
+      `results/${classVal}/${examVal}/${roll}`
+    ])];
+
+    for (const path of paths) {
+      const snap = await get(ref(db, path));
+      if (snap.val()) { student = snap.val(); break; }
+    }
 
     if (!student) {
       showToast('ফলাফল পাওয়া যায়নি।', 'error');
-      output.innerHTML = '';
+      output.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-mid)">
+        <i class="fas fa-search" style="font-size:36px;opacity:.3;margin-bottom:12px;display:block"></i>
+        <p style="font-size:15px;font-weight:600">ফলাফল পাওয়া যায়নি</p>
+        <p style="font-size:13px;margin-top:6px">রোল নম্বর, শ্রেণি ও পরীক্ষা সঠিকভাবে দিন।</p>
+      </div>`;
       return;
     }
 
     const getGrade = m => m>=80?'A+':m>=70?'A':m>=60?'A-':m>=50?'B':m>=40?'C':'F';
+    const getGP    = m => m>=80?5:m>=70?4:m>=60?3.5:m>=50?3:m>=40?2:0;
+
     const subjects = student.subjects || [];
     const rows = subjects.map(s =>
       `<tr><td>${esc(s.name)}</td><td>${s.full || 100}</td><td>${s.marks}</td><td>${getGrade(s.marks)}</td></tr>`
     ).join('');
+
+    // Auto-calculate GPA if not stored, using simple average of grade points
+    let displayGpa = student.gpa || '';
+    if (!displayGpa && subjects.length > 0) {
+      const totalGP = subjects.reduce((sum, s) => sum + getGP(s.marks), 0);
+      displayGpa = (totalGP / subjects.length).toFixed(2);
+    }
 
     output.innerHTML = `
       <div class="res-card">
@@ -701,7 +730,7 @@ document.getElementById('resultForm')?.addEventListener('submit', async e => {
           <thead><tr><th>বিষয়</th><th>পূর্ণমান</th><th>প্রাপ্ত</th><th>গ্রেড</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-        <div class="res-gpa">GPA: ${esc(student.gpa || 'N/A')}</div>
+        <div class="res-gpa">GPA: ${esc(displayGpa || 'N/A')}</div>
       </div>
     `;
     output.scrollIntoView({ behavior: 'smooth', block: 'center' });

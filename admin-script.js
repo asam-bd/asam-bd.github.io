@@ -581,12 +581,24 @@ function bindResultStats(){
 $('loadResultBtn')?.addEventListener('click', async () => {
   const cls  = val('resultClass');
   const exam = val('resultExam');
-  const roll = val('resultRoll');
+  const roll = val('resultRoll').trim();
   if(!roll) return toast('রোল নম্বর দিন','error');
-  const path = `results/${cls}/${exam}/${roll}`;
-  const snap = await get(ref(db, path));
-  const student = snap.val();
-  showResultEntryForm(cls, exam, roll, student);
+
+  // Normalize roll: strip leading zeros for numeric rolls
+  const normalizedRoll = /^\d+$/.test(roll) ? String(parseInt(roll, 10)) : roll;
+
+  // Try normalized first, then original
+  let student = null;
+  const paths = [...new Set([
+    `results/${cls}/${exam}/${normalizedRoll}`,
+    `results/${cls}/${exam}/${roll}`
+  ])];
+  for (const path of paths) {
+    const snap = await get(ref(db, path));
+    if (snap.val()) { student = snap.val(); break; }
+  }
+
+  showResultEntryForm(cls, exam, normalizedRoll, student);
 });
 
 function showResultEntryForm(cls, exam, roll, existing){
@@ -609,15 +621,32 @@ function showResultEntryForm(cls, exam, roll, existing){
     $('reSubjects').insertAdjacentHTML('beforeend', subjectRow('','100','',idx));
   };
   $('reSaveBtn').onclick = async () => {
+    const studentName = val('reStudentName').trim();
+    if (!studentName) return toast('শিক্ষার্থীর নাম দিন', 'error');
+
     const rows = $('reSubjects').querySelectorAll('.re-row');
     const subjects = Array.from(rows).map(r => ({
       name:  r.querySelector('.re-subname').value.trim(),
       full:  Number(r.querySelector('.re-full').value)||100,
       marks: Number(r.querySelector('.re-marks').value)||0,
     })).filter(s => s.name);
-    const data = { name: val('reStudentName'), gpa: val('reGpa'), subjects };
-    await set(ref(db,`results/${cls}/${exam}/${roll}`), data);
-    toast('Result সেভ হয়েছে!');
+
+    if (subjects.length === 0) return toast('অন্তত একটি বিষয় যোগ করুন', 'error');
+
+    // Auto-calculate GPA if field is empty
+    const getGP = m => m>=80?5:m>=70?4:m>=60?3.5:m>=50?3:m>=40?2:0;
+    let gpa = val('reGpa').trim();
+    if (!gpa && subjects.length > 0) {
+      const totalGP = subjects.reduce((sum, s) => sum + getGP(s.marks), 0);
+      gpa = (totalGP / subjects.length).toFixed(2);
+    }
+
+    // Normalize roll: store as plain string (strip leading zeros for numeric)
+    const normalizedRoll = /^\d+$/.test(roll) ? String(parseInt(roll, 10)) : roll;
+
+    const data = { name: studentName, gpa, subjects };
+    await set(ref(db,`results/${cls}/${exam}/${normalizedRoll}`), data);
+    toast(`Result সেভ হয়েছে! (GPA: ${gpa})`);
   };
 }
 function subjectRow(name,full,marks,idx){
