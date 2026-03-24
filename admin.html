@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -8,388 +7,663 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin-style.css" />
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --bg: #f1f5f9;
+      --sidebar-bg: #0f172a;
+      --sidebar-text: #94a3b8;
+      --sidebar-active: #059669;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-mid: #64748b;
+      --border: #e2e8f0;
+      --input-bg: #f8fafc;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans Bengali', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+    /* LOGIN */
+    #loginWrap { position: fixed; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #059669 100%); display: flex; align-items: center; justify-content: center; z-index: 999; }
+    .login-card { background: #fff; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+    .login-icon { font-size: 52px; text-align: center; margin-bottom: 8px; }
+    .login-card h1 { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .login-card > p { text-align: center; color: var(--text-mid); font-size: 13px; margin-bottom: 28px; }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 12px; text-align: center; min-height: 20px; }
+
+    /* SIDEBAR */
+    .sidebar { width: 260px; background: var(--sidebar-bg); display: flex; flex-direction: column; min-height: 100vh; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+    .brand { padding: 24px 20px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .brand-icon { font-size: 30px; }
+    .brand h2 { color: #fff; font-size: 14px; font-weight: 700; line-height: 1.3; }
+    .brand small { color: var(--sidebar-text); font-size: 11px; }
+    .admin-user { padding: 16px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .admin-user > div { overflow: hidden; }
+    #adminEmail { color: #e2e8f0; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .admin-user small { color: var(--sidebar-text); font-size: 11px; }
+    .nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+    .nav-group-label { color: rgba(148,163,184,.5); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 12px 20px 4px; }
+    .nav-item { width: 100%; background: none; border: none; color: var(--sidebar-text); padding: 10px 20px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-family: inherit; cursor: pointer; border-left: 3px solid transparent; transition: all .2s; text-align: left; }
+    .nav-item:hover { background: rgba(255,255,255,.05); color: #e2e8f0; }
+    .nav-item.active { background: rgba(5,150,105,.15); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+    .nav-item .badge { margin-left: auto; background: var(--danger); color: #fff; border-radius: 10px; padding: 1px 7px; font-size: 11px; }
+    .logout { margin: 12px 16px 20px; width: calc(100% - 32px) !important; border-radius: 8px; background: rgba(239,68,68,.12) !important; color: #f87171 !important; border-left: none !important; justify-content: center; padding: 10px !important; font-weight: 600; }
+    .logout:hover { background: rgba(239,68,68,.25) !important; }
+
+    /* MAIN */
+    .main { flex: 1; display: flex; flex-direction: column; min-height: 100vh; overflow: hidden; }
+    .topbar { background: var(--card-bg); padding: 16px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); }
+    .topbar h2 { font-size: 18px; font-weight: 700; }
+    .topbar small { color: var(--text-mid); font-size: 12px; }
+    .content { flex: 1; padding: 28px; overflow-y: auto; }
+
+    /* PANELS */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* CARDS */
+    .card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border); }
+    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--primary-light); color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+    .card h3 i { font-size: 14px; }
+    .section-desc { color: var(--text-mid); font-size: 12.5px; margin-bottom: 16px; margin-top: -10px; }
+
+    /* FORM ELEMENTS */
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; background: var(--input-bg); color: var(--text); transition: border-color .2s; outline: none; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(5,150,105,.1); }
+    .field textarea { resize: vertical; }
+    .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .check-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+    .check-row label { font-size: 13.5px; font-weight: 500; cursor: pointer; }
+    .inline-row { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-end; }
+    .inline-row .field { flex: 1; margin-bottom: 0; }
+    .action-row { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+
+    /* GRIDS */
+    .grid { display: grid; gap: 14px; }
+    .grid.two { grid-template-columns: 1fr 1fr; }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .grid.four { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    /* BUTTONS */
+    .btn { padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-family: inherit; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all .2s; }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn.danger { background: #fee2e2; color: var(--danger-dark); }
+    .btn.danger:hover { background: var(--danger); color: #fff; }
+    .btn.ghost { background: var(--bg); color: var(--text-mid); border: 1.5px solid var(--border); }
+    .btn.ghost:hover { background: var(--border); color: var(--text); }
+    .btn.warning { background: #fef3c7; color: #92400e; }
+    .btn.warning:hover { background: var(--warning); color: #fff; }
+    .btn.info { background: #dbeafe; color: #1d4ed8; }
+    .btn.info:hover { background: var(--info); color: #fff; }
+    .btn.full { width: 100%; justify-content: center; padding: 11px; font-size: 14px; }
+
+    /* STAT CARDS */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat-card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .stat-icon { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .stat-icon.green { background: #d1fae5; color: var(--primary-dark); }
+    .stat-icon.blue { background: #dbeafe; color: #1d4ed8; }
+    .stat-icon.orange { background: #fef3c7; color: #92400e; }
+    .stat-icon.red { background: #fee2e2; color: var(--danger-dark); }
+    .stat-body h4 { font-size: 12px; color: var(--text-mid); font-weight: 500; }
+    .stat-body .big { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1.2; }
+
+    /* LIST ITEMS */
+    .list { display: flex; flex-direction: column; gap: 10px; }
+    .list-item { background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .list-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .list-item p { font-size: 12.5px; color: var(--text-mid); margin-bottom: 2px; }
+    .list-item .list-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .list-item .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-bottom: 6px; }
+    .tag.active { background: #d1fae5; color: var(--primary-dark); }
+    .tag.inactive { background: #fee2e2; color: var(--danger-dark); }
+    .tag.urgent { background: #fee2e2; color: var(--danger-dark); }
+    .tag.normal { background: #d1fae5; color: var(--primary-dark); }
+    .tag.academic { background: #dbeafe; color: #1d4ed8; }
+    .tag.event { background: #fef3c7; color: #92400e; }
+    .teacher-photo-prev { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); float: right; margin-left: 10px; }
+
+    /* TOAST */
+    #toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13.5px; font-weight: 500; z-index: 9999; opacity: 0; transform: translateY(20px); transition: all .3s; pointer-events: none; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { border-left: 4px solid var(--primary); }
+    #toast.error { border-left: 4px solid var(--danger); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    /* FAVICON PREVIEW */
+    .favicon-preview { width: 32px; height: 32px; border-radius: 6px; object-fit: contain; border: 1.5px solid var(--border); background: #f8fafc; }
+    .logo-preview-wrap { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+
+    /* RESULT PANEL */
+    .result-search-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: flex-end; margin-bottom: 16px; }
+
+    /* ADMISSION MESSAGES */
+    .msg-card { background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; }
+    .msg-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .msg-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-bottom: 10px; }
+    .msg-meta span { font-size: 12px; color: var(--text-mid); }
+    .msg-meta span strong { color: var(--text); }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .sidebar { width: 220px; }
+      .grid.four { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; min-height: unset; position: static; flex-direction: row; flex-wrap: wrap; }
+      .nav { display: flex; flex-wrap: wrap; padding: 4px; }
+      .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
+      .content { padding: 16px; }
+      .result-search-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div id="loginWrap">
-    <div class="login-card">
-      <div class="login-icon">🕌</div>
-      <h1>Admin Login</h1>
-      <p>আরপাড়া সদর আলিম মাদ্রাসা</p>
-
-      <div class="field">
-        <label>ইমেইল</label>
-        <input type="email" id="lEmail" placeholder="admin@example.com">
-      </div>
-
-      <div class="field">
-        <label>পাসওয়ার্ড</label>
-        <input type="password" id="lPass" placeholder="••••••••">
-      </div>
-
-      <button id="loginBtn" class="btn primary">লগইন</button>
-      <div class="login-error" id="loginError"></div>
-    </div>
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="login-card">
+    <div class="login-icon">🕌</div>
+    <h1>Admin Login</h1>
+    <p>আরপাড়া সদর আলিম মাদ্রাসা</p>
+    <div class="field"><label>ইমেইল</label><input type="email" id="lEmail" placeholder="admin@example.com"></div>
+    <div class="field"><label>পাসওয়ার্ড</label><input type="password" id="lPass" placeholder="••••••••"></div>
+    <button id="loginBtn" class="btn primary full" style="margin-top:8px"><i class="fas fa-sign-in-alt"></i> লগইন</button>
+    <div class="login-error" id="loginError"></div>
   </div>
+</div>
 
-  <!-- APP -->
-  <div id="app" class="hidden">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-icon">🕌</div>
-        <div>
-          <h2>Madrasah CMS</h2>
-          <small>Admin Panel</small>
+<!-- APP -->
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🕌</div>
+      <div><h2>Madrasah CMS</h2><small>Admin Panel</small></div>
+    </div>
+    <div class="admin-user">
+      <div class="avatar" id="adminAvatar">A</div>
+      <div><div id="adminEmail">admin</div><small>Authenticated</small></div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-group-label">ড্যাশবোর্ড</div>
+      <button class="nav-item active" data-panel="dashboard"><i class="fas fa-house"></i> Dashboard</button>
+
+      <div class="nav-group-label">সাইট কনফিগ</div>
+      <button class="nav-item" data-panel="siteSettings"><i class="fas fa-gear"></i> Site Settings</button>
+      <button class="nav-item" data-panel="hero"><i class="fas fa-star"></i> Hero Section</button>
+      <button class="nav-item" data-panel="ticker"><i class="fas fa-scroll"></i> Ticker / Notice Bar</button>
+
+      <div class="nav-group-label">কন্টেন্ট</div>
+      <button class="nav-item" data-panel="about"><i class="fas fa-info-circle"></i> About & Principal</button>
+      <button class="nav-item" data-panel="teachers"><i class="fas fa-chalkboard-teacher"></i> Teachers</button>
+      <button class="nav-item" data-panel="notices"><i class="fas fa-bell"></i> Notices</button>
+      <button class="nav-item" data-panel="results"><i class="fas fa-chart-bar"></i> Results & Merit</button>
+      <button class="nav-item" data-panel="admission"><i class="fas fa-clipboard-list"></i> Admission Info</button>
+      <button class="nav-item" data-panel="fees"><i class="fas fa-money-bill"></i> Fees</button>
+      <button class="nav-item" data-panel="gallery"><i class="fas fa-images"></i> Gallery & Videos</button>
+      <button class="nav-item" data-panel="events"><i class="fas fa-calendar"></i> Events</button>
+      <button class="nav-item" data-panel="contact"><i class="fas fa-phone"></i> Contact Info</button>
+
+      <div class="nav-group-label">ইনবক্স</div>
+      <button class="nav-item" data-panel="messages">
+        <i class="fas fa-envelope-open-text"></i> Contact Messages
+        <span class="badge" id="msgCount">0</span>
+      </button>
+      <button class="nav-item" data-panel="admissions">
+        <i class="fas fa-user-plus"></i> Admission Apps
+        <span class="badge" id="admCount">0</span>
+      </button>
+    </nav>
+
+    <button id="logoutBtn" class="btn danger logout"><i class="fas fa-right-from-bracket"></i> Logout</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><h2 id="pageTitle">Dashboard</h2><small id="pageDesc">সাইট পরিচালনা করুন</small></div>
+      <div style="font-size:12px;color:var(--text-mid)"><i class="fas fa-circle" style="color:#22c55e;font-size:8px"></i> Connected</div>
+    </header>
+
+    <section class="content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-bell"></i></div><div class="stat-body"><h4>নোটিশ</h4><div class="big" id="dashNoticeCount">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-chalkboard-teacher"></i></div><div class="stat-body"><h4>শিক্ষক</h4><div class="big" id="dashTeacherCount">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-envelope"></i></div><div class="stat-body"><h4>মেসেজ</h4><div class="big" id="dashMsgCount">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon red"><i class="fas fa-user-plus"></i></div><div class="stat-body"><h4>ভর্তি আবেদন</h4><div class="big" id="dashAdmCount">0</div></div></div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-sparkles"></i> স্বাগতম — Madrasah CMS</h3>
+          <p style="color:var(--text-mid);font-size:13.5px;line-height:1.7">বাম মেনু থেকে যেকোনো সেকশন সিলেক্ট করে সাইটের কনটেন্ট ম্যানেজ করুন।<br>
+          <strong>Site Settings</strong> থেকে ওয়েবসাইটের title, description, favicon ও আইকন পরিবর্তন করুন।</p>
         </div>
       </div>
 
-      <div class="admin-user">
-        <div class="avatar" id="adminAvatar">A</div>
-        <div>
-          <div id="adminEmail">admin@example.com</div>
-          <small>Authenticated</small>
-        </div>
-      </div>
+      <!-- ==================== SITE SETTINGS ==================== -->
+      <div class="panel" id="panel-siteSettings">
+        <div class="card">
+          <h3><i class="fas fa-globe"></i> Site Identity (Title, Description, Icon)</h3>
+          <p class="section-desc">ওয়েবসাইটের মূল পরিচয় — ব্রাউজার ট্যাবে দেখানো title, meta description এবং favicon।</p>
 
-      <nav class="nav">
-        <button class="nav-item active" data-panel="dashboard"><i class="fas fa-house"></i> ড্যাশবোর্ড</button>
-        <button class="nav-item" data-panel="hero"><i class="fas fa-star"></i> Hero</button>
-        <button class="nav-item" data-panel="ticker"><i class="fas fa-scroll"></i> Ticker</button>
-        <button class="nav-item" data-panel="notices"><i class="fas fa-bell"></i> Notices</button>
-        <button class="nav-item" data-panel="teachers"><i class="fas fa-chalkboard-teacher"></i> Teachers</button>
-        <button class="nav-item" data-panel="contact"><i class="fas fa-phone"></i> Contact</button>
-        <button class="nav-item" data-panel="siteinfo"><i class="fas fa-gear"></i> Site Info</button>
-        <button class="nav-item" data-panel="messages">
-          <i class="fas fa-envelope-open-text"></i> Messages
-          <span class="badge" id="msgCount">0</span>
-        </button>
-      </nav>
+          <div class="grid two">
+            <div class="field">
+              <label>সাইটের বাংলা নাম (Title)</label>
+              <input id="siteNameBn" type="text" placeholder="আরপাড়া সদর আলিম মাদ্রাসা">
+            </div>
+            <div class="field">
+              <label>সাইটের ইংরেজি নাম</label>
+              <input id="siteNameEn" type="text" placeholder="Arpara Sadar Alim Madrasah">
+            </div>
+          </div>
 
-      <button id="logoutBtn" class="btn danger logout"><i class="fas fa-right-from-bracket"></i> Logout</button>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div>
-          <h2 id="pageTitle">ড্যাশবোর্ড</h2>
-          <small id="pageDesc">সারাংশ</small>
-        </div>
-      </header>
-
-      <section class="content">
-
-        <!-- DASHBOARD -->
-        <div class="panel active" id="panel-dashboard">
-          <div class="card">
-            <h3>স্বাগতম</h3>
-            <p>এই প্যানেল থেকে সাইটের কনটেন্ট ও মেসেজ পরিচালনা করুন।</p>
+          <div class="field">
+            <label>Meta Description (SEO)</label>
+            <textarea id="siteMetaDesc" rows="3" placeholder="আরপাড়া সদর আলিম মাদ্রাসা - শালিখা, মাগুরা..."></textarea>
           </div>
 
           <div class="grid two">
-            <div class="card stat-card">
-              <h4>নতুন মেসেজ</h4>
-              <div class="big" id="dashMsgCount">0</div>
+            <div class="field">
+              <label>Favicon URL (32x32 আইকন, .ico বা .png)</label>
+              <input id="siteFaviconUrl" type="text" placeholder="https://...favicon.ico" oninput="prevFavicon(this.value)">
+              <div class="logo-preview-wrap">
+                <img id="faviconPreview" class="favicon-preview" src="" alt="" onerror="this.style.display='none'" style="display:none">
+                <span style="font-size:11px;color:var(--text-mid)">Preview (ব্রাউজার tab এ দেখাবে)</span>
+              </div>
             </div>
-            <div class="card stat-card">
-              <h4>নোটিশ</h4>
-              <div class="big" id="dashNoticeCount">0</div>
+            <div class="field">
+              <label>Navbar Logo Icon (emoji বা icon class)</label>
+              <input id="siteNavIcon" type="text" placeholder="🕌 অথবা fas fa-mosque">
+              <p style="font-size:11px;color:var(--text-mid);margin-top:4px">Emoji দিলে সরাসরি দেখাবে, যেমন: 🕌 🌙 📚</p>
             </div>
           </div>
+
+          <hr class="divider">
+          <h3 style="border:none;padding:0;margin-bottom:14px"><i class="fas fa-id-card"></i> প্রতিষ্ঠান তথ্য</h3>
+
+          <div class="grid two">
+            <div class="field">
+              <label>EIIN নম্বর</label>
+              <input id="siteEiin" type="text" placeholder="XXXXXX">
+            </div>
+            <div class="field">
+              <label>প্রতিষ্ঠার সাল</label>
+              <input id="siteEstablished" type="text" placeholder="1985">
+            </div>
+            <div class="field">
+              <label>ট্যাগলাইন (Navbar sub)</label>
+              <input id="siteTagline" type="text" placeholder="EIIN: XXXXXX | Est. 1985">
+            </div>
+            <div class="field">
+              <label>Footer কপিরাইট টেক্সট</label>
+              <input id="siteFooterText" type="text" placeholder="© ২০২৫ আরপাড়া সদর আলিম মাদ্রাসা...">
+            </div>
+          </div>
+
+          <hr class="divider">
+          <h3 style="border:none;padding:0;margin-bottom:14px"><i class="fab fa-facebook"></i> সোশ্যাল মিডিয়া</h3>
+
+          <div class="grid two">
+            <div class="field"><label><i class="fab fa-facebook"></i> Facebook URL</label><input id="siteFacebook" type="text" placeholder="https://facebook.com/..."></div>
+            <div class="field"><label><i class="fab fa-youtube"></i> YouTube URL</label><input id="siteYoutube" type="text" placeholder="https://youtube.com/..."></div>
+            <div class="field"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input id="siteWhatsapp" type="text" placeholder="8801XXXXXXXXX"></div>
+            <div class="field"><label><i class="fab fa-instagram"></i> Instagram URL</label><input id="siteInstagram" type="text" placeholder="https://instagram.com/..."></div>
+          </div>
+
+          <button class="btn primary" id="saveSiteSettingsBtn"><i class="fas fa-save"></i> সব Save করুন</button>
+        </div>
+      </div>
+
+      <!-- ==================== HERO ==================== -->
+      <div class="panel" id="panel-hero">
+        <div class="card">
+          <h3><i class="fas fa-star"></i> Hero Section</h3>
+          <p class="section-desc">মূল পেজের প্রথম সেকশন — বড় শিরোনাম, মটো, বিবরণ এবং counter।</p>
+          <div class="grid two">
+            <div class="field"><label>বাংলা শিরোনাম</label><input id="heroTitleBn" type="text" placeholder="আরপাড়া সদর আলিম মাদ্রাসা"></div>
+            <div class="field"><label>English Title</label><input id="heroTitleEn" type="text" placeholder="Arpara Sadar Alim Madrasah"></div>
+            <div class="field"><label>বাংলা মটো / Slogan</label><input id="heroMottoBn" type="text"></div>
+            <div class="field"><label>English Motto</label><input id="heroMottoEn" type="text"></div>
+          </div>
+          <div class="field"><label>বাংলা বিবরণ (Hero Description)</label><textarea id="heroDescBn" rows="3"></textarea></div>
+          <div class="field"><label>English Description</label><textarea id="heroDescEn" rows="3"></textarea></div>
+          <hr class="divider">
+          <h3 style="border:none;padding:0;margin-bottom:14px"><i class="fas fa-chart-bar"></i> Counter সংখ্যা</h3>
+          <div class="grid four">
+            <div class="field"><label>মোট শিক্ষার্থী</label><input id="heroStudents" type="number" placeholder="700"></div>
+            <div class="field"><label>মোট শিক্ষক</label><input id="heroTeachers" type="number" placeholder="22"></div>
+            <div class="field"><label>পাসের হার %</label><input id="heroPassRate" type="number" placeholder="92"></div>
+            <div class="field"><label>বছরের ঐতিহ্য</label><input id="heroYears" type="number" placeholder="40"></div>
+          </div>
+          <button class="btn primary" id="saveHeroBtn"><i class="fas fa-save"></i> Save Hero</button>
+        </div>
+      </div>
+
+      <!-- ==================== TICKER ==================== -->
+      <div class="panel" id="panel-ticker">
+        <div class="card">
+          <h3><i class="fas fa-scroll"></i> Ticker / Scrolling Notice Bar</h3>
+          <p class="section-desc">পেজের একদম উপরে স্ক্রোলিং নোটিশ বার।</p>
+          <div class="inline-row">
+            <div class="field"><label>নতুন Ticker Message</label><input id="tickerInput" type="text" placeholder="📢 নতুন নোটিশ লিখুন..."></div>
+            <button class="btn primary" id="addTickerBtn" style="margin-bottom:0"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <div id="tickerList" class="list"></div>
+        </div>
+      </div>
+
+      <!-- ==================== ABOUT & PRINCIPAL ==================== -->
+      <div class="panel" id="panel-about">
+        <div class="card">
+          <h3><i class="fas fa-user-tie"></i> অধ্যক্ষের বাণী (Principal)</h3>
+          <div class="grid two">
+            <div class="field"><label>অধ্যক্ষের নাম</label><input id="principalName" type="text" placeholder="মাওলানা মোঃ আব্দুল করিম"></div>
+            <div class="field"><label>পদবি</label><input id="principalDesig" type="text" placeholder="অধ্যক্ষ, আরপাড়া সদর আলিম মাদ্রাসা"></div>
+          </div>
+          <div class="field"><label>ছবির URL</label><input id="principalPhoto" type="text" placeholder="https://..."></div>
+          <div class="field"><label>বাণী / Message</label><textarea id="principalMessage" rows="4"></textarea></div>
+          <button class="btn primary" id="savePrincipalBtn"><i class="fas fa-save"></i> Save Principal</button>
         </div>
 
-        <!-- HERO -->
-        <div class="panel" id="panel-hero">
-          <div class="card">
-            <h3>Hero Section</h3>
-            <div class="grid two">
-              <div class="field">
-                <label>বাংলা শিরোনাম</label>
-                <input id="heroTitleBn" type="text" placeholder="আরপাড়া সদর আলিম মাদ্রাসা">
-              </div>
-              <div class="field">
-                <label>English Title</label>
-                <input id="heroTitleEn" type="text" placeholder="Arpara Sadar Alim Madrasah">
-              </div>
-              <div class="field">
-                <label>বাংলা মটো</label>
-                <input id="heroMottoBn" type="text" placeholder="ইসলামিক শিক্ষা ও আধুনিক জ্ঞানের সমন্বয়">
-              </div>
-              <div class="field">
-                <label>English Motto</label>
-                <input id="heroMottoEn" type="text" placeholder="Combining Islamic Education & Modern Knowledge">
-              </div>
-            </div>
+        <div class="card">
+          <h3><i class="fas fa-info-circle"></i> About Cards (প্রতিষ্ঠান বৈশিষ্ট্য)</h3>
+          <p class="section-desc">About section এর ছোট কার্ড গুলো।</p>
+          <input type="hidden" id="aboutCardEditId">
+          <div class="grid two">
+            <div class="field"><label>Icon (Font Awesome class)</label><input id="aboutCardIcon" type="text" placeholder="fas fa-quran"></div>
+            <div class="field"><label>বাংলা শিরোনাম</label><input id="aboutCardTitleBn" type="text"></div>
+          </div>
+          <div class="field"><label>বাংলা বিবরণ</label><textarea id="aboutCardDescBn" rows="2"></textarea></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveAboutCardBtn"><i class="fas fa-save"></i> Save Card</button>
+            <button class="btn ghost" id="clearAboutCardBtn"><i class="fas fa-times"></i> Clear</button>
+          </div>
+          <hr class="divider">
+          <div id="aboutCardList" class="list"></div>
+        </div>
+      </div>
 
-            <div class="field">
-              <label>বাংলা বিবরণ</label>
-              <textarea id="heroDescBn" rows="4"></textarea>
+      <!-- ==================== TEACHERS ==================== -->
+      <div class="panel" id="panel-teachers">
+        <div class="card">
+          <h3><i class="fas fa-chalkboard-teacher"></i> Teacher যোগ / সম্পাদনা</h3>
+          <input type="hidden" id="teacherEditId">
+          <div class="grid two">
+            <div class="field"><label>নাম *</label><input id="teacherName" type="text" placeholder="মাওলানা মোঃ..."></div>
+            <div class="field"><label>পদবি / Role</label><input id="teacherRole" type="text" placeholder="সহকারী শিক্ষক"></div>
+            <div class="field"><label>বিষয় / Subject</label><input id="teacherSubject" type="text" placeholder="আরবি"></div>
+            <div class="field"><label>বিভাগ / Department</label>
+              <select id="teacherDept">
+                <option value="islamic">Islamic (ইসলামিক)</option>
+                <option value="general">General (সাধারণ)</option>
+                <option value="science">Science (বিজ্ঞান)</option>
+              </select>
             </div>
-
-            <div class="grid four">
-              <div class="field">
-                <label>Students</label>
-                <input id="heroStudents" type="number">
-              </div>
-              <div class="field">
-                <label>Teachers</label>
-                <input id="heroTeachers" type="number">
-              </div>
-              <div class="field">
-                <label>Pass Rate</label>
-                <input id="heroPassRate" type="number">
-              </div>
-              <div class="field">
-                <label>Years</label>
-                <input id="heroYears" type="number">
-              </div>
-            </div>
-
-            <button class="btn primary" id="saveHeroBtn">Save Hero</button>
+          </div>
+          <div class="field"><label>যোগ্যতা / Qualification</label><input id="teacherQualification" type="text" placeholder="কামিল (হাদিস)"></div>
+          <div class="field"><label>ছবির URL (Photo)</label><input id="teacherPhoto" type="text" placeholder="https://..."></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveTeacherBtn"><i class="fas fa-save"></i> Save Teacher</button>
+            <button class="btn ghost" id="clearTeacherBtn"><i class="fas fa-times"></i> Clear</button>
           </div>
         </div>
+        <div class="card">
+          <h3><i class="fas fa-list"></i> সকল শিক্ষক (<span id="teacherCountBadge">0</span> জন)</h3>
+          <div id="teacherList" class="list"></div>
+        </div>
+      </div>
 
-        <!-- TICKER -->
-        <div class="panel" id="panel-ticker">
-          <div class="card">
-            <h3>Ticker</h3>
-
-            <div class="inline-row">
-              <input id="tickerInput" type="text" placeholder="Ticker message লিখুন...">
-              <button class="btn primary" id="addTickerBtn">Add</button>
+      <!-- ==================== NOTICES ==================== -->
+      <div class="panel" id="panel-notices">
+        <div class="card">
+          <h3><i class="fas fa-bell"></i> নোটিশ যোগ / সম্পাদনা</h3>
+          <input type="hidden" id="noticeEditId">
+          <div class="field"><label>শিরোনাম / Title *</label><input id="noticeTitle" type="text" placeholder="নোটিশের শিরোনাম"></div>
+          <div class="grid two">
+            <div class="field"><label>ধরন / Type</label>
+              <select id="noticeType">
+                <option value="normal">সাধারণ (Normal)</option>
+                <option value="urgent">জরুরি (Urgent)</option>
+                <option value="academic">একাডেমিক (Academic)</option>
+                <option value="event">ইভেন্ট (Event)</option>
+              </select>
             </div>
-
-            <div id="tickerList" class="list"></div>
+            <div class="field"><label>তারিখ / Date</label><input id="noticeDate" type="date"></div>
+          </div>
+          <div class="field"><label>বাংলা তারিখ (প্রদর্শনীর জন্য)</label><input id="noticeDateDisplay" type="text" placeholder="১২ জানুয়ারি, ২০২৫"></div>
+          <div class="field"><label>বিবরণ / Body *</label><textarea id="noticeBody" rows="4"></textarea></div>
+          <div class="field"><label>সংযুক্ত লিংক (ঐচ্ছিক)</label><input id="noticeLink" type="text" placeholder="https://..."></div>
+          <div class="check-row"><input id="noticeActive" type="checkbox" checked><label for="noticeActive">Active (সাইটে দেখাবে)</label></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveNoticeBtn"><i class="fas fa-save"></i> Save Notice</button>
+            <button class="btn ghost" id="clearNoticeBtn"><i class="fas fa-times"></i> Clear</button>
           </div>
         </div>
+        <div class="card">
+          <h3><i class="fas fa-list"></i> সকল নোটিশ</h3>
+          <div id="noticeList" class="list"></div>
+        </div>
+      </div>
 
-        <!-- NOTICES -->
-        <div class="panel" id="panel-notices">
-          <div class="card">
-            <h3>Notice Form</h3>
-
-            <input type="hidden" id="noticeEditId">
-
-            <div class="field">
-              <label>Title</label>
-              <input id="noticeTitle" type="text" placeholder="Notice title">
-            </div>
-
-            <div class="grid two">
-              <div class="field">
-                <label>Type</label>
-                <select id="noticeType">
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="academic">Academic</option>
-                  <option value="event">Event</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Date</label>
-                <input id="noticeDate" type="date">
-              </div>
-            </div>
-
-            <div class="field">
-              <label>বাংলা তারিখ</label>
-              <input id="noticeDateDisplay" type="text" placeholder="১২ জানুয়ারি, ২০২৫">
-            </div>
-
-            <div class="field">
-              <label>Body</label>
-              <textarea id="noticeBody" rows="5"></textarea>
-            </div>
-
-            <div class="field">
-              <label>Link</label>
-              <input id="noticeLink" type="text" placeholder="https://...">
-            </div>
-
-            <div class="check-row">
-              <input id="noticeActive" type="checkbox" checked>
-              <label for="noticeActive">Active</label>
-            </div>
-
-            <div class="action-row">
-              <button class="btn primary" id="saveNoticeBtn">Save Notice</button>
-              <button class="btn ghost" id="clearNoticeBtn">Clear</button>
-            </div>
+      <!-- ==================== RESULTS & MERIT ==================== -->
+      <div class="panel" id="panel-results">
+        <div class="card">
+          <h3><i class="fas fa-trophy"></i> মেধাতালিকা (Merit List)</h3>
+          <p class="section-desc">Result সেকশনে মেধাবী শিক্ষার্থীদের তালিকা।</p>
+          <input type="hidden" id="meritEditId">
+          <div class="grid two">
+            <div class="field"><label>শিক্ষার্থীর নাম *</label><input id="meritName" type="text"></div>
+            <div class="field"><label>GPA</label><input id="meritGpa" type="text" placeholder="5.00"></div>
+            <div class="field"><label>শ্রেণি / Class</label><input id="meritClass" type="text" placeholder="দাখিল ২০২৪"></div>
+            <div class="field"><label>ক্রম / Rank (1, 2, 3...)</label><input id="meritRank" type="number" placeholder="1" min="1"></div>
           </div>
-
-          <div class="card">
-            <h3>All Notices</h3>
-            <div id="noticeList" class="list"></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveMeritBtn"><i class="fas fa-save"></i> Save</button>
+            <button class="btn ghost" id="clearMeritBtn"><i class="fas fa-times"></i> Clear</button>
           </div>
+          <hr class="divider">
+          <div id="meritList" class="list"></div>
         </div>
 
-        <!-- TEACHERS -->
-        <div class="panel" id="panel-teachers">
-          <div class="card">
-            <h3>Teacher Form</h3>
-
-            <input type="hidden" id="teacherEditId">
-
-            <div class="grid two">
-              <div class="field">
-                <label>Name</label>
-                <input id="teacherName" type="text">
-              </div>
-              <div class="field">
-                <label>Role</label>
-                <input id="teacherRole" type="text">
-              </div>
-            </div>
-
-            <div class="grid two">
-              <div class="field">
-                <label>Subject</label>
-                <input id="teacherSubject" type="text">
-              </div>
-              <div class="field">
-                <label>Department</label>
-                <select id="teacherDept">
-                  <option value="islamic">Islamic</option>
-                  <option value="general">General</option>
-                  <option value="science">Science</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Qualification</label>
-              <input id="teacherQualification" type="text">
-            </div>
-
-            <div class="field">
-              <label>Photo URL</label>
-              <input id="teacherPhoto" type="text" placeholder="https://...">
-            </div>
-
-            <div class="action-row">
-              <button class="btn primary" id="saveTeacherBtn">Save Teacher</button>
-              <button class="btn ghost" id="clearTeacherBtn">Clear</button>
-            </div>
+        <div class="card">
+          <h3><i class="fas fa-chart-bar"></i> Result Stats (পাস/ফেল সারাংশ)</h3>
+          <div class="grid four">
+            <div class="field"><label>মোট পরীক্ষার্থী</label><input id="rsTotal" type="text" placeholder="150"></div>
+            <div class="field"><label>পাস</label><input id="rsPass" type="text" placeholder="148"></div>
+            <div class="field"><label>GPA-5</label><input id="rsGpa5" type="text" placeholder="12"></div>
+            <div class="field"><label>শিক্ষক সংখ্যা</label><input id="rsTeachers" type="text" placeholder="22"></div>
           </div>
-
-          <div class="card">
-            <h3>All Teachers</h3>
-            <div id="teacherList" class="list"></div>
-          </div>
+          <button class="btn primary" id="saveResultStatsBtn"><i class="fas fa-save"></i> Save Stats</button>
         </div>
 
-        <!-- CONTACT -->
-        <div class="panel" id="panel-contact">
-          <div class="card">
-            <h3>Contact Info</h3>
-
-            <div class="field">
-              <label>Full Address</label>
-              <textarea id="contactAddress" rows="3"></textarea>
+        <div class="card">
+          <h3><i class="fas fa-search"></i> Student Result যোগ করুন</h3>
+          <p class="section-desc">ছাত্র-ছাত্রীদের রোল-নম্বর দিয়ে ফলাফল search করার জন্য database-এ result যোগ করুন।</p>
+          <div class="result-search-row">
+            <div class="field"><label>শ্রেণি</label>
+              <select id="resultClass">
+                <option value="6">ষষ্ঠ</option><option value="7">সপ্তম</option><option value="8">অষ্টম</option>
+                <option value="9">নবম</option><option value="10">দশম (দাখিল)</option>
+                <option value="11">একাদশ</option><option value="12">দ্বাদশ (আলিম)</option>
+              </select>
             </div>
-
-            <div class="grid two">
-              <div class="field">
-                <label>Phone</label>
-                <textarea id="contactPhone" rows="3"></textarea>
-              </div>
-              <div class="field">
-                <label>Email</label>
-                <textarea id="contactEmail" rows="3"></textarea>
-              </div>
+            <div class="field"><label>পরীক্ষা</label>
+              <select id="resultExam">
+                <option value="half">অর্ধবার্ষিক</option>
+                <option value="annual">বার্ষিক</option>
+                <option value="dakhil">দাখিল</option>
+                <option value="alim">আলিম</option>
+              </select>
             </div>
-
-            <div class="field">
-              <label>Hours</label>
-              <textarea id="contactHours" rows="3"></textarea>
-            </div>
-
-            <div class="grid two">
-              <div class="field">
-                <label>Address Short</label>
-                <input id="contactAddressShort" type="text">
-              </div>
-              <div class="field">
-                <label>Phone Short</label>
-                <input id="contactPhoneShort" type="text">
-              </div>
-              <div class="field">
-                <label>Email Short</label>
-                <input id="contactEmailShort" type="text">
-              </div>
-              <div class="field">
-                <label>Hours Short</label>
-                <input id="contactHoursShort" type="text">
-              </div>
-              <div class="field">
-                <label>Call Number</label>
-                <input id="contactCallNumber" type="text">
-              </div>
-              <div class="field">
-                <label>WhatsApp</label>
-                <input id="contactWhatsapp" type="text">
-              </div>
-            </div>
-
-            <button class="btn primary" id="saveContactBtn">Save Contact</button>
+            <div class="field"><label>রোল নম্বর</label><input id="resultRoll" type="text" placeholder="101"></div>
+            <button class="btn ghost" id="loadResultBtn" style="margin-bottom:16px"><i class="fas fa-search"></i> Load</button>
           </div>
+          <div id="resultEntryArea"></div>
+        </div>
+      </div>
+
+      <!-- ==================== ADMISSION ==================== -->
+      <div class="panel" id="panel-admission">
+        <div class="card">
+          <h3><i class="fas fa-clipboard-list"></i> ভর্তি তথ্য</h3>
+          <div class="grid two">
+            <div class="field"><label>ভর্তি বর্ষ</label><input id="admYear" type="text" placeholder="২০২৫"></div>
+            <div class="field"><label>ভর্তি ফি</label><input id="admFee" type="text" placeholder="৫০০ টাকা"></div>
+            <div class="field"><label>আবেদন শুরু</label><input id="admStartDate" type="text" placeholder="১ জানুয়ারি, ২০২৫"></div>
+            <div class="field"><label>আবেদন শেষ</label><input id="admEndDate" type="text" placeholder="৩১ জানুয়ারি, ২০২৫"></div>
+            <div class="field"><label>ভর্তি পরীক্ষা</label><input id="admExamDate" type="text" placeholder="৫ ফেব্রুয়ারি, ২০২৫"></div>
+            <div class="field"><label>ফলাফল প্রকাশ</label><input id="admResultDate" type="text" placeholder="১০ ফেব্রুয়ারি, ২০২৫"></div>
+          </div>
+          <button class="btn primary" id="saveAdmissionBtn"><i class="fas fa-save"></i> Save Admission Info</button>
+        </div>
+      </div>
+
+      <!-- ==================== FEES ==================== -->
+      <div class="panel" id="panel-fees">
+        <div class="card">
+          <h3><i class="fas fa-money-bill"></i> ফি কাঠামো যোগ করুন</h3>
+          <input type="hidden" id="feeEditId">
+          <div class="grid four">
+            <div class="field"><label>শ্রেণির নাম</label><input id="feeClass" type="text" placeholder="ষষ্ঠ শ্রেণি"></div>
+            <div class="field"><label>ভর্তি ফি</label><input id="feeAdmission" type="text" placeholder="৫০০ টাকা"></div>
+            <div class="field"><label>মাসিক বেতন</label><input id="feeMonthly" type="text" placeholder="১৫০ টাকা"></div>
+            <div class="field"><label>পরীক্ষা ফি</label><input id="feeExam" type="text" placeholder="২০০ টাকা"></div>
+          </div>
+          <div class="action-row">
+            <button class="btn primary" id="saveFeeBtn"><i class="fas fa-save"></i> Add / Update</button>
+            <button class="btn ghost" id="clearFeeBtn"><i class="fas fa-times"></i> Clear</button>
+          </div>
+          <hr class="divider">
+          <div id="feeList" class="list"></div>
+        </div>
+      </div>
+
+      <!-- ==================== GALLERY & VIDEOS ==================== -->
+      <div class="panel" id="panel-gallery">
+        <div class="card">
+          <h3><i class="fas fa-image"></i> Photo যোগ করুন</h3>
+          <input type="hidden" id="photoEditId">
+          <div class="grid two">
+            <div class="field"><label>ছবির URL *</label><input id="photoUrl" type="text" placeholder="https://..."></div>
+            <div class="field"><label>শিরোনাম</label><input id="photoTitle" type="text"></div>
+            <div class="field"><label>ক্যাটাগরি</label>
+              <select id="photoCat">
+                <option value="campus">ক্যাম্পাস</option>
+                <option value="event">ইভেন্ট</option>
+                <option value="class">ক্লাস</option>
+              </select>
+            </div>
+            <div class="field"><label>বিবরণ</label><input id="photoDesc" type="text"></div>
+          </div>
+          <div class="action-row">
+            <button class="btn primary" id="savePhotoBtn"><i class="fas fa-save"></i> Add Photo</button>
+            <button class="btn ghost" id="clearPhotoBtn"><i class="fas fa-times"></i> Clear</button>
+          </div>
+          <hr class="divider">
+          <div id="photoList" class="list"></div>
         </div>
 
-        <!-- SITE INFO -->
-        <div class="panel" id="panel-siteinfo">
-          <div class="card">
-            <h3>Site Info</h3>
-
-            <div class="grid two">
-              <div class="field">
-                <label>EIIN</label>
-                <input id="siteEiin" type="text">
-              </div>
-              <div class="field">
-                <label>Established</label>
-                <input id="siteEstablished" type="text">
-              </div>
-              <div class="field">
-                <label>Facebook URL</label>
-                <input id="siteFacebook" type="text">
-              </div>
-              <div class="field">
-                <label>YouTube URL</label>
-                <input id="siteYoutube" type="text">
-              </div>
-              <div class="field">
-                <label>WhatsApp</label>
-                <input id="siteWhatsapp" type="text">
-              </div>
-              <div class="field">
-                <label>Instagram URL</label>
-                <input id="siteInstagram" type="text">
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Footer Text</label>
-              <input id="siteFooterText" type="text">
-            </div>
-
-            <button class="btn primary" id="saveSiteInfoBtn">Save Site Info</button>
+        <div class="card">
+          <h3><i class="fab fa-youtube"></i> Video যোগ করুন (YouTube)</h3>
+          <input type="hidden" id="videoEditId">
+          <div class="grid two">
+            <div class="field"><label>YouTube Video ID *</label><input id="videoYtId" type="text" placeholder="dQw4w9WgXcQ"></div>
+            <div class="field"><label>শিরোনাম</label><input id="videoTitle" type="text"></div>
           </div>
-        </div>
-
-        <!-- MESSAGES -->
-        <div class="panel" id="panel-messages">
-          <div class="card">
-            <h3>যোগাযোগ মেসেজ</h3>
-            <div id="messageList" class="list"></div>
+          <div class="check-row"><input id="videoActive" type="checkbox" checked><label for="videoActive">Active</label></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveVideoBtn"><i class="fas fa-save"></i> Add Video</button>
+            <button class="btn ghost" id="clearVideoBtn"><i class="fas fa-times"></i> Clear</button>
           </div>
+          <hr class="divider">
+          <div id="videoList" class="list"></div>
         </div>
+      </div>
 
-      </section>
-    </main>
-  </div>
+      <!-- ==================== EVENTS ==================== -->
+      <div class="panel" id="panel-events">
+        <div class="card">
+          <h3><i class="fas fa-calendar-alt"></i> ইভেন্ট যোগ করুন</h3>
+          <input type="hidden" id="eventEditId">
+          <div class="grid two">
+            <div class="field"><label>শিরোনাম *</label><input id="eventTitle" type="text" placeholder="বার্ষিক মিলাদ মাহফিল"></div>
+            <div class="field"><label>তারিখ (দিন)</label><input id="eventDay" type="text" placeholder="১৫"></div>
+            <div class="field"><label>মাস</label><input id="eventMonth" type="text" placeholder="ফেব্রুয়ারি"></div>
+            <div class="field"><label>সময়</label><input id="eventTime" type="text" placeholder="সকাল ১০:০০"></div>
+          </div>
+          <div class="field"><label>স্থান</label><input id="eventPlace" type="text" placeholder="মাদ্রাসা মাঠ"></div>
+          <div class="field"><label>বিবরণ</label><textarea id="eventDesc" rows="2"></textarea></div>
+          <div class="action-row">
+            <button class="btn primary" id="saveEventBtn"><i class="fas fa-save"></i> Save Event</button>
+            <button class="btn ghost" id="clearEventBtn"><i class="fas fa-times"></i> Clear</button>
+          </div>
+          <hr class="divider">
+          <div id="eventList" class="list"></div>
+        </div>
+      </div>
 
-  <div id="toast" class="toast"></div>
+      <!-- ==================== CONTACT ==================== -->
+      <div class="panel" id="panel-contact">
+        <div class="card">
+          <h3><i class="fas fa-phone"></i> যোগাযোগ তথ্য</h3>
+          <div class="field"><label>পূর্ণ ঠিকানা</label><textarea id="contactAddress" rows="3" placeholder="আরপাড়া, শালিখা&#10;মাগুরা, খুলনা, বাংলাদেশ"></textarea></div>
+          <div class="grid two">
+            <div class="field"><label>ফোন (বিস্তারিত)</label><textarea id="contactPhone" rows="2"></textarea></div>
+            <div class="field"><label>ইমেইল</label><textarea id="contactEmail" rows="2"></textarea></div>
+            <div class="field"><label>অফিস সময়</label><textarea id="contactHours" rows="2"></textarea></div>
+            <div class="field"><label>ঠিকানা (সংক্ষেপ — Footer)</label><input id="contactAddressShort" type="text"></div>
+            <div class="field"><label>ফোন (সংক্ষেপ)</label><input id="contactPhoneShort" type="text"></div>
+            <div class="field"><label>ইমেইল (সংক্ষেপ)</label><input id="contactEmailShort" type="text"></div>
+            <div class="field"><label>সময় (সংক্ষেপ)</label><input id="contactHoursShort" type="text"></div>
+            <div class="field"><label>Call Button নম্বর</label><input id="contactCallNumber" type="text" placeholder="+8801XXXXXXXXX"></div>
+            <div class="field"><label>WhatsApp নম্বর</label><input id="contactWhatsapp" type="text" placeholder="8801XXXXXXXXX"></div>
+          </div>
+          <button class="btn primary" id="saveContactBtn"><i class="fas fa-save"></i> Save Contact</button>
+        </div>
+      </div>
 
-  <script type="module" src="admin-script.js"></script>
+      <!-- ==================== MESSAGES ==================== -->
+      <div class="panel" id="panel-messages">
+        <div class="card">
+          <h3><i class="fas fa-envelope-open-text"></i> Contact Messages (<span id="msgCountBadge">0</span>)</h3>
+          <div id="messageList" class="list"></div>
+        </div>
+      </div>
+
+      <!-- ==================== ADMISSION APPLICATIONS ==================== -->
+      <div class="panel" id="panel-admissions">
+        <div class="card">
+          <h3><i class="fas fa-user-plus"></i> ভর্তি আবেদন (<span id="admCountBadge">0</span>)</h3>
+          <div id="admissionList" class="list"></div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<div id="toast" class="toast success"><i class="fas fa-check-circle"></i><span id="toastMsg">Saved!</span></div>
+
+<script type="module" src="admin-script.js"></script>
 </body>
 </html>

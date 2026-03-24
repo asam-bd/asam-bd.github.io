@@ -552,7 +552,7 @@ onValue(ref(db, 'contact'), (snap) => {
   }
 });
 
-// SITE INFO
+// SITE INFO (legacy node)
 onValue(ref(db, 'siteInfo'), (snap) => {
   const d = snap.val();
   if (!d) return;
@@ -583,6 +583,72 @@ onValue(ref(db, 'siteInfo'), (snap) => {
     const a = document.querySelector('.f-social a:nth-child(4)');
     if (a) a.href = d.instagram;
   }
+});
+
+// SITE SETTINGS (new — controls title, favicon, nav icon, etc.)
+onValue(ref(db, 'siteSettings'), (snap) => {
+  const d = snap.val();
+  if (!d) return;
+
+  // Page <title>
+  if (d.nameBn) {
+    const enPart = d.nameEn ? ` | ${d.nameEn}` : '';
+    document.title = `${d.nameBn}${enPart}`;
+  }
+
+  // Meta description
+  if (d.metaDesc) {
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = d.metaDesc;
+  }
+
+  // Favicon
+  if (d.faviconUrl) {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+    link.href = d.faviconUrl;
+  }
+
+  // Navbar logo icon
+  if (d.navIcon) {
+    const iconEl = document.querySelector('.nav-logo-icon');
+    if (iconEl) iconEl.textContent = d.navIcon;
+    // Hero mosque icon too
+    const heroMosque = document.querySelector('.pl-mosque');
+    if (heroMosque) heroMosque.textContent = d.navIcon;
+    const footerIcon = document.querySelector('.f-logo span');
+    if (footerIcon) footerIcon.textContent = d.navIcon;
+  }
+
+  // Navbar site name
+  if (d.nameBn) {
+    const nameEl = document.querySelector('.nav-logo-name');
+    if (nameEl) nameEl.textContent = d.nameBn;
+    const fLogoName = document.querySelector('.f-logo h3');
+    if (fLogoName) fLogoName.textContent = d.nameBn;
+  }
+
+  // Tagline / EIIN sub
+  if (d.tagline) {
+    const sub = document.querySelector('.nav-logo-sub');
+    if (sub) sub.textContent = d.tagline;
+  } else if (d.eiin) {
+    const sub = document.querySelector('.nav-logo-sub');
+    if (sub) sub.textContent = `EIIN: ${d.eiin} | Est. ${d.established || '1985'}`;
+  }
+
+  // Footer text
+  if (d.footerText) {
+    const ft = document.querySelector('.f-bottom p');
+    if (ft) ft.innerHTML = esc(d.footerText);
+  }
+
+  // Social links
+  const socials = [d.facebook, d.youtube, d.whatsapp ? `https://wa.me/${d.whatsapp}` : null, d.instagram];
+  document.querySelectorAll('.f-social a').forEach((a, i) => {
+    if (socials[i]) a.href = socials[i];
+  });
 });
 
 // RESULT SEARCH
