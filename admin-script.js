@@ -1395,8 +1395,16 @@ async function uploadToCloudinary(input, inputId, previewId, btnId) {
       { method: 'POST', body: formData }
     );
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+
+    // Cloudinary sometimes returns 200 but with an error object inside
+    if (data.error) {
+      throw new Error(data.error.message || 'Cloudinary error');
+    }
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${data.message || 'Upload failed'}`);
+    }
 
     if (data.secure_url) {
       document.getElementById(inputId).value = data.secure_url;
@@ -1404,7 +1412,7 @@ async function uploadToCloudinary(input, inputId, previewId, btnId) {
       if (preview) { preview.src = data.secure_url; preview.classList.add('show'); }
       toast('✅ ছবি সফলভাবে upload হয়েছে!');
     } else {
-      throw new Error(data.error?.message || 'Unknown error');
+      throw new Error('secure_url পাওয়া যায়নি');
     }
   } catch (err) {
     console.error('Cloudinary upload error:', err);
