@@ -1362,67 +1362,57 @@ $('bulkUploadConfirmBtn')?.addEventListener('click', async () => {
   }
 });
 
-// ==================== CLOUDINARY UPLOAD ====================
-// ⚙️ এখানে তোমার Cloudinary info দাও:
+
+// ==================== CLOUDINARY UPLOAD (fetch API) ====================
 const CLOUDINARY_CLOUD_NAME = 'ddtbk1mwo';
 const CLOUDINARY_UPLOAD_PRESET = 'Asambd';
 
-function openCloudinaryUpload(inputId, previewId) {
-  if (CLOUDINARY_CLOUD_NAME === 'YOUR_CLOUD_NAME') {
-    toast('⚠️ Cloudinary config সেট করা হয়নি! admin-script.js-এ CLOUDINARY_CLOUD_NAME ও CLOUDINARY_UPLOAD_PRESET দিন।', 'error');
+async function uploadToCloudinary(input, inputId, previewId, btnId) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    toast('ছবির size 5MB-এর বেশি হওয়া যাবে না!', 'error');
+    input.value = '';
     return;
   }
 
-  const widget = cloudinary.createUploadWidget(
-    {
-      cloudName: CLOUDINARY_CLOUD_NAME,
-      uploadPreset: CLOUDINARY_UPLOAD_PRESET,
-      sources: ['local', 'camera', 'url'],
-      multiple: false,
-      maxFileSize: 5000000, // 5MB
-      clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-      cropping: false,
-      language: 'en',
-      styles: {
-        palette: {
-          window: '#FFFFFF',
-          windowBorder: '#059669',
-          tabIcon: '#059669',
-          menuIcons: '#047857',
-          textDark: '#1F2937',
-          textLight: '#FFFFFF',
-          link: '#059669',
-          action: '#059669',
-          inactiveTabIcon: '#6B7280',
-          error: '#EF4444',
-          inProgress: '#059669',
-          complete: '#059669',
-          sourceBg: '#F9FAFB'
-        }
-      }
-    },
-    (error, result) => {
-      if (error) {
-        console.error('Cloudinary error:', error);
-        toast('Upload-এ সমস্যা হয়েছে।', 'error');
-        return;
-      }
-      if (result && result.event === 'success') {
-        const url = result.info.secure_url;
-        // Input field-এ URL বসাও
-        const input = document.getElementById(inputId);
-        if (input) input.value = url;
-        // Preview দেখাও
-        const preview = document.getElementById(previewId);
-        if (preview) {
-          preview.src = url;
-          preview.classList.add('show');
-        }
-        toast('✅ ছবি সফলভাবে upload হয়েছে!');
-        widget.close();
-      }
-    }
-  );
+  const btn = document.getElementById(btnId);
+  const btnSpan = btn.querySelector('span');
+  const btnIcon = btn.querySelector('i');
 
-  widget.open();
+  btn.classList.add('uploading');
+  btnSpan.textContent = 'Uploading...';
+  btnIcon.className = 'fas fa-spinner fa-spin';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: 'POST', body: formData }
+    );
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (data.secure_url) {
+      document.getElementById(inputId).value = data.secure_url;
+      const preview = document.getElementById(previewId);
+      if (preview) { preview.src = data.secure_url; preview.classList.add('show'); }
+      toast('✅ ছবি সফলভাবে upload হয়েছে!');
+    } else {
+      throw new Error(data.error?.message || 'Unknown error');
+    }
+  } catch (err) {
+    console.error('Cloudinary upload error:', err);
+    toast('Upload-এ সমস্যা হয়েছে: ' + err.message, 'error');
+  } finally {
+    btn.classList.remove('uploading');
+    btnSpan.textContent = 'Upload';
+    btnIcon.className = 'fas fa-cloud-upload-alt';
+    input.value = '';
+  }
 }
