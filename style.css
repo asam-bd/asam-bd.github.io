@@ -448,6 +448,11 @@ input,select,textarea{font-family:inherit;outline:none}
 
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
 
+/* Hide sidebar-only elements on desktop */
+@media(min-width:769px){
+  .sidebar-header,.sidebar-footer{display:none!important}
+}
+
 @media(max-width:1024px){
   .hero-title{font-size:40px}
   .f-grid{grid-template-columns:1fr 1fr}
@@ -550,8 +555,6 @@ input,select,textarea{font-family:inherit;outline:none}
   .sidebar-lang-btn,.sidebar-theme-btn{width:40px;height:40px;border-radius:12px!important;font-size:13px!important}
   .sidebar-copy{font-size:11px;color:var(--text-light);text-align:center}
 
-  /* Hide sidebar-header/footer on desktop */
-  .sidebar-header,.sidebar-footer{display:none}
   .hero-title{font-size:28px}
   .hero-counters{grid-template-columns:repeat(2,1fr)}
   .section{padding:70px 0}
@@ -579,7 +582,9 @@ input,select,textarea{font-family:inherit;outline:none}
 /* ══════════════════════════════════════
    CUSTOM CURSOR
 ══════════════════════════════════════ */
-*, *::before, *::after { cursor: none !important; }
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
 
 #cursor-dot, #cursor-ring {
   position: fixed;
