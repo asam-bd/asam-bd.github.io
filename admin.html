@@ -7,6 +7,29 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin-style.css" />
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    /* Cloudinary Upload Button Style */
+    .cl-upload-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 6px; font-size: 13px;
+      cursor: pointer; border: none; font-weight: 600;
+      background: #6366f1; color: #fff; transition: background .2s;
+      white-space: nowrap;
+    }
+    .cl-upload-btn:hover { background: #4f46e5; }
+    .cl-upload-btn i { font-size: 14px; }
+    .field-with-upload { display: flex; gap: 8px; align-items: flex-end; }
+    .field-with-upload .field { flex: 1; margin: 0; }
+    .cl-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 8px;
+      border: 2px solid var(--primary); display: none; flex-shrink: 0; }
+    .cl-preview.show { display: block; }
+    .cl-config-notice {
+      background: #fef9c3; border: 1px solid #fcd34d; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #92400e;
+    }
+  </style>
   <style>
     :root {
       --primary: #059669;
@@ -430,7 +453,13 @@
             <div class="field"><label>অধ্যক্ষের নাম</label><input id="principalName" type="text" placeholder="মাওলানা মোঃ আব্দুল করিম"></div>
             <div class="field"><label>পদবি</label><input id="principalDesig" type="text" placeholder="অধ্যক্ষ, আরপাড়া সদর আলিম মাদ্রাসা"></div>
           </div>
-          <div class="field"><label>ছবির URL</label><input id="principalPhoto" type="text" placeholder="https://..."></div>
+          <div class="field-with-upload">
+            <div class="field"><label>ছবির URL</label><input id="principalPhoto" type="text" placeholder="Upload করুন অথবা URL দিন"></div>
+            <img id="principalPhotoPreview" class="cl-preview" alt="preview">
+            <button type="button" class="cl-upload-btn" onclick="openCloudinaryUpload('principalPhoto','principalPhotoPreview')">
+              <i class="fas fa-cloud-upload-alt"></i> Upload
+            </button>
+          </div>
           <div class="field"><label>বাণী / Message</label><textarea id="principalMessage" rows="4"></textarea></div>
           <button class="btn primary" id="savePrincipalBtn"><i class="fas fa-save"></i> Save Principal</button>
         </div>
@@ -471,7 +500,13 @@
             </div>
           </div>
           <div class="field"><label>যোগ্যতা / Qualification</label><input id="teacherQualification" type="text" placeholder="কামিল (হাদিস)"></div>
-          <div class="field"><label>ছবির URL (Photo)</label><input id="teacherPhoto" type="text" placeholder="https://..."></div>
+          <div class="field-with-upload">
+            <div class="field"><label>ছবির URL (Photo)</label><input id="teacherPhoto" type="text" placeholder="Upload করুন অথবা URL দিন"></div>
+            <img id="teacherPhotoPreview" class="cl-preview" alt="preview">
+            <button type="button" class="cl-upload-btn" onclick="openCloudinaryUpload('teacherPhoto','teacherPhotoPreview')">
+              <i class="fas fa-cloud-upload-alt"></i> Upload
+            </button>
+          </div>
           <div class="action-row">
             <button class="btn primary" id="saveTeacherBtn"><i class="fas fa-save"></i> Save Teacher</button>
             <button class="btn ghost" id="clearTeacherBtn"><i class="fas fa-times"></i> Clear</button>
@@ -701,7 +736,13 @@
           <h3><i class="fas fa-image"></i> Photo যোগ করুন</h3>
           <input type="hidden" id="photoEditId">
           <div class="grid two">
-            <div class="field"><label>ছবির URL *</label><input id="photoUrl" type="text" placeholder="https://..."></div>
+            <div class="field-with-upload" style="grid-column: 1 / -1;">
+              <div class="field"><label>ছবির URL *</label><input id="photoUrl" type="text" placeholder="Upload করুন অথবা URL দিন"></div>
+              <img id="galleryPhotoPreview" class="cl-preview" alt="preview">
+              <button type="button" class="cl-upload-btn" onclick="openCloudinaryUpload('photoUrl','galleryPhotoPreview')">
+                <i class="fas fa-cloud-upload-alt"></i> Upload
+              </button>
+            </div>
             <div class="field"><label>শিরোনাম</label><input id="photoTitle" type="text"></div>
             <div class="field"><label>ক্যাটাগরি</label>
               <select id="photoCat">

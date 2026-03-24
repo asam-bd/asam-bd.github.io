@@ -443,6 +443,8 @@ function clearTeacher(){
   setV('teacherEditId',''); setV('teacherName',''); setV('teacherRole','');
   setV('teacherSubject',''); setV('teacherDept','general');
   setV('teacherQualification',''); setV('teacherPhoto','');
+  const prev = document.getElementById('teacherPhotoPreview');
+  if (prev) { prev.src=''; prev.classList.remove('show'); }
 }
 
 /* ═══════════════════════════════════
@@ -819,7 +821,10 @@ function bindGallery(){
   });
   $('clearVideoBtn')?.addEventListener('click', clearVideo);
 }
-function clearPhoto(){ setV('photoEditId',''); setV('photoUrl',''); setV('photoTitle',''); setV('photoCat','campus'); setV('photoDesc',''); }
+function clearPhoto(){ setV('photoEditId',''); setV('photoUrl',''); setV('photoTitle',''); setV('photoCat','campus'); setV('photoDesc','');
+  const prev = document.getElementById('galleryPhotoPreview');
+  if (prev) { prev.src=''; prev.classList.remove('show'); }
+}
 function clearVideo(){ setV('videoEditId',''); setV('videoYtId',''); setV('videoTitle',''); $('videoActive').checked=true; }
 
 /* ═══════════════════════════════════
@@ -1356,3 +1361,68 @@ $('bulkUploadConfirmBtn')?.addEventListener('click', async () => {
     btn.innerHTML = '<i class="fas fa-redo"></i> আবার চেষ্টা করুন';
   }
 });
+
+// ==================== CLOUDINARY UPLOAD ====================
+// ⚙️ এখানে তোমার Cloudinary info দাও:
+const CLOUDINARY_CLOUD_NAME = 'ddtbk1mwo';
+const CLOUDINARY_UPLOAD_PRESET = 'Asambd';
+
+function openCloudinaryUpload(inputId, previewId) {
+  if (CLOUDINARY_CLOUD_NAME === 'YOUR_CLOUD_NAME') {
+    toast('⚠️ Cloudinary config সেট করা হয়নি! admin-script.js-এ CLOUDINARY_CLOUD_NAME ও CLOUDINARY_UPLOAD_PRESET দিন।', 'error');
+    return;
+  }
+
+  const widget = cloudinary.createUploadWidget(
+    {
+      cloudName: CLOUDINARY_CLOUD_NAME,
+      uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+      sources: ['local', 'camera', 'url'],
+      multiple: false,
+      maxFileSize: 5000000, // 5MB
+      clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+      cropping: false,
+      language: 'en',
+      styles: {
+        palette: {
+          window: '#FFFFFF',
+          windowBorder: '#059669',
+          tabIcon: '#059669',
+          menuIcons: '#047857',
+          textDark: '#1F2937',
+          textLight: '#FFFFFF',
+          link: '#059669',
+          action: '#059669',
+          inactiveTabIcon: '#6B7280',
+          error: '#EF4444',
+          inProgress: '#059669',
+          complete: '#059669',
+          sourceBg: '#F9FAFB'
+        }
+      }
+    },
+    (error, result) => {
+      if (error) {
+        console.error('Cloudinary error:', error);
+        toast('Upload-এ সমস্যা হয়েছে।', 'error');
+        return;
+      }
+      if (result && result.event === 'success') {
+        const url = result.info.secure_url;
+        // Input field-এ URL বসাও
+        const input = document.getElementById(inputId);
+        if (input) input.value = url;
+        // Preview দেখাও
+        const preview = document.getElementById(previewId);
+        if (preview) {
+          preview.src = url;
+          preview.classList.add('show');
+        }
+        toast('✅ ছবি সফলভাবে upload হয়েছে!');
+        widget.close();
+      }
+    }
+  );
+
+  widget.open();
+}
