@@ -161,18 +161,60 @@
     .msg-meta span { font-size: 12px; color: var(--text-mid); }
     .msg-meta span strong { color: var(--text); }
 
+    /* Hamburger toggle button */
+    .sidebar-toggle-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text);
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: background .2s;
+    }
+    .sidebar-toggle-btn:hover { background: var(--bg); }
+
+    /* Mobile overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    .sidebar-overlay.show { opacity: 1; }
+
     /* MOBILE */
     @media (max-width: 900px) {
       .sidebar { width: 220px; }
       .grid.four { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 640px) {
-      body { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; min-height: unset; position: static; flex-direction: row; flex-wrap: wrap; }
-      .nav { display: flex; flex-wrap: wrap; padding: 4px; }
+    @media (max-width: 768px) {
+      .sidebar-toggle-btn { display: flex; align-items: center; }
+      .sidebar-overlay { display: block; }
+      body { flex-direction: row; }
+      .sidebar {
+        position: fixed !important;
+        top: 0; left: -280px;
+        width: 280px !important;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        z-index: 999;
+        transition: left .35s cubic-bezier(0.32,0.72,0,1);
+        overflow-y: auto;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+      }
+      .sidebar.open { left: 0 !important; }
+      .nav { display: flex; flex-direction: column; padding: 0; }
       .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
       .content { padding: 16px; }
       .result-search-row { grid-template-columns: 1fr 1fr; }
+      .main { width: 100%; }
     }
   </style>
 </head>
@@ -237,9 +279,17 @@
     <button id="logoutBtn" class="btn danger logout"><i class="fas fa-right-from-bracket"></i> Logout</button>
   </aside>
 
+  <!-- Mobile Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
   <main class="main">
     <header class="topbar">
-      <div><h2 id="pageTitle">Dashboard</h2><small id="pageDesc">সাইট পরিচালনা করুন</small></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button id="sidebarToggle" class="sidebar-toggle-btn" onclick="toggleMobileSidebar()" aria-label="মেনু">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div><h2 id="pageTitle">Dashboard</h2><small id="pageDesc">সাইট পরিচালনা করুন</small></div>
+      </div>
       <div style="font-size:12px;color:var(--text-mid)"><i class="fas fa-circle" style="color:#22c55e;font-size:8px"></i> Connected</div>
     </header>
 
@@ -752,5 +802,33 @@
 <div id="toast" class="toast success"><i class="fas fa-check-circle"></i><span id="toastMsg">Saved!</span></div>
 
 <script type="module" src="admin-script.js"></script>
+  <script>
+  function toggleMobileSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const isOpen = sidebar.classList.contains('open');
+    if (isOpen) { closeMobileSidebar(); } else { openMobileSidebar(); }
+  }
+  function openMobileSidebar() {
+    document.querySelector('.sidebar').classList.add('open');
+    const ov = document.getElementById('sidebarOverlay');
+    ov.style.display = 'block';
+    requestAnimationFrame(() => ov.classList.add('show'));
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileSidebar() {
+    document.querySelector('.sidebar').classList.remove('open');
+    const ov = document.getElementById('sidebarOverlay');
+    ov.classList.remove('show');
+    setTimeout(() => { if (!ov.classList.contains('show')) ov.style.display = 'none'; }, 350);
+    document.body.style.overflow = '';
+  }
+  // Close sidebar on nav-item click (mobile)
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeMobileSidebar();
+    });
+  });
+  </script>
 </body>
 </html>

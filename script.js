@@ -155,32 +155,50 @@ document.getElementById('langToggleSidebar')?.addEventListener('click', () => {
   const ring = document.getElementById('cursor-ring');
   if (!dot || !ring) return;
 
-  // Only on non-touch devices
-  if (window.matchMedia('(hover:none) and (pointer:coarse)').matches) return;
+  // Only on non-touch / mouse devices
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
   let mouseX = 0, mouseY = 0;
   let ringX  = 0, ringY  = 0;
-  let rafId;
+  let trailTimer = null;
+
+  // Trail effect
+  function spawnTrail(x, y) {
+    const t = document.createElement('div');
+    t.className = 'cursor-trail-dot';
+    t.style.left = x + 'px';
+    t.style.top  = y + 'px';
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 500);
+  }
 
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     dot.style.left = mouseX + 'px';
     dot.style.top  = mouseY + 'px';
+
+    // Throttled trail spawn
+    if (!trailTimer) {
+      trailTimer = setTimeout(() => {
+        spawnTrail(mouseX, mouseY);
+        trailTimer = null;
+      }, 40);
+    }
   });
 
-  // Ring follows with smooth lag
+  // Ring follows with smooth elastic lag
   function animateRing() {
-    ringX += (mouseX - ringX) * 0.14;
-    ringY += (mouseY - ringY) * 0.14;
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
     ring.style.left = ringX + 'px';
     ring.style.top  = ringY + 'px';
-    rafId = requestAnimationFrame(animateRing);
+    requestAnimationFrame(animateRing);
   }
   animateRing();
 
   // Hover glow on interactive elements
-  const interactiveSelector = 'a, button, [role="button"], input, select, textarea, label[for], .nav-link, .btn-primary, .btn-outline, .btn-glow, .photo-item, .teacher-card, .feat-card, .about-card, .tab-btn, .filter-btn, .g-tab, .cal-nav-btn, .scroll-top, .hamburger, .sidebar-close';
+  const interactiveSelector = 'a, button, [role="button"], input, select, textarea, label[for], .nav-link, .btn-primary, .btn-outline, .btn-glow, .photo-item, .teacher-card, .feat-card, .about-card, .tab-btn, .filter-btn, .g-tab, .cal-nav-btn, .scroll-top, .hamburger, .sidebar-close, .nav-item';
 
   document.addEventListener('mouseover', e => {
     if (e.target.closest(interactiveSelector)) document.body.classList.add('cursor-hover');
@@ -190,14 +208,10 @@ document.getElementById('langToggleSidebar')?.addEventListener('click', () => {
   });
 
   // Click burst
-  document.addEventListener('mousedown', () => {
-    document.body.classList.add('cursor-click');
-  });
-  document.addEventListener('mouseup', () => {
-    document.body.classList.remove('cursor-click');
-  });
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
 
-  // Hide cursor when leaving window
+  // Hide when leaving window
   document.addEventListener('mouseleave', () => {
     dot.style.opacity  = '0';
     ring.style.opacity = '0';
