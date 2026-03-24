@@ -980,3 +980,379 @@ function renderAdmissionApps(){
     await remove(ref(db,`admissionApplications/${b.dataset.admd}`)); toast('আবেদন মুছে গেছে');
   });
 }
+
+/* ═══════════════════════════════════
+   BULK RESULT UPLOAD
+═══════════════════════════════════ */
+
+// ── Shared helpers ──
+const _getGP   = m => m>=80?5:m>=70?4:m>=60?3.5:m>=50?3:m>=40?2:0;
+const _calcGPA = subjects => subjects.length
+  ? (subjects.reduce((s,x) => s + _getGP(x.marks), 0) / subjects.length).toFixed(2)
+  : '0.00';
+
+// Normalize roll string
+const _normRoll = r => /^\d+$/.test(r) ? String(parseInt(r,10)) : r;
+
+// ── Tab switching ──
+$('bulkTabCsvBtn')?.addEventListener('click', () => {
+  $('bulkTabCsv').style.display    = 'block';
+  $('bulkTabManual').style.display = 'none';
+  $('bulkTabCsvBtn').classList.add('bulk-tab-active');
+  $('bulkTabManualBtn').classList.remove('bulk-tab-active');
+  $('bulkSharedActions').style.display = 'none';
+});
+$('bulkTabManualBtn')?.addEventListener('click', () => {
+  $('bulkTabCsv').style.display    = 'none';
+  $('bulkTabManual').style.display = 'block';
+  $('bulkTabManualBtn').classList.add('bulk-tab-active');
+  $('bulkTabCsvBtn').classList.remove('bulk-tab-active');
+  $('bulkSharedActions').style.display = 'none';
+});
+
+// ══════════════════════════════
+//  CSV TAB
+// ══════════════════════════════
+
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return { headers: [], rows: [] };
+  const delim = lines[0].includes(';') ? ';' : ',';
+  const headers = lines[0].split(delim).map(h => h.trim().replace(/^"|"$/g,''));
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cells = lines[i].split(delim).map(c => c.trim().replace(/^"|"$/g,''));
+    if (cells.every(c => !c)) continue;
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h] = cells[idx] || ''; });
+    rows.push(obj);
+  }
+  return { headers, rows };
+}
+
+function csvRowsToStudents(headers, rows) {
+  const subjectCols = headers.slice(2);
+  const students = [], errors = [];
+  rows.forEach((row, i) => {
+    const lineNo = i + 2;
+    const roll = row[headers[0]]?.trim();
+    const name = row[headers[1]]?.trim();
+    if (!roll || !name) { errors.push(`লাইন ${lineNo}: রোল বা নাম খালি।`); return; }
+    const subjects = [];
+    subjectCols.forEach(col => {
+      const marksRaw = row[col]?.trim();
+      if (!marksRaw) return;
+      const marks = Number(marksRaw);
+      if (isNaN(marks)) { errors.push(`লাইন ${lineNo}, "${col}": "${marksRaw}" সংখ্যা নয়।`); return; }
+      const [subName, fullRaw] = col.split('|');
+      const full = fullRaw ? Number(fullRaw) : 100;
+      subjects.push({ name: subName.trim(), full: isNaN(full)?100:full, marks });
+    });
+    students.push({ roll: _normRoll(roll), name, gpa: _calcGPA(subjects), subjects });
+  });
+  return { students, errors };
+}
+
+const subjectSets = {
+  default:   ['বাংলা|100','ইংরেজি|100','গণিত|100','বিজ্ঞান|100','সমাজ বিজ্ঞান|100','ইসলাম শিক্ষা|100'],
+  dakhil:    ['বাংলা|100','ইংরেজি|100','গণিত|100','বিজ্ঞান|100','সমাজ বিজ্ঞান|100','ইসলাম শিক্ষা|100','কুরআন মজীদ|100','আকাইদ ও ফিকহ|100'],
+  alim:      ['বাংলা|100','ইংরেজি|100','আরবি|100','হাদিস|100','তাফসীর|100','ফিকহ|100','মানতিক|100'],
+  ibtedayi:  ['বাংলা|100','ইংরেজি|100','গণিত|100','কুরআন|100','আকাইদ|100'],
+};
+
+function getDefaultSubjects(cls) {
+  if (cls==='class9'||cls==='class10') return subjectSets.dakhil;
+  if (cls==='class11'||cls==='class12') return subjectSets.alim;
+  if (cls.startsWith('ibtedayi')) return subjectSets.ibtedayi;
+  return subjectSets.default;
+}
+
+function generateTemplate(cls) {
+  const subjects = getDefaultSubjects(cls);
+  const headers  = ['roll','name',...subjects];
+  const ex1 = ['101','মোহাম্মদ রাহিম',...subjects.map(()=>'75')];
+  const ex2 = ['102','ফাতেমা খানম',  ...subjects.map(()=>'82')];
+  return [headers,ex1,ex2].map(r=>r.join(',')).join('\n');
+}
+
+$('bulkDownloadTplBtn')?.addEventListener('click', () => {
+  const cls = val('bulkClass');
+  const csv = generateTemplate(cls);
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `result_template_${cls}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+});
+
+// Current pending students for upload (shared between CSV & manual)
+let _pendingStudents = [];
+
+$('bulkFileInput')?.addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const { headers, rows } = parseCSV(text);
+  if (!headers.length || !rows.length) { toast('CSV ফাইল খালি বা format ঠিক নেই।','error'); return; }
+  const { students, errors } = csvRowsToStudents(headers, rows);
+  _pendingStudents = students;
+  renderCSVPreview(students, errors, headers.slice(2));
+  e.target.value = '';
+});
+
+function renderCSVPreview(students, errors, subjectCols) {
+  const area = $('bulkPreviewArea');
+
+  let html = '';
+  if (errors.length) {
+    html += `<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:14px;margin-bottom:12px">
+      <p style="font-weight:700;color:#dc2626;margin-bottom:6px"><i class="fas fa-exclamation-triangle"></i> ${errors.length}টি সমস্যা:</p>
+      ${errors.map(e=>`<p style="font-size:12px;color:#dc2626;margin:2px 0">• ${e}</p>`).join('')}
+    </div>`;
+  }
+  if (!students.length) {
+    area.innerHTML = html + `<p style="color:var(--text-mid);font-size:13px">কোনো valid data পাওয়া যায়নি।</p>`;
+    $('bulkSharedActions').style.display = 'none';
+    return;
+  }
+
+  const subH = subjectCols.map(c=>`<th style="padding:7px 10px">${c.split('|')[0]}</th>`).join('');
+  const rows = students.map(s => {
+    const cells = subjectCols.map(col => {
+      const sub = s.subjects.find(x=>x.name===col.split('|')[0].trim());
+      return `<td style="text-align:center">${sub?sub.marks:'-'}</td>`;
+    }).join('');
+    return `<tr><td>${s.roll}</td><td>${s.name}</td>${cells}<td style="text-align:center;font-weight:700;color:var(--primary)">${s.gpa}</td></tr>`;
+  }).join('');
+
+  html += `<div style="background:var(--input-bg);border:1.5px solid var(--border);border-radius:10px;padding:12px;margin-bottom:4px">
+    <p style="font-weight:600;margin-bottom:8px"><i class="fas fa-eye" style="color:var(--primary)"></i> Preview — ${students.length}জন</p>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr style="background:var(--primary);color:#fff">
+          <th style="padding:7px 10px;text-align:left">রোল</th>
+          <th style="padding:7px 10px;text-align:left">নাম</th>
+          ${subH}
+          <th style="padding:7px 10px">GPA</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+
+  area.innerHTML = html;
+  // Show shared upload button
+  $('bulkSharedActions').style.display = 'block';
+  $('bulkProgressWrap').style.display  = 'none';
+  $('bulkProgressBar').style.width     = '0%';
+  $('bulkUploadConfirmBtn').style.display = '';
+  $('bulkUploadConfirmBtn').disabled   = false;
+  $('bulkUploadConfirmBtn').innerHTML  = `<i class="fas fa-cloud-upload-alt"></i> Firebase-এ Upload করুন (${students.length}জন)`;
+}
+
+// ══════════════════════════════
+//  MANUAL TABLE TAB
+// ══════════════════════════════
+
+$('manualBuildTableBtn')?.addEventListener('click', () => {
+  const raw = $('manualSubjectList').value.trim();
+  if (!raw) { toast('বিষয়ের নাম লিখুন','error'); return; }
+
+  // Parse subject list: "বাংলা|100, ইংরেজি, গণিত|80"
+  const parsedSubjects = raw.split(',').map(s => {
+    const [name, fullRaw] = s.trim().split('|');
+    const full = fullRaw ? Number(fullRaw.trim()) : 100;
+    return { name: name.trim(), full: isNaN(full)?100:full };
+  }).filter(s => s.name);
+
+  if (!parsedSubjects.length) { toast('বিষয় parse করা যায়নি','error'); return; }
+
+  buildManualTable(parsedSubjects, 10); // start with 10 rows
+});
+
+function buildManualTable(subjects, initialRows) {
+  const area = $('manualTableArea');
+
+  const subHeaders = subjects.map(s =>
+    `<th>${s.name}${s.full!==100?`<br><span style="font-weight:400;font-size:11px">(/${s.full})</span>`:''}</th>`
+  ).join('');
+
+  const makeRow = (idx) => {
+    const subInputs = subjects.map(s =>
+      `<td><input class="m-marks" type="number" min="0" max="${s.full}" placeholder="0" data-full="${s.full}"></td>`
+    ).join('');
+    return `<tr>
+      <td><input class="m-roll" type="text" placeholder="${idx+1}"></td>
+      <td><input class="m-name" type="text" placeholder="নাম"></td>
+      ${subInputs}
+      <td style="text-align:center;font-weight:700;color:var(--primary)" class="m-gpa">-</td>
+      <td><button class="del-row-btn" title="Row মুছুন"><i class="fas fa-times"></i></button></td>
+    </tr>`;
+  };
+
+  let rows = '';
+  for (let i=0;i<initialRows;i++) rows += makeRow(i);
+
+  area.innerHTML = `
+    <div style="overflow-x:auto;margin-bottom:10px">
+      <table class="manual-tbl" id="manualTbl">
+        <thead><tr>
+          <th>রোল</th><th>নাম</th>${subHeaders}<th>GPA</th><th></th>
+        </tr></thead>
+        <tbody id="manualTblBody">${rows}</tbody>
+      </table>
+    </div>
+    <div class="action-row" style="margin-bottom:4px">
+      <button class="btn ghost" id="manualAddRowBtn"><i class="fas fa-plus"></i> Row যোগ করুন</button>
+      <button class="btn ghost" id="manualPreviewBtn"><i class="fas fa-eye"></i> Preview ও Save করুন</button>
+    </div>`;
+
+  bindManualTableEvents(subjects);
+}
+
+function bindManualTableEvents(subjects) {
+  // Live GPA update on marks change
+  $('manualTblBody').addEventListener('input', e => {
+    if (!e.target.classList.contains('m-marks')) return;
+    const row = e.target.closest('tr');
+    const markInputs = Array.from(row.querySelectorAll('.m-marks'));
+    const validSubs = markInputs.map((inp,i) => ({
+      marks: Number(inp.value)||0, full: Number(inp.dataset.full)||100
+    })).filter((_,i) => markInputs[i].value !== '');
+    if (validSubs.length) {
+      row.querySelector('.m-gpa').textContent = _calcGPA(validSubs.map(s=>s));
+    }
+  });
+
+  // Delete row
+  $('manualTblBody').addEventListener('click', e => {
+    if (e.target.closest('.del-row-btn')) {
+      const row = e.target.closest('tr');
+      if ($('manualTblBody').querySelectorAll('tr').length > 1) row.remove();
+      else toast('অন্তত একটি row থাকতে হবে','error');
+    }
+  });
+
+  // Add row
+  $('manualAddRowBtn').onclick = () => {
+    const tbody = $('manualTblBody');
+    const idx = tbody.querySelectorAll('tr').length;
+    const subInputs = subjects.map(s =>
+      `<td><input class="m-marks" type="number" min="0" max="${s.full}" placeholder="0" data-full="${s.full}"></td>`
+    ).join('');
+    tbody.insertAdjacentHTML('beforeend', `<tr>
+      <td><input class="m-roll" type="text" placeholder="${idx+1}"></td>
+      <td><input class="m-name" type="text" placeholder="নাম"></td>
+      ${subInputs}
+      <td style="text-align:center;font-weight:700;color:var(--primary)" class="m-gpa">-</td>
+      <td><button class="del-row-btn" title="Row মুছুন"><i class="fas fa-times"></i></button></td>
+    </tr>`);
+  };
+
+  // Preview & prepare for upload
+  $('manualPreviewBtn').onclick = () => {
+    const rows = Array.from($('manualTblBody').querySelectorAll('tr'));
+    const students = [], errors = [];
+
+    rows.forEach((row, i) => {
+      const roll = row.querySelector('.m-roll')?.value.trim();
+      const name = row.querySelector('.m-name')?.value.trim();
+      const markInputs = Array.from(row.querySelectorAll('.m-marks'));
+
+      if (!roll && !name && markInputs.every(inp=>!inp.value)) return; // skip fully blank rows
+
+      if (!roll) { errors.push(`Row ${i+1}: রোল নম্বর খালি।`); return; }
+      if (!name) { errors.push(`Row ${i+1}: নাম খালি।`); return; }
+
+      const subs = markInputs.map((inp,j) => ({
+        name: subjects[j].name,
+        full: subjects[j].full,
+        marks: Number(inp.value)||0
+      }));
+
+      students.push({ roll: _normRoll(roll), name, gpa: _calcGPA(subs), subjects: subs });
+    });
+
+    if (errors.length) {
+      let errHtml = `<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px;margin-bottom:10px">
+        <p style="font-weight:700;color:#dc2626;margin-bottom:6px"><i class="fas fa-exclamation-triangle"></i> ${errors.length}টি সমস্যা:</p>
+        ${errors.map(e=>`<p style="font-size:12px;color:#dc2626;margin:2px 0">• ${e}</p>`).join('')}
+      </div>`;
+      $('manualTableArea').insertAdjacentHTML('afterbegin', errHtml);
+      // Remove after 5s
+      setTimeout(()=>{ const el = $('manualTableArea').querySelector('div'); if(el) el.remove(); }, 5000);
+      return;
+    }
+
+    if (!students.length) { toast('কোনো data পাওয়া যায়নি।','error'); return; }
+
+    _pendingStudents = students;
+    $('bulkSharedActions').style.display = 'block';
+    $('bulkProgressWrap').style.display  = 'none';
+    $('bulkProgressBar').style.width     = '0%';
+    $('bulkUploadConfirmBtn').style.display = '';
+    $('bulkUploadConfirmBtn').disabled   = false;
+    $('bulkUploadConfirmBtn').innerHTML  = `<i class="fas fa-cloud-upload-alt"></i> Firebase-এ Upload করুন (${students.length}জন)`;
+    $('bulkUploadConfirmBtn').scrollIntoView({behavior:'smooth', block:'center'});
+    toast(`${students.length}জনের data ready। নিচের বাটনে click করুন।`);
+  };
+}
+
+// ══════════════════════════════
+//  SHARED UPLOAD LOGIC
+// ══════════════════════════════
+
+$('bulkCancelBtn')?.addEventListener('click', () => {
+  $('bulkPreviewArea').innerHTML = '';
+  $('bulkSharedActions').style.display = 'none';
+  _pendingStudents = [];
+});
+
+$('bulkUploadConfirmBtn')?.addEventListener('click', async () => {
+  const students = _pendingStudents;
+  if (!students.length) { toast('Upload করার data নেই।','error'); return; }
+
+  const cls  = val('bulkClass');
+  const exam = val('bulkExam');
+  const btn  = $('bulkUploadConfirmBtn');
+  const progressWrap = $('bulkProgressWrap');
+  const progressBar  = $('bulkProgressBar');
+  const progressLbl  = $('bulkProgressLabel');
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+  progressWrap.style.display = 'block';
+
+  let done = 0;
+  const total = students.length;
+  const BATCH = 10;
+
+  try {
+    for (let i=0; i<total; i+=BATCH) {
+      const batch = students.slice(i, i+BATCH);
+      await Promise.all(batch.map(s =>
+        set(ref(db, `results/${cls}/${exam}/${s.roll}`), {
+          name: s.name, gpa: s.gpa, subjects: s.subjects
+        })
+      ));
+      done = Math.min(i+BATCH, total);
+      const pct = Math.round((done/total)*100);
+      progressBar.style.width   = pct+'%';
+      progressLbl.textContent   = `Uploading... ${done}/${total} (${pct}%)`;
+    }
+
+    progressLbl.textContent        = `✅ সম্পন্ন! ${total}জনের result upload হয়েছে।`;
+    progressBar.style.background   = '#10b981';
+    toast(`${total}জনের result সফলভাবে upload হয়েছে!`);
+    btn.style.display = 'none';
+    $('bulkCancelBtn').innerHTML   = '<i class="fas fa-check"></i> Done';
+    _pendingStudents = [];
+  } catch (err) {
+    console.error(err);
+    toast(`Upload-এ সমস্যা হয়েছে (${done}/${total} সম্পন্ন)।`,'error');
+    progressLbl.textContent       = `❌ Error — ${done}/${total} সম্পন্ন।`;
+    progressBar.style.background  = '#ef4444';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-redo"></i> আবার চেষ্টা করুন';
+  }
+});

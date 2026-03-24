@@ -267,3 +267,20 @@ html,body{margin:0;padding:0;font-family:var(--font);background:var(--bg);color:
   .sidebar{position:static}
   .grid.two,.grid.four{grid-template-columns:1fr}
 }
+
+/* BULK TAB BUTTONS */
+.bulk-tab {
+  background: none; border: none; padding: 9px 18px; font-size: 13px;
+  font-family: inherit; cursor: pointer; color: var(--text-mid);
+  font-weight: 500; transition: all .18s; display: flex; align-items: center; gap: 6px;
+}
+.bulk-tab:hover { background: var(--bg); color: var(--text); }
+.bulk-tab-active { background: var(--primary); color: #fff !important; font-weight: 700; }
+
+/* MANUAL TABLE */
+.manual-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.manual-tbl th { background: var(--primary); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; white-space: nowrap; }
+.manual-tbl td { padding: 4px 5px; border-bottom: 1px solid var(--border); }
+.manual-tbl input { width: 100%; padding: 6px 8px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 12.5px; background: var(--input-bg); font-family: inherit; box-sizing: border-box; }
+.manual-tbl input:focus { outline: none; border-color: var(--primary); }
+.manual-tbl .del-row-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 12px; }

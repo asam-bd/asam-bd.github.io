@@ -60,43 +60,153 @@ window.addEventListener('scroll', () => {
   document.getElementById('scrollTop')?.classList.toggle('show', cur > 400);
 });
 
-// HAMBURGER
-const hamburger = document.getElementById('hamburger');
-const navMenu = document.getElementById('navMenu');
+// SIDEBAR / HAMBURGER
+const hamburger  = document.getElementById('hamburger');
+const navMenu    = document.getElementById('navMenu');
+const navOverlay = document.getElementById('navOverlay');
+
+function openSidebar() {
+  hamburger.classList.add('active');
+  navMenu.classList.add('open');
+  navOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  hamburger.setAttribute('aria-label', 'মেনু বন্ধ করুন');
+}
+
+function closeSidebar() {
+  hamburger.classList.remove('active');
+  navMenu.classList.remove('open');
+  navOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+  hamburger.setAttribute('aria-label', 'মেনু খুলুন');
+}
+
 hamburger?.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  navMenu.classList.toggle('open');
+  navMenu.classList.contains('open') ? closeSidebar() : openSidebar();
 });
+
+// Close button inside sidebar
+document.getElementById('sidebarClose')?.addEventListener('click', closeSidebar);
+
+// Click outside (overlay) closes sidebar
+navOverlay?.addEventListener('click', closeSidebar);
+
+// Close on nav-link click
 navMenu?.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('open');
+    if (window.innerWidth <= 768) closeSidebar();
   });
 });
+
+// Dropdown toggle on mobile
 document.querySelectorAll('.has-dd > .nav-link').forEach(link => {
   link.addEventListener('click', e => {
-    if(window.innerWidth <= 768){
+    if (window.innerWidth <= 768) {
       e.preventDefault();
       link.closest('.has-dd').classList.toggle('open');
     }
   });
 });
 
-// THEME
-const themeToggle = document.getElementById('themeToggle');
-themeToggle?.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+// Escape key closes sidebar
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && navMenu.classList.contains('open')) closeSidebar();
 });
 
-// LANGUAGE
-let currentLang = 'bn';
-document.getElementById('langToggle')?.addEventListener('click', () => {
-  currentLang = currentLang === 'bn' ? 'en' : 'bn';
-  document.getElementById('langToggle').querySelector('.lang-txt').textContent = currentLang === 'bn' ? 'EN' : 'বাং';
-  document.documentElement.setAttribute('data-lang', currentLang);
+// THEME — sync both desktop + sidebar toggle buttons
+function applyTheme(isDark) {
+  const icon = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeToggle').innerHTML         = icon;
+  const st = document.getElementById('themeToggleSidebar');
+  if (st) st.innerHTML = icon;
+}
+const themeToggle = document.getElementById('themeToggle');
+themeToggle?.addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
 });
+document.getElementById('themeToggleSidebar')?.addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+});
+
+// LANGUAGE — sync both desktop + sidebar toggle buttons
+let currentLang = 'bn';
+function applyLang(lang) {
+  currentLang = lang;
+  const label = lang === 'bn' ? 'EN' : 'বাং';
+  const el  = document.getElementById('langToggle');
+  const sel = document.getElementById('langToggleSidebar');
+  if (el?.querySelector('.lang-txt'))  el.querySelector('.lang-txt').textContent  = label;
+  if (sel?.querySelector('.lang-txt-s')) sel.querySelector('.lang-txt-s').textContent = label;
+  document.documentElement.setAttribute('data-lang', lang);
+}
+document.getElementById('langToggle')?.addEventListener('click', () => {
+  applyLang(currentLang === 'bn' ? 'en' : 'bn');
+});
+document.getElementById('langToggleSidebar')?.addEventListener('click', () => {
+  applyLang(currentLang === 'bn' ? 'en' : 'bn');
+});
+
+// ══════════════════════════════
+// CUSTOM CURSOR
+// ══════════════════════════════
+(function initCursor() {
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+
+  // Only on non-touch devices
+  if (window.matchMedia('(hover:none) and (pointer:coarse)').matches) return;
+
+  let mouseX = 0, mouseY = 0;
+  let ringX  = 0, ringY  = 0;
+  let rafId;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top  = mouseY + 'px';
+  });
+
+  // Ring follows with smooth lag
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    rafId = requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover glow on interactive elements
+  const interactiveSelector = 'a, button, [role="button"], input, select, textarea, label[for], .nav-link, .btn-primary, .btn-outline, .btn-glow, .photo-item, .teacher-card, .feat-card, .about-card, .tab-btn, .filter-btn, .g-tab, .cal-nav-btn, .scroll-top, .hamburger, .sidebar-close';
+
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(interactiveSelector)) document.body.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(interactiveSelector)) document.body.classList.remove('cursor-hover');
+  });
+
+  // Click burst
+  document.addEventListener('mousedown', () => {
+    document.body.classList.add('cursor-click');
+  });
+  document.addEventListener('mouseup', () => {
+    document.body.classList.remove('cursor-click');
+  });
+
+  // Hide cursor when leaving window
+  document.addEventListener('mouseleave', () => {
+    dot.style.opacity  = '0';
+    ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    dot.style.opacity  = '1';
+    ring.style.opacity = '';
+  });
+})();
 
 // COUNTERS
 let counted = false;
