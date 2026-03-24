@@ -457,6 +457,29 @@ input,select,textarea{font-family:inherit;outline:none}
 
 /* ── Desktop: hide mobile-only elements ── */
 .sidebar-header,.sidebar-footer{display:none}
+
+/* Desktop nav reset — must come BEFORE mobile media query */
+@media(min-width:769px){
+  .nav-menu{
+    position:static!important;
+    left:auto!important;
+    width:auto!important;
+    max-width:none!important;
+    height:auto!important;
+    background:transparent!important;
+    flex-direction:row!important;
+    display:flex!important;
+    overflow:visible!important;
+    box-shadow:none!important;
+    border:none!important;
+    transition:none!important;
+    z-index:auto!important;
+    padding:0!important;
+    align-items:center!important;
+    gap:2px!important;
+  }
+  .nav-overlay{display:none!important}
+}
 @media(max-width:1024px){
   .hero-title{font-size:40px}
   .f-grid{grid-template-columns:1fr 1fr}
@@ -471,33 +494,37 @@ input,select,textarea{font-family:inherit;outline:none}
   /* Show hamburger */
   .hamburger{display:flex!important}
 
-  /* Hide desktop menu items — drawer handles them */
-  .nav-menu{
-    display:block!important;
-    position:fixed;
-    top:0;left:-100%;
-    width:80%;max-width:290px;
-    height:100%;height:100dvh;
-    background:#0f172a;
-    overflow-y:auto;
-    z-index:9999;
-    transition:left .38s cubic-bezier(0.32,0.72,0,1);
-    box-shadow:6px 0 40px rgba(0,0,0,.5);
-    border-right:1px solid rgba(255,255,255,.07);
-    padding:0;
-  }
-  .nav-menu.open{left:0!important}
-
   /* Overlay */
   .nav-overlay{
     position:fixed;inset:0;
     background:rgba(0,0,0,.6);
-    backdrop-filter:blur(3px);
+    backdrop-filter:blur(4px);
     z-index:9998;
     opacity:0;visibility:hidden;
     transition:opacity .35s,visibility .35s;
+    pointer-events:none;
   }
-  .nav-overlay.show{opacity:1;visibility:visible}
+  .nav-overlay.show{opacity:1;visibility:visible;pointer-events:all}
+
+  /* Mobile drawer — hidden off-screen by default */
+  .nav-menu{
+    position:fixed!important;
+    top:0;left:-100%!important;
+    width:82%;max-width:290px;
+    height:100vh;height:100dvh;
+    background:#0f172a;
+    flex-direction:column!important;
+    display:flex!important;
+    overflow-y:auto;
+    z-index:9999;
+    transition:left .38s cubic-bezier(0.32,0.72,0,1);
+    box-shadow:6px 0 50px rgba(0,0,0,.6);
+    border-right:1px solid rgba(255,255,255,.06);
+    padding:0;
+    align-items:stretch;
+    gap:0;
+  }
+  .nav-menu.open{left:0!important}
 
   /* Sidebar Header — show on mobile */
   .sidebar-header{
