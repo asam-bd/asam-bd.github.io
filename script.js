@@ -323,11 +323,15 @@ onValue(ref(db, 'teachers'), (snap) => {
   const grid = document.querySelector('.teachers-grid');
   if (!grid) return;
 
-  grid.innerHTML = teachers.map(t => `
+  grid.innerHTML = teachers.map(t => {
+    const initials = encodeURIComponent((t.name || 'T').substring(0, 2));
+    const fallback = `https://ui-avatars.com/api/?name=${initials}&background=059669&color=fff&size=200`;
+    const src = (t.photo && t.photo.startsWith('http')) ? esc(t.photo) : fallback;
+    return `
     <div class="teacher-card" data-dept="${esc(t.dept || 'general')}" data-aos>
       <div class="t-photo">
-        <img src="${esc(t.photo || '')}" alt="${esc(t.name || '')}"
-          onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent((this.alt||'T').substring(0,2))}&background=059669&color=fff&size=200'">
+        <img src="${src}" alt="${esc(t.name || '')}"
+          onerror="this.onerror=null;this.src='${fallback}'">
       </div>
       <div class="t-info">
         <h4>${esc(t.name || '')}</h4>
@@ -335,8 +339,8 @@ onValue(ref(db, 'teachers'), (snap) => {
         <span class="t-subject">${esc(t.subject || '')}</span>
         ${t.qualification ? `<p>${esc(t.qualification)}</p>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 
   bindTeacherFilters();
   triggerAOS();
