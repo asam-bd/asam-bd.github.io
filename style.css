@@ -494,11 +494,13 @@ input,select,textarea{font-family:inherit;outline:none}
   /* Show hamburger */
   .hamburger{display:flex!important}
 
-  /* Overlay */
+  /* Overlay — only covers the area OUTSIDE the drawer */
   .nav-overlay{
-    position:fixed;inset:0;
-    background:rgba(0,0,0,.6);
-    backdrop-filter:blur(4px);
+    position:fixed;
+    top:0;
+    left:82%;left:290px;
+    right:0;bottom:0;
+    background:rgba(0,0,0,.45);
     z-index:9998;
     opacity:0;visibility:hidden;
     transition:opacity .35s,visibility .35s;
