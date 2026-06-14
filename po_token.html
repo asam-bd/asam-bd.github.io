@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Premium (CSM Tube)– About</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:     #FF0000;
+      --red-dark:#C00000;
+      --gold:    #FFD700;
+      --dark:    #0A0A0A;
+      --dark2:   #111111;
+      --dark3:   #1A1A1A;
+      --mid:     #2A2A2A;
+      --text:    #EAEAEA;
+      --muted:   #888888;
+      --white:   #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,0,0,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,215,0,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Animated ring */
+    .hero-ring {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,0,0,0.12);
+      animation: pulse-ring 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-ring:nth-child(2) { width: 900px; height: 900px; animation-delay: 1s; border-color: rgba(255,215,0,0.06); }
+    .hero-ring:nth-child(3) { width: 1100px; height: 1100px; animation-delay: 2s; }
+
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.03); }
+    }
+
+    .yt-logo {
+      position: relative;
+      margin-bottom: 28px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .yt-logo svg { width: 90px; height: 90px; drop-shadow: 0 0 30px rgba(255,0,0,0.6); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--gold), #FF8C00);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 110px);
+      line-height: 0.95;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .hero h1 span.yt { color: var(--red); text-shadow: 0 0 40px rgba(255,0,0,0.5); }
+    .hero h1 span.pr { color: var(--white); }
+    .hero h1 span.gd {
+      background: linear-gradient(90deg, var(--gold), #FFA500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: clamp(14px, 2.5vw, 18px);
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--mid);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .version-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #00E676; animation: blink 1.2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,0,0,0.4), rgba(255,215,0,0.3), transparent);
+    }
+
+    /* ── SECTION ── */
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 60px);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .section-body {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #AAAAAA;
+      max-width: 640px;
+    }
+
+    /* ── FEATURES GRID ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .feat-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      cursor: default;
+    }
+    .feat-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,0,0,0.35);
+      box-shadow: 0 12px 40px rgba(255,0,0,0.12);
+    }
+
+    .feat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .feat-icon.red  { background: rgba(255,0,0,0.15); }
+    .feat-icon.gold { background: rgba(255,215,0,0.12); }
+    .feat-icon.blue { background: rgba(0,150,255,0.12); }
+    .feat-icon.grn  { background: rgba(0,230,118,0.12); }
+    .feat-icon.pur  { background: rgba(180,0,255,0.12); }
+    .feat-icon.org  { background: rgba(255,140,0,0.12); }
+
+    .feat-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+    .feat-desc  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── SPECS TABLE ── */
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 40px;
+      font-size: 15px;
+    }
+    .specs-table tr {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.2s;
+    }
+    .specs-table tr:hover { background: rgba(255,255,255,0.03); }
+    .specs-table td { padding: 16px 12px; }
+    .specs-table td:first-child { color: var(--muted); width: 40%; }
+    .specs-table td:last-child  { color: var(--text); font-weight: 500; }
+    .specs-table .tag {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255,0,0,0.15);
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── DEVELOPER CARD ── */
+    .dev-card {
+      background: linear-gradient(135deg, var(--dark2) 0%, var(--dark3) 100%);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 20px;
+      padding: 40px 36px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .dev-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dark), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      color: var(--white);
+      flex-shrink: 0;
+      box-shadow: 0 0 30px rgba(255,215,0,0.25);
+    }
+
+    .dev-info h3 { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .dev-info .role { font-size: 13px; color: var(--gold); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+    .dev-info p { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 480px; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      background: rgba(255,215,0,0.05);
+      border: 1px solid rgba(255,215,0,0.15);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 13px;
+      color: #888;
+      line-height: 1.7;
+      margin-top: 48px;
+    }
+    .disclaimer strong { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      padding: 40px 24px;
+      font-size: 13px;
+      color: #444;
+    }
+    footer span { color: var(--red); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+
+  <div class="yt-logo">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="90" height="90" rx="20" fill="#FF0000"/>
+      <path d="M65 45L33 27V63L65 45Z" fill="white"/>
+      <!-- Crown -->
+      <path d="M18 20 L26 30 L34 22 L42 30 L50 20 L50 16 L18 16 Z" fill="#FFD700"/>
+    </svg>
+  </div>
+
+  <div class="badge">⭐ Premium Unlocked!</div>
+
+  <h1>
+    <span class="yt">YouTube</span><br>
+    <span class="pr">Premium</span>
+    <span class="gd"> Pro</span>
+  </h1>
+
+  <p class="hero-sub">
+    Ads-free. Background play. Downloads. Everything unlocked — crafted for the true YouTube experience.
+  </p>
+
+  <div class="version-pill">
+    <span class="dot"></span>
+    Latest Version Available
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Features -->
+<section class="reveal">
+  <div class="section-eyebrow">What's Inside</div>
+  <h2 class="section-title">Premium Features,<br>Zero Cost</h2>
+  <p class="section-body">
+    This modded APK unlocks every YouTube Premium feature — without a subscription. Watch freely, download content, and enjoy an uninterrupted experience across all your devices.
+  </p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon red">🚫</div>
+      <div class="feat-title">Ad-Free Experience</div>
+      <div class="feat-desc">Zero ads — no pre-roll, mid-roll, or banner interruptions whatsoever.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon gold">🎵</div>
+      <div class="feat-title">Background Play</div>
+      <div class="feat-desc">Keep the audio running when you lock your screen or switch apps.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon blue">⬇️</div>
+      <div class="feat-title">Offline Downloads</div>
+      <div class="feat-desc">Save videos locally and watch them without an internet connection.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon grn">🎬</div>
+      <div class="feat-title">4K / HDR Quality</div>
+      <div class="feat-desc">Full access to 4K, HDR, and 60fps video quality settings.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon pur">🔒</div>
+      <div class="feat-title">No Root Required</div>
+      <div class="feat-desc">Install directly — no root or special permissions needed.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon org">⚡</div>
+      <div class="feat-title">Optimized Speed</div>
+      <div class="feat-desc">Faster loading, reduced data usage, and smoother playback.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Specs -->
+<section class="reveal">
+  <div class="section-eyebrow">App Info</div>
+  <h2 class="section-title">Technical<br>Details</h2>
+
+  <table class="specs-table">
+    <tr>
+      <td>App Name</td>
+      <td>YouTube Premium (CSM Tube)</td>
+    </tr>
+    <tr>
+      <td>Designed By</td>
+      <td>CSM Mohasin Alam <span class="tag">Verified</span></td>
+    </tr>
+    <tr>
+      <td>Platform</td>
+      <td>Android 5.0 and above</td>
+    </tr>
+    <tr>
+      <td>Root Required</td>
+      <td>No ✅</td>
+    </tr>
+    <tr>
+      <td>Ads</td>
+      <td>Removed ✅</td>
+    </tr>
+    <tr>
+      <td>Background Play</td>
+      <td>Enabled ✅</td>
+    </tr>
+    <tr>
+      <td>Offline Download</td>
+      <td>Unlocked ✅</td>
+    </tr>
+    <tr>
+      <td>Category</td>
+      <td>Entertainment / Streaming</td>
+    </tr>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- Developer -->
+<section class="reveal">
+  <div class="section-eyebrow">Developer</div>
+  <h2 class="section-title">Meet the<br>Developer</h2>
+
+  <div class="dev-card">
+    <div class="dev-avatar"><div class="dev-avatar">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIxT6Z2uAYspy2VfGzpwYmacDmP4xi-lujbPL9M3NNjw&s=10" 
+       style="width:100%;height:100%;object-fit:cover;border-radius:50%;" 
+       alt="CSM Mohasin Alam">
+</div></div>
+    <div class="dev-info">
+      <h3>CSM Mohasin Alam</h3>
+      <div class="role">APK Developer & Modifier</div>
+      <p>
+        Passionate about delivering premium Android experiences to everyone — freely and safely.
+        This mod is carefully crafted, tested, and maintained to ensure a smooth, stable, and feature-rich experience on all supported Android devices.
+      </p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Disclaimer:</strong> This APK is created for educational and personal use only.
+    YouTube™ is a trademark of Google LLC. This project is not affiliated with, endorsed, or sponsored by Google or YouTube.
+    Please support the original creators by watching on the official platform when possible.
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  Made with <span>♥</span> by <strong style="color:#FFD700;">CSM Mohasin Alam</strong> &nbsp;|&nbsp; YouTube Premium (CSM Tube) &nbsp;|&nbsp; All Rights Reserved © 2026
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
